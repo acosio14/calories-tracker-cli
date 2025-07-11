@@ -1,2 +1,2 @@
 # health-tracker
-Calories counter, weight, body metrics
+Calories counter, tracks weight and other important body metrics. Creates analysis.
