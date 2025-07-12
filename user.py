@@ -29,12 +29,15 @@ class User:
     
     def calculate_maintance_calories(self):
         # Mifflin-St Jeor Equation
+        
+        weight_kg = self.weight * 0.453 #lbs to kgs
+        height_cm = self.height * 0.393701 #inches to cm (To-Do: Convert 5'9" to inches first)
 
         # Basal Matabolic Rate
         if self.gender is "male":
-            bmr = (10 * self.gender) + (6.25 * self.height) - (5 * self.age) + 5
+            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * self.age) + 5
         if self.gender is "female":
-            bmr = (10 * self.gender) + (6.25 * self.height) - (5 * self.age) - 161
+            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * self.age) - 161
         
         activity_factor = {
             'sedantary': 1.2,           #little to no exercise
