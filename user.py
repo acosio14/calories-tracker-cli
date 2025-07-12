@@ -32,9 +32,9 @@ class User:
 
         # Basal Matabolic Rate
         if self.gender is "male":
-            bmr = (10 * self.gender) + (6.25 self.height) - (5 * self.age) + 5
+            bmr = (10 * self.gender) + (6.25 * self.height) - (5 * self.age) + 5
         if self.gender is "female":
-            bmr = (10 * self.gender) + (6.25 self.height) - (5 * self.age) - 161
+            bmr = (10 * self.gender) + (6.25 * self.height) - (5 * self.age) - 161
         
         activity_factor = {
             'sedantary': 1.2,           #little to no exercise
