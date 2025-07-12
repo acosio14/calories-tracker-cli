@@ -2,9 +2,10 @@
 
 class User:
 
-    def __init__(self, name, age, height, weight):
+    def __init__(self, name, age, gender, height, weight):
         self.name = name
         self.age = age
+        self.gender = gender
         self.height = height
         self.weight = weight
 
@@ -15,7 +16,13 @@ class User:
 
         return bmi
     
-    def calculate_body_fat_percentage():
-        pass
+    def calculate_body_fat_percentage(self, waist_hip_ratio):
+        # simplified Navy method
 
-    
+        if self.gender is "male":
+            body_fat_percentage = 76.76 * waist_hip_ratio - 49.82
+
+        if self.gender is "female":
+            body_fat_percentage = 70.41 * waist_hip_ratio - 58.25
+
+        return body_fat_percentage
