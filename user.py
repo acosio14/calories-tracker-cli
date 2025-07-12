@@ -26,3 +26,24 @@ class User:
             body_fat_percentage = 70.41 * waist_hip_ratio - 58.25
 
         return body_fat_percentage
+    
+    def calculate_maintance_calories(self):
+        # Mifflin-St Jeor Equation
+
+        # Basal Matabolic Rate
+        if self.gender is "male":
+            bmr = (10 * self.gender) + (6.25 self.height) - (5 * self.age) + 5
+        if self.gender is "female":
+            bmr = (10 * self.gender) + (6.25 self.height) - (5 * self.age) - 161
+        
+        activity_factor = {
+            'sedantary': 1.2,           #little to no exercise
+            'lightly active': 1.375,    # light exercise/sports 1-3 days/week
+            'moderate active': 1.55,    # moderate exercise/sports 3-5 days/week
+            'Very Active': 1.725,       # hard exercise/sports 6-7 days a week
+            'Extra Active': 1.9,        # very hard exercise/sports & physical job
+        }
+
+        maintance_calories = activity_factor * bmr
+
+        return maintance_calories
