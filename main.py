@@ -6,7 +6,7 @@ James = User("James", 24, "male", 6, 180, 36, 40, 'Lightly Active')
 
 waist_to_hip_ratio = James.calculate_waist_to_hip_ratio()
 
-print(f"{James.name} is {James.age} years old.\n")
+print(f"{James.name} is {James.age} years old {James.gender}.\n")
 print("His body metrics are:")
 print(f"WHR (waist-to-hip ratio): {waist_to_hip_ratio}")
 print(f"BMI (body-mass-index): {James.calculate_bmi_imperial()}")
