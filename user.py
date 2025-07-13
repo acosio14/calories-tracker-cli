@@ -34,7 +34,7 @@ class User:
         if self.gender == "female":
             body_fat_percentage = 70.41 * waist_hip_ratio - 58.25
 
-        return body_fat_percentage
+        return round(body_fat_percentage,2)
     
     def calculate_maintance_calories(self):
         # Mifflin-St Jeor Equation
