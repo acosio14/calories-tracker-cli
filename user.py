@@ -1,16 +1,16 @@
 # User Profile
+from dataclasses import dataclass
 
+@dataclass
 class User:
-
-    def __init__(self, name, age, gender, height, weight):
-        self.name = name
-        self.age = age
-        self.gender = gender
-        self.height = height
-        self.weight = weight
+    name: str
+    age: int
+    gender: str
+    height_ft: int
+    weight_lbs: int
 
     def calculate_bmi_imperial(self):
-        bmi = ( self.weight / pow( self.height, 2) ) * 703
+        bmi = ( self.weight_lbs / pow( self.height_ft, 2) ) * 703
          
         # Need to compare bmi to recommended numbers, show risk
 
@@ -30,8 +30,8 @@ class User:
     def calculate_maintance_calories(self):
         # Mifflin-St Jeor Equation
         
-        weight_kg = self.weight * 0.453 #lbs to kgs
-        height_cm = self.height * 0.393701 #inches to cm (To-Do: Convert 5'9" to inches first)
+        weight_kg = self.weight_lbs * 0.453       #lbs to kgs
+        height_cm = self.height_ft * 0.393701     #inches to cm (To-Do: Convert 5'9" to inches first)
 
         # Basal Matabolic Rate
         if self.gender is "male":
