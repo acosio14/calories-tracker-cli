@@ -8,7 +8,15 @@ class User:
     gender: str
     height_ft: int
     weight_lbs: int
+    waist_in: int
+    hip_in: int
 
+
+    def calculate_waist_to_hip_ratio(self):
+        waist_to_hip_ratio = self.waist_in / self.hip_in
+
+        return waist_to_hip_ratio
+    
     def calculate_bmi_imperial(self):
         bmi = ( self.weight_lbs / pow( self.height_ft, 2) ) * 703
          
