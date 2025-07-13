@@ -10,6 +10,7 @@ class User:
     weight_lbs: int
     waist_in: int
     hip_in: int
+    activity_level: str
 
 
     def calculate_waist_to_hip_ratio(self):
@@ -48,13 +49,18 @@ class User:
             bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * self.age) - 161
         
         activity_factor = {
-            'sedantary': 1.2,           #little to no exercise
-            'lightly active': 1.375,    # light exercise/sports 1-3 days/week
-            'moderate active': 1.55,    # moderate exercise/sports 3-5 days/week
+            'Sedantary': 1.2,           #little to no exercise
+            'Lightly Active': 1.375,    # light exercise/sports 1-3 days/week
+            'Moderate Active': 1.55,    # moderate exercise/sports 3-5 days/week
             'Very Active': 1.725,       # hard exercise/sports 6-7 days a week
             'Extra Active': 1.9,        # very hard exercise/sports & physical job
         }
 
-        maintance_calories = activity_factor * bmr
+        activity_factor_value = activity_factor.get(self.activity_level.lower())
+
+        if activity_factor_value is not None:
+            maintance_calories = activity_factor_value * bmr
+        else:
+            raise ValueError(f"{self.activity_level} is not a correct activity level.")
 
         return maintance_calories
