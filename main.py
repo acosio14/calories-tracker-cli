@@ -2,7 +2,7 @@ from user import User
 
 
 
-James = User("James", 24, "male", 6, 180, 36, 40)
+James = User("James", 24, "male", 6, 180, 36, 40, 'Lightly Active')
 
 waist_to_hip_ratio = James.calculate_waist_to_hip_ratio()
 
