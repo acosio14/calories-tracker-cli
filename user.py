@@ -19,11 +19,13 @@ class User:
         return waist_to_hip_ratio
     
     def calculate_bmi_imperial(self):
-        bmi = ( self.weight_lbs / pow( self.height_ft, 2) ) * 703
+        height_in = self.height_ft * 12
+
+        bmi = ( self.weight_lbs / pow( height_in, 2) ) * 703
          
         # Need to compare bmi to recommended numbers, show risk
 
-        return bmi
+        return round(bmi,1)
     
     def calculate_body_fat_percentage(self, waist_hip_ratio):
         # simplified Navy method
