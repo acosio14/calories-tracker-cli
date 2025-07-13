@@ -63,4 +63,4 @@ class User:
         else:
             raise ValueError(f"{self.activity_level} is not a correct activity level.")
 
-        return maintance_calories
+        return round(maintance_calories)
