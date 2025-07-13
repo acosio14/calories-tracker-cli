@@ -42,11 +42,11 @@ class User:
         # Mifflin-St Jeor Equation
         
         weight_kg = self.weight_lbs * 0.453       #lbs to kgs
-        height_cm = self.height_ft * 0.393701     #inches to cm (To-Do: Convert 5'9" to inches first)
+        height_cm = self.height_ft * 30.48     #(convert ft to cm (To-Do: Convert 5'9" to inches first)
 
         # Basal Matabolic Rate
         if self.gender == "male":
-            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * self.age) + 5
+            bmr = 66.5 + (13.75 * weight_kg) + (5.003 * height_cm) - (6.75 * self.age)
         if self.gender == "female":
             bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * self.age) - 161
         
