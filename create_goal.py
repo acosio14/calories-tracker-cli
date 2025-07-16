@@ -1,13 +1,16 @@
 from user import User
 
-def create_goal_plan(goal: str) -> int:
+def create_goal_plan(goal: str, tracking: bool = True) -> int:
     maintance = User.calculate_maintance_calories()
+    
+    if not tracking:
+        calories_delta = 500
+    else:
+        ...
+        # linear regression of table, data, stored values.
 
-    if goal == "gain":
-        calories = maintance + 500
-    if goal == "lose":
-        calories = maintance - 500
-    if goal == "maintain":
-        calories = maintance
+    goals = { 'gain': 1, 'lose': -1, 'maintain': 0}
+    
+    calories = maintance + ( goals.get(goal) * calories_delta )
     
     return calories
