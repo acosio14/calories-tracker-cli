@@ -50,7 +50,7 @@ class User:
             bmr = 655.1 + (9.563 * weight_kg) + (1.850 * height_cm) - (4.676 * self.age)
         
         activity_factor = {
-            'sedantary': 1.2,           #little to no exercise
+            'sedantary': 1.2,           # little to no exercise
             'lightly active': 1.375,    # light exercise/sports 1-3 days/week
             'moderate active': 1.55,    # moderate exercise/sports 3-5 days/week
             'very active': 1.725,       # hard exercise/sports 6-7 days a week
