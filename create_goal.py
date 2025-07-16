@@ -14,3 +14,9 @@ def create_goal_plan(goal: str, tracking: bool = True) -> int:
     calories = maintance + ( goals.get(goal) * delta )
     
     return calories
+
+def main():
+    ...
+
+if __name__ == "__main__":
+    main()
