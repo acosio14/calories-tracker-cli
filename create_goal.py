@@ -1,6 +1,10 @@
 from user import User
 
-def create_goal_plan(my_user: User, goal: str, tracking: bool = False) -> int:
+def calculate_recommended_calories(
+        my_user: User,
+        goal: str, 
+        tracking: bool = False
+) -> int:
     # Currently only able to recalibrate to weight of 1
 
     current_weight_delta = 1
@@ -24,9 +28,7 @@ def create_goal_plan(my_user: User, goal: str, tracking: bool = False) -> int:
     if tracking:
         maintenance = current_calories - (500 * current_weight_delta)
     
-    calories = maintenance + ( weight_delta.get(goal) * calories_delta )
-    
-    return calories
+    return maintenance + ( weight_delta.get(goal) * calories_delta )
 
 def main():
     ...
