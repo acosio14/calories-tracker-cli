@@ -1,4 +1,4 @@
-from user import User
+from user import UserProfile
 from dataclasses import dataclass
 
 @dataclass
@@ -12,7 +12,7 @@ class HealthPlan:
 
     def calculate_recommended_calories(
             self,
-            my_user: User,
+            my_user: UserProfile,
             goal: str, 
             tracking: bool = False
     ) -> int:
