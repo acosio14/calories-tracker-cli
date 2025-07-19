@@ -3,10 +3,10 @@ from dataclasses import dataclass
 
 @dataclass
 class HealthPlan:
-    goal: str
+    goal: str # lose, gain, maintain weight
     diet_type: str
-    current_calories: int
-    current_weight_delta: float | int
+    current_calories: int = 500 # Default of 500 calories
+    current_weight_delta: float | int = 1 # Default of 1 lb/week (negative?)
     desired_weight_delta: float | int
 
 
@@ -16,14 +16,12 @@ class HealthPlan:
             goal: str, 
             tracking: bool = False
     ) -> int:
-        
-        weight_delta = abs(self.desired_weight_delta)
 
         # weight delta need to be negative and positive.
         # Need to verify calculations
         # Might need to change dict to tuple. Don't think I need all 3
-        calories_delta = 500 * self.desired_weight_delta
-        weight_delta = {'lose': self.desired_weight_delta, 
+        calories_delta = 500 * self.desired_weight_delta # Assuming +/- 1 lbs = +/- 500 calories
+        weight_delta = {'lose': self.desired_weight_delta, #TO-DO: This value needs to be negative
                         'maintain': 0, 
                         'gain': self.desired_weight_delta,
                         }
