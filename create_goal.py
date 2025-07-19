@@ -3,11 +3,11 @@ from dataclasses import dataclass
 
 @dataclass
 class HealthPlan:
-    goal: str # lose, gain, maintain weight
-    diet_type: str
-    current_calories: int = 500 # Default of 500 calories
-    current_weight_delta: float | int = 1 # Default of 1 lb/week (negative?)
-    desired_weight_delta: float | int
+    goal: str = 'lose' # lose, gain, maintain weight
+    diet_type: str = 'balanced'
+    current_goal_calories: int = 1500, m = 2000 # Calories to lose, gain (subtract by 1 lb = 500 cal)
+    current_weight_delta: float | int = - 1 # Default of lose 1 lb/week
+    desired_weight_delta: float | int = - 1
 
 
     def calculate_recommended_calories(
@@ -16,23 +16,13 @@ class HealthPlan:
             goal: str, 
             tracking: bool = False
     ) -> int:
-
-        # weight delta need to be negative and positive.
-        # Need to verify calculations
-        # Might need to change dict to tuple. Don't think I need all 3
-        calories_delta = 500 * self.desired_weight_delta # Assuming +/- 1 lbs = +/- 500 calories
-        weight_delta = {'lose': self.desired_weight_delta, #TO-DO: This value needs to be negative
-                        'maintain': 0, 
-                        'gain': self.desired_weight_delta,
-                        }
-
         
-        maintenance = my_user.calculate_maintance_calories()
+        maintenance_calories = my_user.calculate_maintance_calories()
         
         if tracking:
-            maintenance = self.current_calories - (500 * self.current_weight_delta)
+            maintenance_calories = self.current_goal_calories - (500 * self.current_weight_delta)
         
-        return maintenance + ( weight_delta.get(goal) * calories_delta )
+        return maintenance_calories + ( self.desired_weight_delta * 500 )
 
 def main():
     ...
