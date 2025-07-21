@@ -41,6 +41,13 @@ class HealthPlan:
             maintenance_calories = my_user.calculate_maintance_calories()
         
         return maintenance_calories + ( self.desired_weight_delta * 500 ) #recommended calories
+    
+    def calculate_macronutrients(
+            self,
+            my_user: UserProfile
+    ) -> int:
+        """ Function to calculate user's macros. """
+        ...
 
 def main():
     ...
