@@ -54,16 +54,35 @@ class HealthPlan:
             'Fats': 9
         }
         
-        ''' Protein Needs g per kg of body weigth:
-        Sedentary Adult, 0.8 g/kg, Moderate 1.2 - 1.6, Active, 1.6 - 2.0, Very Active 2.0 - 2.2
-        Active Adult, 1.2 - 2.0 g/kg
-        Endurance athletes, 1.2 - 1.6 g/kg
-        Strength/Power athletes, 1.6 - 2.2 g/kg
-        Fat loss (cutting), 2.0 - 2.4 g/kg
-        Muslce gain (bulking), 1.6 - 2.2 g/kg
-        Older Adults, 1.2 - 2.0 g/kg 
-        '''
+        # Protein needs, grams per kg of body weight
+        protein_intake_need = {
+            'lose': 2.4,
+            'gain': 2.2,
+            'maintain': 2.0
+        }
 
+        protein_grams = (my_user.weight_lbs * 0.453) * protein_intake_need(self.goal)
+        
+        protein_calories = protein_grams * macro_calories.get('Protein')
+
+        if self.diet_type == 'balanced':
+            fats_percentage = 0.20 # 20% of allocated calories
+
+            fats_calories = self.current_goal_calories * fats_percentage
+            fats_grams = fats_calories / macro_calories.get('Fats')
+
+            carb_calories = self.current_goal_calories - (protein_calories + fats_calories)
+            carbohydrates_grams = carb_calories / macro_calories.get('Carbohydrates')
+
+        elif self.diet_type == 'low-carb':
+            carbohydrates_grams = 130
+            carb_calories = carbohydrates_grams * macro_calories.get('Carbohydrates')
+
+            fats_calories = self.current_goal_calories - (protein_calories + carb_calories)
+            fats_grams = fats_calories / macro_calories.get('Fats')
+
+        
+        return protein_grams, carbohydrates_grams, fats_grams
 
 
 def main():
