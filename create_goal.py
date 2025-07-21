@@ -47,7 +47,24 @@ class HealthPlan:
             my_user: UserProfile
     ) -> int:
         """ Function to calculate user's macros. """
-        ...
+        
+        macro_calories = { 
+            'Protien': 4,
+            'Carbohydrates': 4,
+            'Fats': 9
+        }
+        
+        ''' Protein Needs g per kg of body weigth:
+        Sedentary Adult, 0.8 g/kg, Moderate 1.2 - 1.6, Active, 1.6 - 2.0, Very Active 2.0 - 2.2
+        Active Adult, 1.2 - 2.0 g/kg
+        Endurance athletes, 1.2 - 1.6 g/kg
+        Strength/Power athletes, 1.6 - 2.2 g/kg
+        Fat loss (cutting), 2.0 - 2.4 g/kg
+        Muslce gain (bulking), 1.6 - 2.2 g/kg
+        Older Adults, 1.2 - 2.0 g/kg 
+        '''
+
+
 
 def main():
     ...
