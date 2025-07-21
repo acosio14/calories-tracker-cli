@@ -3,11 +3,15 @@ from dataclasses import dataclass
 
 @dataclass
 class HealthPlan:
-    goal: str = 'lose' # lose, gain, maintain weight
-    diet_type: str = 'balanced'
-    current_goal_calories: int = 1500 # Calories to lose, gain (subtract by 1 lb = 500 cal)
-    current_weight_delta: float | int = - 1 # Default of lose 1 lb/week
-    desired_weight_delta: float | int = - 1
+    """
+    A class for calculating recommended health metrics for desired goal.
+    """
+
+    goal: str
+    diet_type: str
+    current_goal_calories: int
+    current_weight_delta: float | int
+    desired_weight_delta: float | int
 
 
     def calculate_recommended_calories(
@@ -15,6 +19,21 @@ class HealthPlan:
             my_user: UserProfile, 
             tracking: bool = False
     ) -> int:
+        """
+        Function to calculate caloires for user based on goal.
+
+        Will be used to recalculate the maintenance calories of the user depending on how much
+        their weight has changed. With new maintance calories, it find a more accurate weekly calorie
+        goal to reach the desired weight change.
+
+        Args:
+            my_user: UserProfile Class that contains all the person's current body metrics.
+            tracking: Flag that tells wether user is tracking their weight.
+        
+        Returns
+            recommended_calories: New calories to reach the goal weight change.
+    
+        """
         
         if tracking:
             maintenance_calories = self.current_goal_calories - (500 * self.current_weight_delta)
