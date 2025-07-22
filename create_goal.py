@@ -66,9 +66,7 @@ class HealthPlan:
         protein_calories = protein_grams * macro_calories.get('Protein')
 
         if self.diet_type == 'balanced':
-            fats_percentage = 0.20 # 20% of allocated calories
-
-            fats_calories = self.current_goal_calories * fats_percentage
+            fats_calories = 0.20 * self.current_goal_calories # 20% of current cal are for fats 
             fats_grams = fats_calories / macro_calories.get('Fats')
 
             carb_calories = self.current_goal_calories - (protein_calories + fats_calories)
