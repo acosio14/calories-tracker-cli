@@ -19,4 +19,12 @@ goal_calories = James.calculate_maintance_calories() - (weight_delta * 500)
 james_goal = HealthPlan('lose','balanced', goal_calories, weight_delta, weight_delta)
 
 print(f"Recommended calories: {james_goal.calculate_recommended_calories(James)}")
-print(f"Macros: {james_goal.calculate_macronutrients(James)}")
+protein, carbs, fats = james_goal.calculate_macronutrients(James)
+print(
+f"""
+Macros 
+  Protein: {protein}g
+  Carbs: {carbs}g
+  Fats: {fats}g
+"""
+)
