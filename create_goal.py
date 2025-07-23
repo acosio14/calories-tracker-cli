@@ -10,8 +10,8 @@ class HealthPlan:
     goal: str
     diet_type: str
     current_goal_calories: int
-    current_weight_delta: float
-    desired_weight_delta: float
+    current_weight_delta: int
+    desired_weight_delta: int
 
 
     def calculate_recommended_calories(
@@ -49,9 +49,9 @@ class HealthPlan:
         """ Function to calculate user's macros. """
         
         macro_calories = { 
-            'Protien': 4,
-            'Carbohydrates': 4,
-            'Fats': 9
+            'Protein': 4.0,
+            'Carbohydrates': 4.0,
+            'Fats': 9.0
         }
         
         # Protein needs, grams per kg of body weight
@@ -60,26 +60,26 @@ class HealthPlan:
             'gain': 2.2,
             'maintain': 2.0
         }
+        protein_grams = round(
+            (float(my_user.weight_lbs) * 0.453) * protein_intake_need.get(self.goal)
+        )
 
-        protein_grams = (my_user.weight_lbs * 0.453) * protein_intake_need(self.goal)
-        
         protein_calories = protein_grams * macro_calories.get('Protein')
 
         if self.diet_type == 'balanced':
             fats_calories = 0.20 * self.current_goal_calories # 20% of current cal are for fats 
-            fats_grams = fats_calories / macro_calories.get('Fats')
+            fats_grams = round(fats_calories / macro_calories.get('Fats'))
 
             carb_calories = self.current_goal_calories - (protein_calories + fats_calories)
-            carbohydrates_grams = carb_calories / macro_calories.get('Carbohydrates')
+            carbohydrates_grams = round(carb_calories / macro_calories.get('Carbohydrates'))
 
         elif self.diet_type == 'low-carb':
-            carbohydrates_grams = 130
+            carbohydrates_grams = 130.0
             carb_calories = carbohydrates_grams * macro_calories.get('Carbohydrates')
 
             fats_calories = self.current_goal_calories - (protein_calories + carb_calories)
-            fats_grams = fats_calories / macro_calories.get('Fats')
+            fats_grams = round(fats_calories / macro_calories.get('Fats'))
 
-        
         return protein_grams, carbohydrates_grams, fats_grams
 
 
