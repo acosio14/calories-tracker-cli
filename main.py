@@ -13,8 +13,8 @@ print(f"Body fat percentage: {James.calculate_body_fat_percentage(waist_to_hip_r
 
 print(f"\nEstimated maintance calories: {James.calculate_maintance_calories()}")
 
-weight_delta = 1
-goal_calories = James.calculate_maintance_calories() - (weight_delta * 500)
+weight_delta = -1
+goal_calories = James.calculate_maintance_calories() + (weight_delta * 500)
 
 james_goal = HealthPlan('lose','balanced', goal_calories, weight_delta, weight_delta)
 
