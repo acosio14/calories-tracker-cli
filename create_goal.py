@@ -10,8 +10,8 @@ class HealthPlan:
     goal: str
     diet_type: str
     current_goal_calories: int
-    current_weight_delta: float | int
-    desired_weight_delta: float | int
+    current_weight_delta: float
+    desired_weight_delta: float
 
 
     def calculate_recommended_calories(
