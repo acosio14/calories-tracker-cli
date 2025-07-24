@@ -70,11 +70,7 @@ class UserProfile:
 
         return round(maintance_calories)
 
-    def calculate_recommended_calories(
-            self,
-            my_user: UserProfile, 
-            tracking: bool = False
-    ) -> int:
+    def calculate_recommended_calories( self, tracking: bool = False) -> int:
         """
         Function to calculate caloires for user based on goal.
 
@@ -94,14 +90,11 @@ class UserProfile:
         if tracking:
             maintenance_calories = self.current_goal_calories - (500 * self.current_weight_delta)
         else:
-            maintenance_calories = my_user.calculate_maintance_calories()
+            maintenance_calories = self.calculate_maintance_calories()
         
         return maintenance_calories + ( self.desired_weight_delta * 500 ) #recommended calories
     
-    def calculate_macronutrients(
-            self,
-            my_user: UserProfile
-    ) -> int:
+    def calculate_macronutrients(self) -> int:
         """ Function to calculate user's macros. """
         
         macro_calories = { 
@@ -117,7 +110,7 @@ class UserProfile:
             'maintain': 2.0
         }
         protein_grams = round(
-            (float(my_user.weight_lbs) * 0.453) * protein_intake_need.get(self.goal)
+            (float(self.weight_lbs) * 0.453) * protein_intake_need.get(self.goal)
         )
 
         protein_calories = protein_grams * macro_calories.get('Protein')
