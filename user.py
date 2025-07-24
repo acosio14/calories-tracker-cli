@@ -1,13 +1,13 @@
 # User Profile
-from dataclasses import dataclass
-
-@dataclass
 class UserProfile:
-    name: str
-    age: int
-    gender: str
-    height_ft: int
-    weight_lbs: int
+
+    def __init__(self, name, age, gender, height_ft):
+        self.name = name
+        self.age = age
+        self.gender = gender
+        self.height_ft = height_ft
+        self.weight_lbs = weight_lbs
+
     waist_in: int
     hip_in: int
     activity_level: str
