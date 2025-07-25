@@ -2,12 +2,7 @@
 class UserProfile:
 
     def __init__(
-        self,
-        name: str,
-        age: int,
-        gender: str,
-        height_ft: float,
-        weight_lbs: float,
+            self, name: str, age: int, gender: str, height_ft: float, weight_lbs: float,
     ) -> None:
         
         self.name = name
@@ -16,12 +11,6 @@ class UserProfile:
         self.height_ft = height_ft
         self.weight_lbs = weight_lbs
 
-    activity_level: str
-    goal: str = None
-    diet_type: str             
-    current_goal_calories: int
-    current_weight_delta: int
-    desired_weight_delta: int
 
     def calculate_waist_to_hip_ratio( 
         self,
@@ -29,17 +18,17 @@ class UserProfile:
         hip_inches: float,
     ) -> float:
         
-        waist_to_hip_ratio = waist_inches / hip_inches
-
-        return waist_to_hip_ratio
+        return waist_inches / hip_inches
     
+
     def calculate_bmi_imperial(self) -> float:
         # Need to compare bmi to recommended numbers, show risk
         weight = self.weight_lbs
         height_squared = pow( self.height_ft * 12, 2)
+
         return round(( weight / height_squared ) * 703, 1)
          
-    
+
     def calculate_body_fat_percentage(self, waist_hip_ratio: float) -> float:
         # simplified Navy method
 
@@ -51,6 +40,7 @@ class UserProfile:
 
         return round(body_fat_percentage,2)
     
+
     def calculate_maintance_calories(self) -> int:
         
         weight_kg = self.weight_lbs * 0.453       #lbs to kgs
@@ -79,6 +69,13 @@ class UserProfile:
 
         return round(maintance_calories)
 
+
+    def calculate_initial_recommended_calories(self, activity: str, goal: str, diet_type: str):        
+        current_goal_calories: int
+        current_weight_delta: int
+        desired_weight_delta: int
+
+
     def calculate_recommended_calories( self, tracking: bool = False) -> int:
         """
         Function to calculate caloires for user based on goal.
@@ -102,6 +99,7 @@ class UserProfile:
             maintenance_calories = self.calculate_maintance_calories()
         
         return maintenance_calories + ( self.desired_weight_delta * 500 ) #recommended calories
+    
     
     def calculate_macronutrients(self) -> int:
         """ Function to calculate user's macros. """
