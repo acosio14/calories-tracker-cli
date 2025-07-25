@@ -1,15 +1,21 @@
 # User Profile
 class UserProfile:
 
-    def __init__(self, name, age, gender, height_ft):
+    def __init__(
+        self,
+        name: str,
+        age: int,
+        gender: str,
+        height_ft: float,
+        weight_lbs: float,
+    ) -> None:
+        
         self.name = name
         self.age = age
         self.gender = gender
         self.height_ft = height_ft
         self.weight_lbs = weight_lbs
 
-    waist_in: int
-    hip_in: int
     activity_level: str
     goal: str = None
     diet_type: str             
@@ -17,21 +23,24 @@ class UserProfile:
     current_weight_delta: int
     desired_weight_delta: int
 
-    def calculate_waist_to_hip_ratio(self):
-        waist_to_hip_ratio = self.waist_in / self.hip_in
+    def calculate_waist_to_hip_ratio( 
+        self,
+        waist_inches: float,
+        hip_inches: float,
+    ) -> float:
+        
+        waist_to_hip_ratio = waist_inches / hip_inches
 
         return waist_to_hip_ratio
     
-    def calculate_bmi_imperial(self):
-        height_in = self.height_ft * 12
-
-        bmi = ( self.weight_lbs / pow( height_in, 2) ) * 703
-         
+    def calculate_bmi_imperial(self) -> float:
         # Need to compare bmi to recommended numbers, show risk
-
-        return round(bmi,1)
+        weight = self.weight_lbs
+        height_squared = pow( self.height_ft * 12, 2)
+        return round(( weight / height_squared ) * 703, 1)
+         
     
-    def calculate_body_fat_percentage(self, waist_hip_ratio):
+    def calculate_body_fat_percentage(self, waist_hip_ratio: float) -> float:
         # simplified Navy method
 
         if self.gender == "male":
@@ -42,7 +51,7 @@ class UserProfile:
 
         return round(body_fat_percentage,2)
     
-    def calculate_maintance_calories(self):
+    def calculate_maintance_calories(self) -> int:
         
         weight_kg = self.weight_lbs * 0.453       #lbs to kgs
         height_cm = self.height_ft * 30.48     #(convert ft to cm (To-Do: Convert 5'9" to inches first)
