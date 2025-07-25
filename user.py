@@ -128,7 +128,7 @@ class UserProfile:
         desired_weight_delta: float,
         current_calories: float,
         current_weight_delta: float,
-        tracking: bool = False
+        init_calories: bool,
     ) -> int:
         """
         Function to calculate caloires for user based on goal.
@@ -146,12 +146,12 @@ class UserProfile:
     
         """
         
-        if tracking:
+        if not init_calories:
             maintenance_calories = current_calories - (500 * current_weight_delta)
         else:
             self.calculate_initial_calories(goal, desired_weight_delta)
         
-        return maintenance_calories + ( self.desired_weight_delta * 500 ) #recommended calories
+        return maintenance_calories + ( desired_weight_delta * 500 ) #recommended calories
     
 
 
