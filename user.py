@@ -2,7 +2,7 @@
 class UserProfile:
 
     def __init__(
-            self, name: str, age: int, gender: str, height_ft: float, weight_lbs: float,
+        self, name: str, age: int, gender: str, height_ft: float, weight_lbs: float,
     ) -> None:
         
         self.name = name
@@ -41,7 +41,7 @@ class UserProfile:
         return round(body_fat_percentage,2)
     
 
-    def calculate_maintenance_calories(self) -> int:
+    def calculate_maintenance_calories(self, activity_level) -> int:
         
         weight_kg = self.weight_lbs * 0.453       #lbs to kgs
         height_cm = self.height_ft * 30.48     #(convert ft to cm (To-Do: Convert 5'9" to inches first)
@@ -60,17 +60,17 @@ class UserProfile:
             'extra active': 1.9,        # very hard exercise/sports & physical job
         }
 
-        activity_factor_value = activity_factor.get(self.activity_level.lower())
+        activity_factor_value = activity_factor.get(activity_level.lower())
 
         if activity_factor_value is not None:
             maintenance_calories = activity_factor_value * bmr
         else:
-            raise ValueError(f"{self.activity_level} is not a correct activity level.")
+            raise ValueError(f"{activity_level} is not a correct activity level.")
 
         return round(maintenance_calories)
 
 
-    def calculate_macronutrients(self) -> int:
+    def calculate_macronutrients(self, diet_type: str) -> int:
         """ Function to calculate user's macros. """
         
         macro_calories = { 
@@ -91,14 +91,14 @@ class UserProfile:
 
         protein_calories = protein_grams * macro_calories.get('Protein')
 
-        if self.diet_type == 'balanced':
+        if diet_type == 'balanced':
             fats_calories = 0.20 * self.current_goal_calories # 20% of current cal are for fats 
             fats_grams = round(fats_calories / macro_calories.get('Fats'))
 
             carb_calories = self.current_goal_calories - (protein_calories + fats_calories)
             carbohydrates_grams = round(carb_calories / macro_calories.get('Carbohydrates'))
 
-        elif self.diet_type == 'low-carb':
+        elif diet_type == 'low-carb':
             carbohydrates_grams = 130.0
             carb_calories = carbohydrates_grams * macro_calories.get('Carbohydrates')
 
@@ -108,18 +108,28 @@ class UserProfile:
         return protein_grams, carbohydrates_grams, fats_grams
     
 
-    def calculate_initial_recommended_calories(self, activity: str, goal: str, diet_type: str):
+    def calculate_initial_calories(self, goal: str, desired_weight_delta: float):
+        """ Function that calculates the initial recommended calories based on goal."""
 
         init_maintenance_calories = self.calculate_maintenance_calories()
+        
+        if goal == 'lose':
+            recommend_calories = init_maintenance_calories - 500 * abs(desired_weight_delta)
+        elif goal == 'gain':
+            recommend_calories = init_maintenance_calories + 500 * abs(desired_weight_delta)
+        else:
+            recommend_calories = init_maintenance_calories
+
+        return recommend_calories
 
 
-
-        current_goal_calories: int
-        current_weight_delta: int
-        desired_weight_delta: int
-
-
-    def calculate_recommended_calories( self, tracking: bool = False) -> int:
+    def calculate_recommended_calories(
+        self, goal: str, 
+        desired_weight_delta: float,
+        current_calories: float,
+        current_weight_delta: float,
+        tracking: bool = False
+    ) -> int:
         """
         Function to calculate caloires for user based on goal.
 
@@ -137,9 +147,9 @@ class UserProfile:
         """
         
         if tracking:
-            maintenance_calories = self.current_goal_calories - (500 * self.current_weight_delta)
+            maintenance_calories = current_calories - (500 * current_weight_delta)
         else:
-            maintenance_calories = self.calculate_maintenance_calories()
+            self.calculate_initial_calories(goal, desired_weight_delta)
         
         return maintenance_calories + ( self.desired_weight_delta * 500 ) #recommended calories
     
