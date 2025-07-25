@@ -41,7 +41,7 @@ class UserProfile:
         return round(body_fat_percentage,2)
     
 
-    def calculate_maintance_calories(self) -> int:
+    def calculate_maintenance_calories(self) -> int:
         
         weight_kg = self.weight_lbs * 0.453       #lbs to kgs
         height_cm = self.height_ft * 30.48     #(convert ft to cm (To-Do: Convert 5'9" to inches first)
@@ -63,44 +63,13 @@ class UserProfile:
         activity_factor_value = activity_factor.get(self.activity_level.lower())
 
         if activity_factor_value is not None:
-            maintance_calories = activity_factor_value * bmr
+            maintenance_calories = activity_factor_value * bmr
         else:
             raise ValueError(f"{self.activity_level} is not a correct activity level.")
 
-        return round(maintance_calories)
+        return round(maintenance_calories)
 
 
-    def calculate_initial_recommended_calories(self, activity: str, goal: str, diet_type: str):        
-        current_goal_calories: int
-        current_weight_delta: int
-        desired_weight_delta: int
-
-
-    def calculate_recommended_calories( self, tracking: bool = False) -> int:
-        """
-        Function to calculate caloires for user based on goal.
-
-        Will be used to recalculate the maintenance calories of the user depending on how much
-        their weight has changed. With new maintance calories, it find a more accurate weekly calorie
-        goal to reach the desired weight change.
-
-        Args:
-            my_user: UserProfile Class that contains all the person's current body metrics.
-            tracking: Flag that tells wether user is tracking their weight.
-        
-        Returns
-            recommended_calories: New calories to reach the goal weight change.
-    
-        """
-        
-        if tracking:
-            maintenance_calories = self.current_goal_calories - (500 * self.current_weight_delta)
-        else:
-            maintenance_calories = self.calculate_maintance_calories()
-        
-        return maintenance_calories + ( self.desired_weight_delta * 500 ) #recommended calories
-    
-    
     def calculate_macronutrients(self) -> int:
         """ Function to calculate user's macros. """
         
@@ -137,4 +106,42 @@ class UserProfile:
             fats_grams = round(fats_calories / macro_calories.get('Fats'))
 
         return protein_grams, carbohydrates_grams, fats_grams
+    
+
+    def calculate_initial_recommended_calories(self, activity: str, goal: str, diet_type: str):
+
+        init_maintenance_calories = self.calculate_maintenance_calories()
+
+
+
+        current_goal_calories: int
+        current_weight_delta: int
+        desired_weight_delta: int
+
+
+    def calculate_recommended_calories( self, tracking: bool = False) -> int:
+        """
+        Function to calculate caloires for user based on goal.
+
+        Will be used to recalculate the maintenance calories of the user depending on how much
+        their weight has changed. With new maintenance calories, it find a more accurate weekly calorie
+        goal to reach the desired weight change.
+
+        Args:
+            my_user: UserProfile Class that contains all the person's current body metrics.
+            tracking: Flag that tells wether user is tracking their weight.
+        
+        Returns
+            recommended_calories: New calories to reach the goal weight change.
+    
+        """
+        
+        if tracking:
+            maintenance_calories = self.current_goal_calories - (500 * self.current_weight_delta)
+        else:
+            maintenance_calories = self.calculate_maintenance_calories()
+        
+        return maintenance_calories + ( self.desired_weight_delta * 500 ) #recommended calories
+    
+
 
