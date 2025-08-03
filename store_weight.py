@@ -2,31 +2,29 @@
 
 import sqlite3
 
-def create_sql_table():
-    database = 'weight.db'
+def create_sql_table(database):
     create_table_sql = """
     CREATE TABLE IF NOT EXISTS weight_table (
-        id TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT NOT NULL, 
         weight REAL NOT NULL-- Stores weight
     );
     """
-
     with sqlite3.connect(database) as connection:
         cursor = connection.cursor()
         cursor.execute(create_table_sql)
         connection.commit()
 
-def add_weight_entry(database, connection, weight_entry):
+def add_weight_entry(database, weight_entry):
     with sqlite3.connect(database) as connection:
-        insert_statement = ''' INSERT INTO weight_table(id, date, weight)
-                                VALUES(?,?,?,?) '''
+        insert_statement = ''' INSERT INTO weight_table(date, weight)
+                                VALUES(?,?) '''
         
         cursor = connection.cursor()
         cursor.execute(insert_statement, weight_entry)
         connection.commit()
 
-def get_weekly_avg(database, connection, size):
+def get_weekly_avg(database, size):
     with sqlite3.connect(database) as connection:
         cursor = connection.cursor()
         cursor.execture('SELECT weight FROM weight_table WHERE MAX(id)')
@@ -34,19 +32,22 @@ def get_weekly_avg(database, connection, size):
     
     print(rows)
         
-
 def main():
+    database = 'weight.db'
+
+    create_sql_table(database)
 
     weight_entries = [
-        (0, "2025-08-01", 180.0),
-        (0, "2025-08-02", 180.0),
-        (0, "2025-08-03", 180.0),
-        (0, "2025-08-04", 180.0),
-        (0, "2025-08-05", 180.0)
+        ("2025-08-01", 180.0),
+        ("2025-08-02", 180.0),
+        ("2025-08-03", 180.0),
+        ("2025-08-04", 180.0),
+        ("2025-08-05", 180.0)
     ]
-
+    
     for weight_entry in weight_entries:
-        add_weight_entry(weight_entry)
+        add_weight_entry(database, weight_entry)
+    
 
 if __name__ == '__main__':
     main()
