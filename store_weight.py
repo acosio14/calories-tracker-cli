@@ -7,7 +7,7 @@ def create_sql_table(database):
     CREATE TABLE IF NOT EXISTS weight_table (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT NOT NULL, 
-        weight REAL NOT NULL-- Stores weight
+        weight INTEGER NOT NULL-- Stores weight
     );
     """
     with sqlite3.connect(database) as connection:
@@ -24,13 +24,11 @@ def add_weight_entry(database, weight_entry):
         cursor.execute(insert_statement, weight_entry)
         connection.commit()
 
-def get_weekly_avg(database, size):
+def get_weekly_avg(database):
     with sqlite3.connect(database) as connection:
         cursor = connection.cursor()
-        cursor.execture('SELECT weight FROM weight_table WHERE MAX(id)')
-        rows = cursor.fetchmany(size)
-    
-    print(rows)
+        cursor.execute('SELECT weight FROM weight_table ORDER BY id DESC LIMIT 7')
+        return cursor.fetchall()
         
 def main():
     database = 'weight.db'
@@ -39,15 +37,27 @@ def main():
 
     weight_entries = [
         ("2025-08-01", 180.0),
-        ("2025-08-02", 180.0),
-        ("2025-08-03", 180.0),
-        ("2025-08-04", 180.0),
-        ("2025-08-05", 180.0)
+        ("2025-08-02", 181.0),
+        ("2025-08-03", 182.0),
+        ("2025-08-04", 183.0),
+        ("2025-08-05", 184.0),
+        ("2025-08-06", 180.0),
+        ("2025-08-07", 181.0),
+        ("2025-08-08", 182.0),
+        ("2025-08-09", 183.0),
+        ("2025-08-10", 184.0)
     ]
     
     for weight_entry in weight_entries:
         add_weight_entry(database, weight_entry)
     
+    weight_list = []
+    for entry in get_weekly_avg(database):
+        weight_list.append(*entry)
+    
+    weekly_avg = round(sum(weight_list) / len(weight_list),2)
+
+    print(weekly_avg)
 
 if __name__ == '__main__':
     main()
