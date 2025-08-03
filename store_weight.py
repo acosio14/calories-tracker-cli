@@ -17,25 +17,26 @@ def create_sql_table():
         cursor.execute(create_table_sql)
         connection.commit()
 
-def add_weight_entry(conn, weight_entry):
+def add_weight_entry(connection, weight_entry):
     insert_statement = ''' INSERT INTO weight_table(id, date, weight)
                             VALUES(?,?,?,?) '''
     
-    cursor = conn.cursor()
-
+    cursor = connection.cursor()
     cursor.execute(insert_statement, weight_entry)
+    connection.commit()
 
-    conn.commit()
+def main():
 
-    return cursor.lastrowid
+    weight_entries = [
+        (0, "2025-08-01", 180.0),
+        (0, "2025-08-02", 180.0),
+        (0, "2025-08-03", 180.0),
+        (0, "2025-08-04", 180.0),
+        (0, "2025-08-05", 180.0)
+    ]
 
-weight_entries = [
-    (0, "2025-08-01", 180.0),
-    (0, "2025-08-02", 180.0),
-    (0, "2025-08-03", 180.0),
-    (0, "2025-08-04", 180.0),
-    (0, "2025-08-05", 180.0)
-]
+    for weight_entry in weight_entries:
+        add_weight_entry(weight_entry)
 
-for weight_entry in weight_entries:
-    add_weight_entry(weight_entry)
+if __name__ == '__main__':
+    main()
