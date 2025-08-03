@@ -29,7 +29,7 @@ def add_weight_entry(database, connection, weight_entry):
 def get_weekly_avg(database, connection, size):
     with sqlite3.connect(database) as connection:
         cursor = connection.cursor()
-        cursor.execture('SELECT * FROM weight_table')
+        cursor.execture('SELECT weight FROM weight_table WHERE MAX(id)')
         rows = cursor.fetchmany(size)
     
     print(rows)
