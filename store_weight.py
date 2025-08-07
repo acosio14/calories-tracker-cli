@@ -24,12 +24,25 @@ def add_weight_entry(database, weight_entry):
         cursor.execute(insert_statement, weight_entry)
         connection.commit()
 
-def get_weekly_avg(database):
+def get_weight_data(database, data_length):
+    
     with sqlite3.connect(database) as connection:
         cursor = connection.cursor()
-        cursor.execute('SELECT weight FROM weight_table ORDER BY id DESC LIMIT 7')
-        return cursor.fetchall()
+        cursor.execute(f'SELECT weight FROM weight_table ORDER BY id DESC LIMIT {data_length}')
+        weekly_weight = cursor.fetchall()
         
+        # This look like: 
+        # [(184.0,), (183.0,), (182.0,), (181.0,), (180.0,), (184.0,), (183.0,)]
+        # Need to unpack it
+        return [weight for (weight,) in weekly_weight]
+
+def calculate_avg_weight(weight_data):
+    """ Calculate average for list of weight values. """
+    total_week_sum = sum(weight_data)
+    avg_weekkly_weight = total_week_sum / len(weight_data)
+    
+    return round(avg_weekkly_weight, 2)
+
 def main():
     database = 'weight.db'
 
@@ -51,13 +64,11 @@ def main():
     for weight_entry in weight_entries:
         add_weight_entry(database, weight_entry)
     
-    weight_list = []
-    for entry in get_weekly_avg(database):
-        weight_list.append(*entry)
-    
-    weekly_avg = round(sum(weight_list) / len(weight_list),2)
+    week_data = get_weight_data(database,7) # For a week, 7 days
 
-    print(weekly_avg)
+    avg_weekly_weight = calculate_avg_weight(week_data)
+
+    print(avg_weekly_weight)
 
 if __name__ == '__main__':
     main()
