@@ -2,7 +2,9 @@
 
 import sqlite3
 
-def create_sql_table(database):
+def create_sql_table(database: str) -> None:
+    """ Create an sql table in a database file"""
+
     create_table_sql = """
     CREATE TABLE IF NOT EXISTS weight_table (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,17 +17,20 @@ def create_sql_table(database):
         cursor.execute(create_table_sql)
         connection.commit()
 
-def add_weight_entry(database, weight_entry):
+def add_weight_entry(database: str, data_entry: tuple[str,float]) -> None:
+    """ Add a weight entry into sql table. """
+
     with sqlite3.connect(database) as connection:
         insert_statement = ''' INSERT INTO weight_table(date, weight)
                                 VALUES(?,?) '''
         
         cursor = connection.cursor()
-        cursor.execute(insert_statement, weight_entry)
+        cursor.execute(insert_statement, data_entry)
         connection.commit()
 
-def get_weight_data(database, data_length):
-    
+def get_weight_data(database: str, data_length: int) -> list[float]:
+    """ Get weight data from sql table"""
+
     with sqlite3.connect(database) as connection:
         cursor = connection.cursor()
         cursor.execute(f'SELECT weight FROM weight_table ORDER BY id DESC LIMIT {data_length}')
@@ -36,8 +41,9 @@ def get_weight_data(database, data_length):
         # Need to unpack it
         return [weight for (weight,) in weekly_weight]
 
-def calculate_avg_weight(weight_data):
+def calculate_avg_weight(weight_data: list[float]) -> float:
     """ Calculate average for list of weight values. """
+    
     total_week_sum = sum(weight_data)
     avg_weekkly_weight = total_week_sum / len(weight_data)
     
@@ -47,22 +53,6 @@ def main():
     database = 'weight.db'
 
     create_sql_table(database)
-
-    weight_entries = [
-        ("2025-08-01", 180.0),
-        ("2025-08-02", 181.0),
-        ("2025-08-03", 182.0),
-        ("2025-08-04", 183.0),
-        ("2025-08-05", 184.0),
-        ("2025-08-06", 180.0),
-        ("2025-08-07", 181.0),
-        ("2025-08-08", 182.0),
-        ("2025-08-09", 183.0),
-        ("2025-08-10", 184.0)
-    ]
-    
-    for weight_entry in weight_entries:
-        add_weight_entry(database, weight_entry)
     
     week_data = get_weight_data(database,7) # For a week, 7 days
 
