@@ -1,0 +1,61 @@
+""" File is used to interact with a sql table inside weight database. """
+
+import sqlite3
+
+def create_sql_table(database: str) -> None:
+    """ Create an sql table in a database file"""
+
+    create_table_sql = """
+    CREATE TABLE IF NOT EXISTS weight_table (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL, 
+        weight INTEGER NOT NULL-- Stores weight
+    );
+    """
+    with sqlite3.connect(database) as connection:
+        cursor = connection.cursor()
+        cursor.execute(create_table_sql)
+        connection.commit()
+
+def add_weight_entry(database: str, data_entry: tuple[str,float]) -> None:
+    """ Add a weight entry into sql table. """
+
+    with sqlite3.connect(database) as connection:
+        insert_statement = ''' INSERT INTO weight_table(date, weight)
+                                VALUES(?,?) '''
+        
+        cursor = connection.cursor()
+        cursor.execute(insert_statement, data_entry)
+        connection.commit()
+
+def get_weight_data(database: str, data_length: int) -> list[float]:
+    """ Get weight data from sql table"""
+
+    with sqlite3.connect(database) as connection:
+        cursor = connection.cursor()
+        cursor.execute(f'SELECT weight FROM weight_table ORDER BY id DESC LIMIT {data_length}')
+        weekly_weight = cursor.fetchall()
+
+        return [weight for (weight,) in weekly_weight]
+
+def calculate_avg_weight(weight_data: list[float]) -> float:
+    """ Calculate average for list of weight values. """
+    
+    total_week_sum = sum(weight_data)
+    avg_weekkly_weight = total_week_sum / len(weight_data)
+    
+    return round(avg_weekkly_weight, 2)
+
+def main():
+    database = 'weight.db'
+
+    create_sql_table(database)
+    
+    week_data = get_weight_data(database,7) # For a week, 7 days
+
+    avg_weekly_weight = calculate_avg_weight(week_data)
+
+    print(avg_weekly_weight)
+
+if __name__ == '__main__':
+    main()
