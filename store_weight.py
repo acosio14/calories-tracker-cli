@@ -1,4 +1,4 @@
-# To store weight in a database. Should include date, weight.
+""" File is used to interact with a sql table inside weight database. """
 
 import sqlite3
 
@@ -35,10 +35,7 @@ def get_weight_data(database: str, data_length: int) -> list[float]:
         cursor = connection.cursor()
         cursor.execute(f'SELECT weight FROM weight_table ORDER BY id DESC LIMIT {data_length}')
         weekly_weight = cursor.fetchall()
-        
-        # This look like: 
-        # [(184.0,), (183.0,), (182.0,), (181.0,), (180.0,), (184.0,), (183.0,)]
-        # Need to unpack it
+
         return [weight for (weight,) in weekly_weight]
 
 def calculate_avg_weight(weight_data: list[float]) -> float:
