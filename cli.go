@@ -16,6 +16,11 @@ func (c *CLI) SetCaloriesGoal() error {
 	return nil
 }
 
+func (c *CLI) UpdateCaloriesGoal() error {
+	// manually update calories
+	return nil
+}
+
 func (c *CLI) AddWeight() error {
 	return nil
 }
@@ -29,10 +34,5 @@ func (c *CLI) ViewRemaindingCalories() error {
 }
 
 func (c *CLI) DisplayWeightProgress() error {
-	return nil
-}
-
-func (c *CLI) UpdateCaloriesGoal() error {
-	// manually update calories
 	return nil
 }
