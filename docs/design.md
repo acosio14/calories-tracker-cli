@@ -5,6 +5,8 @@
 - Select User
 - Set Goal: maintain, lose, gain
 - Add meal/food per day
+    - FoodItem -> quantity? servings?
+- Modify/Update food entry
 - Add weight
 - Display progress: weight (weekly or monthly?)
 - View remaining calories in the day (or week?)
