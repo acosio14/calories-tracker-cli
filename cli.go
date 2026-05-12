@@ -1,6 +1,8 @@
 package main
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+)
 
 func NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
@@ -16,31 +18,83 @@ func NewRootCmd() *cobra.Command {
 }
 
 func User() *cobra.Command {
-	//create
-	//select
 	userCmd := &cobra.Command{
-		Use:   "User",
-		Short: "Creater or Select user.",
+		Use:   "user",
+		Short: "Select user.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return nil
 		},
 	}
-	userCmd.Flags().AddFlag()
+	userCmd.AddCommand(CreateUser())
 	return userCmd
+}
+
+func CreateUser() *cobra.Command {
+	createUserCmd := &cobra.Command{
+		Use:   "create",
+		Short: "Create User.",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	return createUserCmd
+
 }
 
 func Add() *cobra.Command {
 	//Add: Goal, Calories, Weight, or Food item
-	return nil
+	addCmd := &cobra.Command{
+		Use:   "add",
+		Short: "Add Goal, FoodItem or weight.",
+		Long:  "Add Goal, FoodItem or weight to User's tracking history.",
+	}
+	addCmd.AddCommand(AddGoal())
+	addCmd.AddCommand(AddFoodItem())
+	addCmd.AddCommand(AddWeigth())
+	return addCmd
+}
+
+func AddGoal() *cobra.Command {
+	addGoalCmd := &cobra.Command{}
+}
+
+func AddFoodItem() *cobra.Command {
+	addFoodCmd := &cobra.Command{}
+}
+
+func AddWeigth() *cobra.Command {
+	addWeigthCmd := &cobra.Command{}
 }
 
 func Edit() *cobra.Command {
 	//Edit: Goal or Food Item
-	return nil
+	editCmd := &cobra.Command{
+		Use:   "edit",
+		Short: "Edit Goal or Food Item.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	editCmd.AddCommand()
+	editCmd.AddCommand()
+	return editCmd
 }
 
 func View() *cobra.Command {
 	//View: Remaining calories in the day
 	// Weight Progress (Plot)
+	var remainingCalories string
+	var weightPlot string
+	viewCmd := &cobra.Command{
+		Use:   "add",
+		Short: "Add Goal, FoodItem or weight.",
+		Long:  "Add Goal, FoodItem or weight to User's tracking history.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	viewCmd.AddCommand()
+	viewCmd.AddCommand()
 	return nil
 }

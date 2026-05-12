@@ -12,12 +12,12 @@ func (t *Tracker) SelectUser() error {
 	return nil
 }
 
-func (t *Tracker) SetCaloriesGoal() error {
+func (t *Tracker) AddCaloriesGoal() error {
 	// manually set calories
 	return nil
 }
 
-func (t *Tracker) UpdateCaloriesGoal() error {
+func (t *Tracker) EditCaloriesGoal() error {
 	// manually update calories
 	return nil
 }
@@ -30,7 +30,7 @@ func (t *Tracker) AddFoodItem() error {
 	return nil
 }
 
-func (t *Tracker) ModifyFoodItem() error {
+func (t *Tracker) EditFoodItem() error {
 	return nil
 }
 
