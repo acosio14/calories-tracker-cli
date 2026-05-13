@@ -67,7 +67,6 @@ func AddGoal() *cobra.Command {
 }
 
 func AddFoodItem() *cobra.Command {
-	var meal string
 	addFoodCmd := &cobra.Command{
 		Use:   "food",
 		Short: "Add Food Item.",
@@ -75,7 +74,10 @@ func AddFoodItem() *cobra.Command {
 			return nil
 		},
 	}
-	addFoodCmd.Flags().StringVar(&meal, "meal", "breakfast", "Meal of the day(breakfast, Lunch, Dinner)")
+	addFoodCmd.Flags().String("meal", "", "Meal of the day(breakfast, Lunch, Dinner)")
+	if err := addFoodCmd.MarkFlagRequired("meal"); err != nil {
+		panic(err)
+	}
 	return addFoodCmd
 }
 
