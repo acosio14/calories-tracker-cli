@@ -99,8 +99,8 @@ func Edit() *cobra.Command {
 			return nil
 		},
 	}
-	editCmd.AddCommand()
-	editCmd.AddCommand()
+	editCmd.AddCommand(EditGoal())
+	editCmd.AddCommand(EditFoodItem())
 	return editCmd
 }
 
@@ -129,8 +129,6 @@ func EditFoodItem() *cobra.Command {
 func View() *cobra.Command {
 	//View: Remaining calories in the day
 	// Weight Progress (Plot)
-	var remainingCalories string
-	var weightPlot string
 	viewCmd := &cobra.Command{
 		Use:   "add",
 		Short: "Add Goal, FoodItem or weight.",
@@ -139,7 +137,33 @@ func View() *cobra.Command {
 			return nil
 		},
 	}
-	viewCmd.AddCommand()
-	viewCmd.AddCommand()
+	viewCmd.AddCommand(ViewLeftoverCalories())
+	viewCmd.AddCommand(ViewPlot())
 	return nil
+}
+
+func ViewLeftoverCalories() *cobra.Command {
+	viewCaloriesCmd := &cobra.Command{
+		Use:   "calories",
+		Short: "Remaining calories for the day/week.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	//default: today. Monday, Tuesday, etc.
+	//default: current. Last (week)
+	viewCaloriesCmd.Flags().String("day", "today", "Show remaining calories the day.")
+	viewCaloriesCmd.Flags().String("week", "current", "Show remaining calories for current week.")
+}
+
+func ViewPlot() *cobra.Command {
+	viewPlotCmd := &cobra.Command{
+		Use:   "plot",
+		Short: "Show plot",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	// week. month, year
+	viewPlotCmd.Flags().String("weigth", "month", "Plot weight for time period.")
 }
