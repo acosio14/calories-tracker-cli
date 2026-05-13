@@ -139,7 +139,7 @@ func View() *cobra.Command {
 	}
 	viewCmd.AddCommand(ViewLeftoverCalories())
 	viewCmd.AddCommand(ViewPlot())
-	return nil
+	return viewCmd
 }
 
 func ViewLeftoverCalories() *cobra.Command {
@@ -154,6 +154,7 @@ func ViewLeftoverCalories() *cobra.Command {
 	//default: current. Last (week)
 	viewCaloriesCmd.Flags().String("day", "today", "Show remaining calories the day.")
 	viewCaloriesCmd.Flags().String("week", "current", "Show remaining calories for current week.")
+	return viewCaloriesCmd
 }
 
 func ViewPlot() *cobra.Command {
@@ -166,4 +167,5 @@ func ViewPlot() *cobra.Command {
 	}
 	// week. month, year
 	viewPlotCmd.Flags().String("weigth", "month", "Plot weight for time period.")
+	return viewPlotCmd
 }
