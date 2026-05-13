@@ -56,15 +56,38 @@ func Add() *cobra.Command {
 }
 
 func AddGoal() *cobra.Command {
-	addGoalCmd := &cobra.Command{}
+	addGoalCmd := &cobra.Command{
+		Use:   "goal",
+		Short: "Add weight goal.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	return addGoalCmd
 }
 
 func AddFoodItem() *cobra.Command {
-	addFoodCmd := &cobra.Command{}
+	var meal string
+	addFoodCmd := &cobra.Command{
+		Use:   "food",
+		Short: "Add Food Item.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	addFoodCmd.Flags().StringVar(&meal, "meal", "breakfast", "Meal of the day(breakfast, Lunch, Dinner)")
+	return addFoodCmd
 }
 
 func AddWeigth() *cobra.Command {
-	addWeigthCmd := &cobra.Command{}
+	addWeigthCmd := &cobra.Command{
+		Use:   "weight",
+		Short: "Add weight",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	return addWeigthCmd
 }
 
 func Edit() *cobra.Command {
