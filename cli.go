@@ -104,6 +104,28 @@ func Edit() *cobra.Command {
 	return editCmd
 }
 
+func EditGoal() *cobra.Command {
+	editGoalCmd := &cobra.Command{
+		Use:   "goal",
+		Short: "Edit Goal.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	return editGoalCmd
+}
+
+func EditFoodItem() *cobra.Command {
+	editFoodItem := &cobra.Command{
+		Use:   "food",
+		Short: "Edit food item.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
+	}
+	return editFoodItem
+}
+
 func View() *cobra.Command {
 	//View: Remaining calories in the day
 	// Weight Progress (Plot)
