@@ -39,7 +39,7 @@ CLI:
     - Goal(Gain, Lose, Maintain)
     - Food Item
 - View
-    - Remaining Calories for day/wee
+    - Remaining Calories for day/week
     - Plot Weight Progress
 
 Store:
