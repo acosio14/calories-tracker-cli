@@ -132,9 +132,8 @@ func View() *cobra.Command {
 	//View: Remaining calories in the day
 	// Weight Progress (Plot)
 	viewCmd := &cobra.Command{
-		Use:   "add",
-		Short: "Add Goal, FoodItem or weight.",
-		Long:  "Add Goal, FoodItem or weight to User's tracking history.",
+		Use:   "view",
+		Short: "View remaining calories or weight progress.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return nil
 		},
