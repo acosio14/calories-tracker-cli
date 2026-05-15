@@ -47,3 +47,24 @@ Store:
 
 Display:
 - Plot weight per week, day or year
+
+DB structure
+- User
+    - Name
+    - Age
+    - Gender
+    - Height
+    - Goal
+        - (Maintain, Gain, Lose)
+        - Goal Weight
+        - Rate of change
+    - Weight
+        - Date
+        - Value
+    - Food
+        - Date
+        - Meal (B, L, D)
+        - Name
+        - Servings
+        - Calories Per Serving
+        - Total Calories
