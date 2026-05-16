@@ -5,7 +5,18 @@ import (
 )
 
 func main() {
-	if err := NewRootCmd().Execute(); err != nil {
+	userSvc := service.UserService{}
+	goalSvc := service.GoalService{}
+	foodSvc := service.FoodService{}
+	weightSvc := service.WeightService{}
+
+	cli := NewCLI(userSvc, goalSvc, foodSvc, weightSvc)
+	if err := cli.NewRootCmd().Execute(); err != nil {
 		os.Exit(1)
 	}
 }
+
+// The svc above should implmement the interfaces in cli
+// UserService would be struct type UserServiceStruct{}
+// And it would have methods -> CreateUser() and SelectUser()
+// to complete the interface
