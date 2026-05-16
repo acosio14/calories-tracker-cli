@@ -2,6 +2,9 @@ package main
 
 import (
 	"os"
+
+	"github.com/acosio14/calories-tracker-cli/cli"
+	service "github.com/acosio14/calories-tracker-cli/services"
 )
 
 func main() {
@@ -10,7 +13,7 @@ func main() {
 	foodSvc := service.FoodService{}
 	weightSvc := service.WeightService{}
 
-	cli := NewCLI(userSvc, goalSvc, foodSvc, weightSvc)
+	cli := cli.NewCLI(userSvc, goalSvc, foodSvc, weightSvc)
 	if err := cli.NewRootCmd().Execute(); err != nil {
 		os.Exit(1)
 	}
