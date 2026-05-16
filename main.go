@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/acosio14/calories-tracker-cli/cli"
-	service "github.com/acosio14/calories-tracker-cli/services"
+	"github.com/acosio14/calories-tracker-cli/service"
 )
 
 func main() {
@@ -18,8 +18,3 @@ func main() {
 		os.Exit(1)
 	}
 }
-
-// The svc above should implmement the interfaces in cli
-// UserService would be struct type UserServiceStruct{}
-// And it would have methods -> CreateUser() and SelectUser()
-// to complete the interface

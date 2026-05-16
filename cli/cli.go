@@ -5,8 +5,8 @@ import (
 )
 
 type UserManager interface {
-	CreateUser() error
-	SelectUser() error
+	CreateUser(name string) error
+	SelectUser(name string) error
 }
 
 type GoalManager interface {
@@ -72,7 +72,7 @@ func (c *CLI) CreateUserCmd() *cobra.Command {
 		Short: "Create User.",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.User.CreateUser()
+			return c.User.CreateUser(args[0])
 		},
 	}
 	return createUserCmd

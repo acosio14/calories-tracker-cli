@@ -1,4 +1,4 @@
-package main
+package domain
 
 type Goal struct {
 	Type   string `json:"type"`
@@ -20,7 +20,7 @@ type FoodItem struct {
 	TotalCalories      int    `json:"total_calories"`
 }
 
-type CalorieTrackerUser struct {
+type User struct {
 	Name        string     `json:"name"`
 	Age         int        `json:"age"`
 	Gender      string     `json:"gender"`
