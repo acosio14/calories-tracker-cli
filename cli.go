@@ -32,6 +32,15 @@ type CLI struct {
 	Weight WeightTracker
 }
 
+func NewCLI(User UserManager, Goal GoalManager, Food FoodTracker, Weight WeightTracker) *CLI {
+	return &CLI{
+		User:   User,
+		Goal:   Goal,
+		Food:   Food,
+		Weight: Weight,
+	}
+}
+
 func (c *CLI) NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "calorie-tracker",
