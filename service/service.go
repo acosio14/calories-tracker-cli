@@ -46,7 +46,7 @@ func (u *UserManager) CreateUser(name string) error {
 	return nil
 }
 
-func (u *UserManager) SelectUser() error {
+func (u *UserManager) SelectUser(name string) error {
 	return nil
 }
 
