@@ -4,20 +4,48 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewRootCmd() *cobra.Command {
+type UserManager interface {
+	CreateUser() error
+	SelectUser() error
+}
+
+type GoalManager interface {
+	AddCaloriesGoal() error
+	EditCaloriesGoal() error
+}
+
+type FoodTracker interface {
+	AddFoodItem() error
+	EditFoodItem() error
+	ViewRemainingCalories() error
+}
+
+type WeightTracker interface {
+	AddWeight() error
+	DisplayWeightProgress() error
+}
+
+type CLI struct {
+	User   UserManager
+	Goal   GoalManager
+	Food   FoodTracker
+	Weight WeightTracker
+}
+
+func (c *CLI) NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "calorie-tracker",
 		Short: "Tracks Calories",
 	}
-	rootCmd.AddCommand(User())
-	rootCmd.AddCommand(Add())
-	rootCmd.AddCommand(Edit())
-	rootCmd.AddCommand(View())
+	rootCmd.AddCommand(c.UserCmd())
+	rootCmd.AddCommand(c.AddCmd())
+	rootCmd.AddCommand(c.EditCmd())
+	rootCmd.AddCommand(c.ViewCmd())
 
 	return rootCmd
 }
 
-func User() *cobra.Command {
+func (c *CLI) UserCmd() *cobra.Command {
 	userCmd := &cobra.Command{
 		Use:   "user",
 		Short: "Select user.",
@@ -25,53 +53,53 @@ func User() *cobra.Command {
 			return nil
 		},
 	}
-	userCmd.AddCommand(CreateUser())
+	userCmd.AddCommand(c.CreateUserCmd())
 	return userCmd
 }
 
-func CreateUser() *cobra.Command {
+func (c *CLI) CreateUserCmd() *cobra.Command {
 	createUserCmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create User.",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return c.User.CreateUser()
 		},
 	}
 	return createUserCmd
 
 }
 
-func Add() *cobra.Command {
+func (c *CLI) AddCmd() *cobra.Command {
 	//Add: Goal, Calories, Weight, or Food item
 	addCmd := &cobra.Command{
 		Use:   "add",
 		Short: "Add Goal, FoodItem or weight.",
 		Long:  "Add Goal, FoodItem or weight to User's tracking history.",
 	}
-	addCmd.AddCommand(AddGoal())
-	addCmd.AddCommand(AddFoodItem())
-	addCmd.AddCommand(AddWeigth())
+	addCmd.AddCommand(c.AddGoalCmd())
+	addCmd.AddCommand(c.AddFoodItemCmd())
+	addCmd.AddCommand(c.AddWeigthCmd())
 	return addCmd
 }
 
-func AddGoal() *cobra.Command {
+func (c *CLI) AddGoalCmd() *cobra.Command {
 	addGoalCmd := &cobra.Command{
 		Use:   "goal",
 		Short: "Add weight goal.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return c.Goal.AddCaloriesGoal()
 		},
 	}
 	return addGoalCmd
 }
 
-func AddFoodItem() *cobra.Command {
+func (c *CLI) AddFoodItemCmd() *cobra.Command {
 	addFoodCmd := &cobra.Command{
 		Use:   "food",
 		Short: "Add Food Item.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return c.Food.AddFoodItem()
 		},
 	}
 	addFoodCmd.Flags().String("meal", "", "Meal of the day(breakfast, Lunch, Dinner)")
@@ -81,74 +109,68 @@ func AddFoodItem() *cobra.Command {
 	return addFoodCmd
 }
 
-func AddWeigth() *cobra.Command {
+func (c *CLI) AddWeigthCmd() *cobra.Command {
 	addWeigthCmd := &cobra.Command{
 		Use:   "weight",
 		Short: "Add weight",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return c.Weight.AddWeight()
 		},
 	}
 	return addWeigthCmd
 }
 
-func Edit() *cobra.Command {
+func (c *CLI) EditCmd() *cobra.Command {
 	//Edit: Goal or Food Item
 	editCmd := &cobra.Command{
 		Use:   "edit",
 		Short: "Edit Goal or Food Item.",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
-		},
 	}
-	editCmd.AddCommand(EditGoal())
-	editCmd.AddCommand(EditFoodItem())
+	editCmd.AddCommand(c.EditGoalCmd())
+	editCmd.AddCommand(c.EditFoodItemCmd())
 	return editCmd
 }
 
-func EditGoal() *cobra.Command {
+func (c *CLI) EditGoalCmd() *cobra.Command {
 	editGoalCmd := &cobra.Command{
 		Use:   "goal",
 		Short: "Edit Goal.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return c.Goal.EditCaloriesGoal()
 		},
 	}
 	return editGoalCmd
 }
 
-func EditFoodItem() *cobra.Command {
+func (c *CLI) EditFoodItemCmd() *cobra.Command {
 	editFoodItem := &cobra.Command{
 		Use:   "food",
 		Short: "Edit food item.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return c.Food.EditFoodItem()
 		},
 	}
 	return editFoodItem
 }
 
-func View() *cobra.Command {
+func (c *CLI) ViewCmd() *cobra.Command {
 	//View: Remaining calories in the day
 	// Weight Progress (Plot)
 	viewCmd := &cobra.Command{
 		Use:   "view",
 		Short: "View remaining calories or weight progress.",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
-		},
 	}
-	viewCmd.AddCommand(ViewLeftoverCalories())
-	viewCmd.AddCommand(ViewPlot())
+	viewCmd.AddCommand(c.ViewLeftoverCaloriesCmd())
+	viewCmd.AddCommand(c.ViewPlotCmd())
 	return viewCmd
 }
 
-func ViewLeftoverCalories() *cobra.Command {
+func (c *CLI) ViewLeftoverCaloriesCmd() *cobra.Command {
 	viewCaloriesCmd := &cobra.Command{
 		Use:   "calories",
 		Short: "Remaining calories for the day/week.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return c.Food.ViewRemainingCalories()
 		},
 	}
 	//default: today. Monday, Tuesday, etc.
@@ -158,12 +180,12 @@ func ViewLeftoverCalories() *cobra.Command {
 	return viewCaloriesCmd
 }
 
-func ViewPlot() *cobra.Command {
+func (c *CLI) ViewPlotCmd() *cobra.Command {
 	viewPlotCmd := &cobra.Command{
 		Use:   "plot",
 		Short: "Show plot",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return c.Weight.DisplayWeightProgress()
 		},
 	}
 	// week. month, year
