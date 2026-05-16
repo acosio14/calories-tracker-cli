@@ -6,7 +6,7 @@ type Goal struct {
 	Rate   int    `json:"rate"`
 }
 
-type WeightProgress struct {
+type Weight struct {
 	Date  int `json:"date"`
 	Value int `json:"weight_value"`
 }
@@ -20,12 +20,12 @@ type FoodItem struct {
 	TotalCalories      int    `json:"total_calories"`
 }
 
-type TrackerUser struct {
-	Name   string         `json:"name"`
-	Age    int            `json:"age"`
-	Gender string         `json:"gender"`
-	Height int            `json:"height"`
-	Goal   Goal           `json:"goal"`
-	Weight WeightProgress `json:"weight"`
-	Food   FoodItem       `json:"food"`
+type CalorieTrackerUser struct {
+	Name        string     `json:"name"`
+	Age         int        `json:"age"`
+	Gender      string     `json:"gender"`
+	Height      int        `json:"height"`
+	Goal        []Goal     `json:"goal"`
+	Weight      []Weight   `json:"weight"`
+	FoodJournal []FoodItem `json:"food_items"`
 }
