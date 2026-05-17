@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
 )
@@ -22,26 +23,51 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Println("What is your height?")
 	fmt.Scan(&height)
 
-	var goal int
+	var userGoal string
 	fmt.Println("What is your goal? (lose/maintain/gain)")
-	fmt.Scan(&goal)
+	fmt.Scan(&userGoal)
 
-	var weight int
+	var initWeight int
 	fmt.Println("What is your current weight?")
-	fmt.Scan(&weight)
+	fmt.Scan(&initWeight)
 	// Need to get date, and add date and weight to weight struct
 
-	//Validate if User does not exist
+	var goalWeight int
+	fmt.Println("What is your goal weight?")
+	fmt.Scan(&goalWeight)
+
+	var goalTimeline int
+	fmt.Println("How many weeks to reach goal?")
+	fmt.Scan(&goalTimeline)
+
+	goalRate := (goalWeight - initWeight) / goalTimeline
+
+	goal := domain.Goal{
+		Type:   userGoal,
+		Weight: goalWeight,
+		Rate:   goalRate,
+	}
+	today := time.Now().Format("January 2, 2006")
+
+	weight := make([]domain.Weight, 1)
+	weight[0] = domain.Weight{
+		Date:  today,
+		Value: initWeight,
+	}
+
+	foodItem := make([]domain.FoodItem, 1)
 
 	user := domain.User{
-		Name:   name,
-		Age:    age,
-		Gender: gender,
-		Height: height,
-		//Goal:   goal,
-		//Weight: weight,
+		Name:        name,
+		Age:         age,
+		Gender:      gender,
+		Height:      height,
+		Goal:        goal,
+		Weight:      weight,
+		FoodJournal: foodItem,
 	}
 	json.Marshal(user)
+	//validate if user doesn't exist
 
 	return nil
 }
