@@ -7,8 +7,8 @@ type Goal struct {
 }
 
 type Weight struct {
-	Date  int `json:"date"`
-	Value int `json:"weight_value"`
+	Date  string `json:"date"`
+	Value int    `json:"weight_value"`
 }
 
 type FoodItem struct {
@@ -25,7 +25,7 @@ type User struct {
 	Age         int        `json:"age"`
 	Gender      string     `json:"gender"`
 	Height      int        `json:"height"`
-	Goal        []Goal     `json:"goal"`
+	Goal        Goal       `json:"goal"`
 	Weight      []Weight   `json:"weight"`
 	FoodJournal []FoodItem `json:"food_items"`
 }
