@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
@@ -30,7 +31,6 @@ func (u *UserManager) CreateUser(name string) error {
 	var initWeight int
 	fmt.Println("What is your current weight?")
 	fmt.Scan(&initWeight)
-	// Need to get date, and add date and weight to weight struct
 
 	var goalWeight int
 	fmt.Println("What is your goal weight?")
@@ -66,13 +66,24 @@ func (u *UserManager) CreateUser(name string) error {
 		Weight:      weight,
 		FoodJournal: foodItem,
 	}
-	json.Marshal(user)
-	//validate if user doesn't exist
+
+	userData, err := json.Marshal(user)
+	if err != nil {
+		return err
+	}
+
+	filename := fmt.Sprintf("%s.json", user.Name)
+	err = os.WriteFile(filename, userData, 0644)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
 func (u *UserManager) SelectUser(name string) error {
+	//unmarshals json file pertaining to user. How does in keep it? Cache?
+
 	return nil
 }
 
