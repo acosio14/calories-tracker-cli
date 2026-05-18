@@ -99,37 +99,3 @@ func (u *UserManager) SelectUser(name string) error {
 
 	return nil
 }
-
-type GoalManager struct{}
-
-func (g *GoalManager) AddCaloriesGoal() error {
-	return nil
-}
-
-func (g *GoalManager) EditCaloriesGoal() error {
-	return nil
-}
-
-type FoodTracker struct{}
-
-func (f *FoodTracker) AddFoodItem() error {
-	return nil
-}
-
-func (f *FoodTracker) EditFoodItem() error {
-	return nil
-}
-
-func (f *FoodTracker) ViewRemainingCalories() error {
-	return nil
-}
-
-type WeightTracker struct{}
-
-func (w *WeightTracker) AddWeight() error {
-	return nil
-}
-
-func (w *WeightTracker) DisplayWeightProgress() error {
-	return nil
-}
