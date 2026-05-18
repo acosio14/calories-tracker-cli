@@ -83,6 +83,19 @@ func (u *UserManager) CreateUser(name string) error {
 
 func (u *UserManager) SelectUser(name string) error {
 	//unmarshals json file pertaining to user. How does in keep it? Cache?
+	//Ability to write name or list names and select?
+
+	jsonFile := fmt.Sprintf("%s.json", name)
+	jsonContent, err := os.ReadFile(jsonFile)
+	if err != nil {
+		return err
+	}
+
+	var user domain.User
+	err = json.Unmarshal(jsonContent, &user)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
