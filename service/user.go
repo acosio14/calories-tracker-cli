@@ -4,12 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
 )
 
-type UserManager struct{}
+type UserManager struct {
+	statePath string
+}
 
 func (u *UserManager) CreateUser(name string) error {
 	var age int
@@ -67,7 +70,7 @@ func (u *UserManager) CreateUser(name string) error {
 		FoodJournal: foodItem,
 	}
 
-	userData, err := json.Marshal(user)
+	userData, err := json.MarshalIndent(user, "", "	")
 	if err != nil {
 		return err
 	}
@@ -81,21 +84,34 @@ func (u *UserManager) CreateUser(name string) error {
 	return nil
 }
 
-func (u *UserManager) SelectUser(name string) error {
-	//unmarshals json file pertaining to user. How does in keep it? Cache?
-	//Ability to write name or list names and select?
+func (u *UserManager) SelectUser(name string) (*domain.User, error) {
 
 	jsonFile := fmt.Sprintf("%s.json", name)
 	jsonContent, err := os.ReadFile(jsonFile)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("read user %q: %w", name, err)
 	}
 
 	var user domain.User
 	err = json.Unmarshal(jsonContent, &user)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("parse user %q: %w", name, err)
 	}
 
-	return nil
+	return &user, nil
+}
+
+func (u *UserManager) SetCurrentUser(name string) error {
+	if _, err := u.SelectUser(name); err != nil {
+		return err
+	}
+	return os.WriteFile(u.statePath, []byte(name), 0600)
+}
+
+func (u *UserManager) CurrentUser() (*domain.User, error) {
+	name, err := os.ReadFile(u.statePath)
+	if err != nil {
+		return nil, fmt.Errorf("no user selected: %w", err)
+	}
+	return u.SelectUser(strings.TrimSpace(string(name)))
 }

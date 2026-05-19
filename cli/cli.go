@@ -1,12 +1,15 @@
 package cli
 
 import (
+	"fmt"
+
+	"github.com/acosio14/calories-tracker-cli/domain"
 	"github.com/spf13/cobra"
 )
 
 type UserManager interface {
 	CreateUser(name string) error
-	SelectUser(name string) error
+	SelectUser(name string) (*domain.User, error)
 }
 
 type GoalManager interface {
@@ -46,7 +49,7 @@ func (c *CLI) NewRootCmd() *cobra.Command {
 		Use:   "calorie-tracker",
 		Short: "Tracks Calories",
 	}
-	rootCmd.AddCommand(c.UserCmd())
+	rootCmd.AddCommand(c.SelectUserCmd())
 	rootCmd.AddCommand(c.AddCmd())
 	rootCmd.AddCommand(c.EditCmd())
 	rootCmd.AddCommand(c.ViewCmd())
@@ -54,11 +57,17 @@ func (c *CLI) NewRootCmd() *cobra.Command {
 	return rootCmd
 }
 
-func (c *CLI) UserCmd() *cobra.Command {
+func (c *CLI) SelectUserCmd() *cobra.Command {
 	userCmd := &cobra.Command{
 		Use:   "user",
 		Short: "Select user.",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			user, err := c.User.SelectUser(args[0])
+			if err != nil {
+				return err
+			}
+			fmt.Fprintf(cmd.OutOrStdout(), "Selected user: %s\n", user.Name)
 			return nil
 		},
 	}
