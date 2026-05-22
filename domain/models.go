@@ -1,14 +1,14 @@
 package domain
 
 type Goal struct {
-	Type   string `json:"type"`
-	Weight int    `json:"weight"`
-	Rate   int    `json:"rate"`
+	Type   string  `json:"type"`
+	Weight float32 `json:"weight"`
+	Rate   float32 `json:"rate"`
 }
 
 type Weight struct {
-	Date  string `json:"date"`
-	Value int    `json:"weight_value"`
+	Date  string  `json:"date"`
+	Value float32 `json:"weight_value"`
 }
 
 type FoodItem struct {

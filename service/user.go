@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
+	"path/filepath"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
@@ -20,26 +20,26 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Scan(&age)
 
 	var gender string
-	fmt.Println("What is your gender?")
+	fmt.Println("What is your gender?") //add M/F, truncate to lower
 	fmt.Scan(&gender)
 
 	var height int
-	fmt.Println("What is your height?")
+	fmt.Println("What is your height?") //add in inches
 	fmt.Scan(&height)
 
 	var userGoal string
-	fmt.Println("What is your goal? (lose/maintain/gain)")
+	fmt.Println("What is your goal? (lose/maintain/gain)") //truncate to lower case, and if misspelled
 	fmt.Scan(&userGoal)
 
-	var initWeight int
-	fmt.Println("What is your current weight?")
+	var initWeight float32
+	fmt.Println("What is your current weight?") //add lbs
 	fmt.Scan(&initWeight)
 
-	var goalWeight int
+	var goalWeight float32
 	fmt.Println("What is your goal weight?")
 	fmt.Scan(&goalWeight)
 
-	var goalTimeline int
+	var goalTimeline float32
 	fmt.Println("How many weeks to reach goal?")
 	fmt.Scan(&goalTimeline)
 
@@ -74,9 +74,15 @@ func (u *UserManager) CreateUser(name string) error {
 	if err != nil {
 		return err
 	}
+	outputFolder := "output"
+	err = os.MkdirAll(outputFolder, 0644)
+	if err != nil {
+		return err
+	}
 
 	filename := fmt.Sprintf("%s.json", user.Name)
-	err = os.WriteFile(filename, userData, 0644)
+	outputPath := filepath.Join(outputFolder, filename)
+	err = os.WriteFile(outputPath, userData, 0644)
 	if err != nil {
 		return err
 	}
@@ -99,19 +105,4 @@ func (u *UserManager) SelectUser(name string) (*domain.User, error) {
 	}
 
 	return &user, nil
-}
-
-func (u *UserManager) SetCurrentUser(name string) error {
-	if _, err := u.SelectUser(name); err != nil {
-		return err
-	}
-	return os.WriteFile(u.statePath, []byte(name), 0600)
-}
-
-func (u *UserManager) CurrentUser() (*domain.User, error) {
-	name, err := os.ReadFile(u.statePath)
-	if err != nil {
-		return nil, fmt.Errorf("no user selected: %w", err)
-	}
-	return u.SelectUser(strings.TrimSpace(string(name)))
 }

@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
 	"github.com/spf13/cobra"
@@ -57,6 +58,29 @@ func (c *CLI) NewRootCmd() *cobra.Command {
 	return rootCmd
 }
 
+func (c *CLI) CreateUserCmd() *cobra.Command {
+	createUserCmd := &cobra.Command{
+		Use:   "create",
+		Short: "Create User.",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			entries, err := os.ReadDir("./output")
+			if err != nil {
+				fmt.Printf("Error reading directory %v", err)
+				return err
+			}
+			if len(entries) == 0 {
+				return c.User.CreateUser(args[0])
+			} else {
+				fmt.Printf("A user file already exist: %s\n", entries[0].Name())
+				return err
+			}
+		},
+	}
+	return createUserCmd
+
+}
+
 func (c *CLI) SelectUserCmd() *cobra.Command {
 	userCmd := &cobra.Command{
 		Use:   "user",
@@ -73,19 +97,6 @@ func (c *CLI) SelectUserCmd() *cobra.Command {
 	}
 	userCmd.AddCommand(c.CreateUserCmd())
 	return userCmd
-}
-
-func (c *CLI) CreateUserCmd() *cobra.Command {
-	createUserCmd := &cobra.Command{
-		Use:   "create",
-		Short: "Create User.",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.User.CreateUser(args[0])
-		},
-	}
-	return createUserCmd
-
 }
 
 func (c *CLI) AddCmd() *cobra.Command {
