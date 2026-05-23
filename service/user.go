@@ -20,23 +20,23 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Scan(&age)
 
 	var gender string
-	fmt.Println("What is your gender?") //add M/F, truncate to lower
+	fmt.Println("What is your gender?(M/F)")
 	fmt.Scan(&gender)
 
 	var height int
-	fmt.Println("What is your height?") //add in inches
+	fmt.Println("What is your height?(inches)")
 	fmt.Scan(&height)
 
 	var userGoal string
-	fmt.Println("What is your goal? (lose/maintain/gain)") //truncate to lower case, and if misspelled
+	fmt.Println("What is your goal? (lose/maintain/gain)")
 	fmt.Scan(&userGoal)
 
 	var initWeight float32
-	fmt.Println("What is your current weight?") //add lbs
+	fmt.Println("What is your current weight?(lbs)")
 	fmt.Scan(&initWeight)
 
 	var goalWeight float32
-	fmt.Println("What is your goal weight?")
+	fmt.Println("What is your goal weight?(lbs)")
 	fmt.Scan(&goalWeight)
 
 	var goalTimeline float32
@@ -90,18 +90,27 @@ func (u *UserManager) CreateUser(name string) error {
 	return nil
 }
 
-func (u *UserManager) SelectUser(name string) (*domain.User, error) {
+func SelectUser() (*domain.User, error) {
+	var user domain.User
 
-	jsonFile := fmt.Sprintf("%s.json", name)
-	jsonContent, err := os.ReadFile(jsonFile)
+	entries, err := os.ReadDir("../output")
 	if err != nil {
-		return nil, fmt.Errorf("read user %q: %w", name, err)
+		return nil, fmt.Errorf("Error with reading output directory %v", err)
 	}
 
-	var user domain.User
-	err = json.Unmarshal(jsonContent, &user)
-	if err != nil {
-		return nil, fmt.Errorf("parse user %q: %w", name, err)
+	if len(entries) < 1 {
+		return nil, fmt.Errorf("User not created")
+	} else {
+		jsonFile := string(entries[0].Name())
+		jsonContent, err := os.ReadFile(jsonFile)
+		if err != nil {
+			return nil, fmt.Errorf("read user %q: %w", jsonFile, err)
+		}
+
+		err = json.Unmarshal(jsonContent, &user)
+		if err != nil {
+			return nil, fmt.Errorf("parse user %q: %w", jsonFile, err)
+		}
 	}
 
 	return &user, nil
