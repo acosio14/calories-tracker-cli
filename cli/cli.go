@@ -105,21 +105,9 @@ func (c *CLI) AddCmd() *cobra.Command {
 		Short: "Add Goal, FoodItem or weight.",
 		Long:  "Add Goal, FoodItem or weight to User's tracking history.",
 	}
-	addCmd.AddCommand(c.AddGoalCmd())
 	addCmd.AddCommand(c.AddFoodItemCmd())
 	addCmd.AddCommand(c.AddWeigthCmd())
 	return addCmd
-}
-
-func (c *CLI) AddGoalCmd() *cobra.Command {
-	addGoalCmd := &cobra.Command{
-		Use:   "goal",
-		Short: "Add weight goal.",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.Goal.AddCaloriesGoal()
-		},
-	}
-	return addGoalCmd
 }
 
 func (c *CLI) AddFoodItemCmd() *cobra.Command {
