@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/acosio14/calories-tracker-cli/domain"
 	"github.com/spf13/cobra"
 )
 
 type UserManager interface {
 	CreateUser(name string) error
-	SelectUser(name string) (*domain.User, error)
 }
 
 type GoalManager interface {
@@ -78,24 +76,6 @@ func (c *CLI) CreateUserCmd() *cobra.Command {
 	}
 	return createUserCmd
 
-}
-
-func (c *CLI) SelectUserCmd() *cobra.Command {
-	userCmd := &cobra.Command{
-		Use:   "user",
-		Short: "Select user.",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			user, err := c.User.SelectUser(args[0])
-			if err != nil {
-				return err
-			}
-			fmt.Fprintf(cmd.OutOrStdout(), "Selected user: %s\n", user.Name)
-			return nil
-		},
-	}
-	userCmd.AddCommand(c.CreateUserCmd())
-	return userCmd
 }
 
 func (c *CLI) AddCmd() *cobra.Command {
