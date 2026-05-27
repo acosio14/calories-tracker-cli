@@ -14,7 +14,6 @@ type UserManager interface {
 }
 
 type GoalManager interface {
-	AddCaloriesGoal() error
 	EditCaloriesGoal() error
 }
 
