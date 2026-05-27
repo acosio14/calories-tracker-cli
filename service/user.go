@@ -50,7 +50,7 @@ func (u *UserManager) CreateUser(name string) error {
 		Weight: goalWeight,
 		Rate:   goalRate,
 	}
-	today := time.Now().Format("January 2, 2006")
+	today := time.Now()
 
 	weight := make([]domain.Weight, 1)
 	weight[0] = domain.Weight{

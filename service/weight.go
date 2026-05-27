@@ -8,6 +8,9 @@ import (
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
+	"gonum.org/v1/plot"
+	"gonum.org/v1/plot/plotter"
+	"gonum.org/v1/plot/vg"
 )
 
 type WeightTracker struct{}
@@ -20,7 +23,7 @@ func (w *WeightTracker) AddWeight(weight float32) error {
 	}
 
 	weight_entry := domain.Weight{
-		Date:  time.Now().Format("January 2, 2006"),
+		Date:  time.Now(),
 		Value: weight,
 	}
 	user.Weight = append(user.Weight, weight_entry)
@@ -41,5 +44,32 @@ func (w *WeightTracker) AddWeight(weight float32) error {
 }
 
 func (w *WeightTracker) DisplayWeightProgress() error {
+	user, err := SelectUser()
+	if err != nil {
+		return err
+	}
+
+	pts := make(plotter.XYs, len(user.Weight))
+	for i := range user.Weight {
+		pts[i].X = float64(user.Weight[i].Date.Unix())
+		pts[i].Y = float64(user.Weight[i].Value)
+	}
+
+	p := plot.New()
+	p.Title.Text = "Weight"
+	p.Y.Label.Text = "(LBS)"
+	p.X.Tick.Marker = plot.TimeTicks{
+		Format: "2006-01-02",
+	}
+
+	line, scatter, err := plotter.NewLinePoints(pts)
+	if err != nil {
+		return fmt.Errorf("failed to create line points: %v", err)
+	}
+	p.Add(line, scatter)
+
+	if err := p.Save(4*vg.Inch, 4*vg.Inch, "weight.png"); err != nil {
+		return fmt.Errorf("failed to save plot as png")
+	}
 	return nil
 }
