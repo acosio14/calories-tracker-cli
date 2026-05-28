@@ -25,14 +25,12 @@ Tracker(Core):
 - User
 - Calories
 - Weight
-- Macros
 
 CLI:
 - User
     - (Name) Select User
     - (--create) Create User
 - Add
-    - Goal
     - Food Item
     - Weight
 - Edit
