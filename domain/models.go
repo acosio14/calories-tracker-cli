@@ -4,13 +4,13 @@ import "time"
 
 type Goal struct {
 	Type   string  `json:"type"`
-	Weight float32 `json:"weight"`
-	Rate   float32 `json:"rate"`
+	Weight float64 `json:"weight"`
+	Rate   float64 `json:"rate"`
 }
 
 type Weight struct {
 	Date  time.Time `json:"date"`
-	Value float32   `json:"weight_value"`
+	Value float64   `json:"weight_value"`
 }
 
 type FoodItem struct {

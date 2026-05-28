@@ -10,9 +10,7 @@ import (
 	"github.com/acosio14/calories-tracker-cli/domain"
 )
 
-type UserManager struct {
-	statePath string
-}
+type UserManager struct{}
 
 func (u *UserManager) CreateUser(name string) error {
 	var age int
@@ -31,15 +29,15 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Println("What is your goal? (lose/maintain/gain)")
 	fmt.Scan(&userGoal)
 
-	var initWeight float32
+	var initWeight float64
 	fmt.Println("What is your current weight?(lbs)")
 	fmt.Scan(&initWeight)
 
-	var goalWeight float32
+	var goalWeight float64
 	fmt.Println("What is your goal weight?(lbs)")
 	fmt.Scan(&goalWeight)
 
-	var goalTimeline float32
+	var goalTimeline float64
 	fmt.Println("How many weeks to reach goal?")
 	fmt.Scan(&goalTimeline)
 
@@ -90,7 +88,7 @@ func (u *UserManager) CreateUser(name string) error {
 	return nil
 }
 
-func SelectUser() (*domain.User, error) {
+func (u *UserManager) SelectUser() (*domain.User, error) {
 	var user domain.User
 
 	entries, err := os.ReadDir("../output")

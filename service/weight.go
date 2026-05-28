@@ -15,9 +15,8 @@ import (
 
 type WeightTracker struct{}
 
-func (w *WeightTracker) AddWeight(weight float32) error {
-	// Appends a weight entry to the user's weight list
-	user, err := SelectUser()
+func (w *WeightTracker) AddWeight(u UserManager, weight float64) error {
+	user, err := u.SelectUser()
 	if err != nil {
 		return err
 	}
@@ -44,7 +43,8 @@ func (w *WeightTracker) AddWeight(weight float32) error {
 }
 
 func (w *WeightTracker) DisplayWeightProgress() error {
-	user, err := SelectUser()
+	u := &UserManager{}
+	user, err := u.SelectUser()
 	if err != nil {
 		return err
 	}

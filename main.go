@@ -8,10 +8,10 @@ import (
 )
 
 func main() {
-	userSvc := &service.UserManager{}
-	goalSvc := &service.GoalManager{}
-	foodSvc := &service.FoodTracker{}
-	weightSvc := &service.WeightTracker{}
+	userSvc := service.UserManager{}
+	goalSvc := service.GoalManager{}
+	foodSvc := service.FoodTracker{}
+	weightSvc := service.WeightTracker{}
 
 	cli := cli.NewCLI(userSvc, goalSvc, foodSvc, weightSvc)
 	if err := cli.NewRootCmd().Execute(); err != nil {

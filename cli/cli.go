@@ -3,12 +3,16 @@ package cli
 import (
 	"fmt"
 	"os"
+	"strconv"
 
+	"github.com/acosio14/calories-tracker-cli/domain"
+	"github.com/acosio14/calories-tracker-cli/service"
 	"github.com/spf13/cobra"
 )
 
 type UserManager interface {
 	CreateUser(name string) error
+	SelectUser() (*domain.User, error)
 }
 
 type GoalManager interface {
@@ -22,18 +26,21 @@ type FoodTracker interface {
 }
 
 type WeightTracker interface {
-	AddWeight() error
+	AddWeight(u service.UserManager, weight float64) error
 	DisplayWeightProgress() error
 }
 
 type CLI struct {
-	User   UserManager
-	Goal   GoalManager
-	Food   FoodTracker
-	Weight WeightTracker
+	User   service.UserManager
+	Goal   service.GoalManager
+	Food   service.FoodTracker
+	Weight service.WeightTracker
 }
 
-func NewCLI(User UserManager, Goal GoalManager, Food FoodTracker, Weight WeightTracker) *CLI {
+func NewCLI(User service.UserManager,
+	Goal service.GoalManager,
+	Food service.FoodTracker,
+	Weight service.WeightTracker) *CLI {
 	return &CLI{
 		User:   User,
 		Goal:   Goal,
@@ -47,7 +54,7 @@ func (c *CLI) NewRootCmd() *cobra.Command {
 		Use:   "calorie-tracker",
 		Short: "Tracks Calories",
 	}
-	rootCmd.AddCommand(c.SelectUserCmd())
+	rootCmd.AddCommand(c.CreateUserCmd())
 	rootCmd.AddCommand(c.AddCmd())
 	rootCmd.AddCommand(c.EditCmd())
 	rootCmd.AddCommand(c.ViewCmd())
@@ -110,7 +117,11 @@ func (c *CLI) AddWeigthCmd() *cobra.Command {
 		Use:   "weight",
 		Short: "Add weight",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.Weight.AddWeight()
+			weight_arg, err := strconv.ParseFloat(args[0], 64)
+			if err != nil {
+				return fmt.Errorf("invalid weight value: %w", err)
+			}
+			return c.Weight.AddWeight(c.User, weight_arg)
 		},
 	}
 	return addWeigthCmd
