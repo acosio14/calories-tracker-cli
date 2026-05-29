@@ -14,7 +14,7 @@ type UserManager struct{}
 
 func (u *UserManager) CreateUser(name string) error {
 	var age int
-	fmt.Println("What is your age?:")
+	fmt.Println("What is your age?:") //change to use birthday and calculate age
 	fmt.Scan(&age)
 
 	var gender string
@@ -29,9 +29,9 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Println("What is your goal? (lose/maintain/gain)")
 	fmt.Scan(&userGoal)
 
-	var initWeight float64
+	var currentWeight float64
 	fmt.Println("What is your current weight?(lbs)")
-	fmt.Scan(&initWeight)
+	fmt.Scan(&currentWeight)
 
 	var goalWeight float64
 	fmt.Println("What is your goal weight?(lbs)")
@@ -41,7 +41,7 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Println("How many weeks to reach goal?")
 	fmt.Scan(&goalTimeline)
 
-	goalRate := (goalWeight - initWeight) / goalTimeline
+	goalRate := (goalWeight - currentWeight) / goalTimeline
 
 	goal := domain.Goal{
 		Type:   userGoal,
@@ -53,7 +53,7 @@ func (u *UserManager) CreateUser(name string) error {
 	weight := make([]domain.Weight, 1)
 	weight[0] = domain.Weight{
 		Date:  today,
-		Value: initWeight,
+		Value: currentWeight,
 	}
 
 	foodItem := make([]domain.FoodItem, 1)
