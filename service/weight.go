@@ -25,7 +25,7 @@ func (w *WeightTracker) AddWeight(u UserManager, weight float64) error {
 		Date:  time.Now(),
 		Value: weight,
 	}
-	user.Weight = append(user.Weight, weight_entry)
+	user.WeightTracker = append(user.WeightTracker, weight_entry)
 
 	userData, err := json.MarshalIndent(user, "", "	")
 	if err != nil {
@@ -49,10 +49,10 @@ func (w *WeightTracker) DisplayWeightProgress() error {
 		return err
 	}
 
-	pts := make(plotter.XYs, len(user.Weight))
-	for i := range user.Weight {
-		pts[i].X = float64(user.Weight[i].Date.Unix())
-		pts[i].Y = float64(user.Weight[i].Value)
+	pts := make(plotter.XYs, len(user.WeightTracker))
+	for i := range user.WeightTracker {
+		pts[i].X = float64(user.WeightTracker[i].Date.Unix())
+		pts[i].Y = float64(user.WeightTracker[i].Value)
 	}
 
 	p := plot.New()

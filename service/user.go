@@ -59,13 +59,13 @@ func (u *UserManager) CreateUser(name string) error {
 	foodItem := make([]domain.FoodItem, 1)
 
 	user := domain.User{
-		Name:        name,
-		Age:         age,
-		Gender:      gender,
-		Height:      height,
-		Goal:        goal,
-		Weight:      weight,
-		FoodJournal: foodItem,
+		Name:          name,
+		Age:           age,
+		Gender:        gender,
+		Height:        height,
+		Goal:          goal,
+		WeightTracker: weight,
+		FoodJournal:   foodItem,
 	}
 
 	userData, err := json.MarshalIndent(user, "", "	")
