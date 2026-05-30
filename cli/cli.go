@@ -16,7 +16,7 @@ type UserManager interface {
 }
 
 type GoalManager interface {
-	EditCaloriesGoal() error
+	EditCaloriesGoal(u service.UserManager) error
 }
 
 type FoodTracker interface {
@@ -102,13 +102,32 @@ func (c *CLI) AddFoodItemCmd() *cobra.Command {
 		Use:   "food",
 		Short: "Add Food Item.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.Food.AddFoodItem()
+			foodItem := args[0]
+			meal, _ := cmd.Flags().GetString("meal")
+			calories, _ := cmd.Flags().GetInt("calories")
+			servingSize, _ := cmd.Flags().GetInt("serving-size")
+			quantity, _ := cmd.Flags().GetInt("quantity")
+			// add food oatmeal --calories 160 --serving-size 35g --quantity 43g --meal breakfast
+			return c.Food.AddFoodItem(c.User, foodItem, calories, servingSize, quantity, meal)
 		},
 	}
 	addFoodCmd.Flags().String("meal", "", "Meal of the day(breakfast, Lunch, Dinner)")
 	if err := addFoodCmd.MarkFlagRequired("meal"); err != nil {
 		panic(err)
 	}
+	addFoodCmd.Flags().Int("calories", 0, "Calories per serving for food item.")
+	if err := addFoodCmd.MarkFlagRequired("calories"); err != nil {
+		panic(err)
+	}
+	addFoodCmd.Flags().Int("serving-size", 0, "Serving size of food item.")
+	if err := addFoodCmd.MarkFlagRequired("serving-size"); err != nil {
+		panic(err)
+	}
+	addFoodCmd.Flags().Int("quantity", 0, "Number of servings.")
+	if err := addFoodCmd.MarkFlagRequired("quantity"); err != nil {
+		panic(err)
+	}
+
 	return addFoodCmd
 }
 
@@ -122,6 +141,7 @@ func (c *CLI) AddWeigthCmd() *cobra.Command {
 				return fmt.Errorf("invalid weight value: %w", err)
 			}
 			return c.Weight.AddWeight(c.User, weight_arg)
+			// Need optional date flag, say I measured yesterday and wrote it down but didn't add it
 		},
 	}
 	return addWeigthCmd
@@ -143,7 +163,7 @@ func (c *CLI) EditGoalCmd() *cobra.Command {
 		Use:   "goal",
 		Short: "Edit Goal.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.Goal.EditCaloriesGoal()
+			return c.Goal.EditCaloriesGoal(c.User)
 		},
 	}
 	return editGoalCmd
