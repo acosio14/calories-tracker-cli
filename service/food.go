@@ -24,16 +24,18 @@ func (f *FoodTracker) AddFoodItem(
 	if err != nil {
 		return err
 	}
-	//Date
+
 	today := time.Now()
 	hour := today.Hour()
-
-	if hour < 11 {
-		meal = "breakfast"
-	} else if hour < 18 {
-		meal = "lunch"
-	} else {
-		meal = "dinner"
+	if meal == "" {
+		switch {
+		case hour < 11:
+			meal = "breakfast"
+		case hour < 18:
+			meal = "lunch"
+		default:
+			meal = "dinner"
+		}
 	}
 	totalCalories := calories * (quantity / servingSize)
 
