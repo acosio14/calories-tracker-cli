@@ -26,19 +26,18 @@ func (f *FoodTracker) AddFoodItem(
 	}
 	//Date
 	today := time.Now()
+	hour := today.Hour()
 
 	// I can make --meal automatic based of time and if user wishes he can use
 	// serving and quantity have to be same units to make math correct else error
 	// the optional flag to add it in a diff meal
 	// PLACEHOLDER: need to decide correct times for breakfast, lunch, dinner
-	if today > midnight && today < midday {
+	if hour < 11 {
 		meal = "breakfast"
-	} else if today > midday && today < dinner {
+	} else if hour < 18 {
 		meal = "lunch"
-	} else if today > dinner {
-		meal = "dinner"
 	} else {
-		fmt.Println("meal out of range")
+		meal = "dinner"
 	}
 	totalCalories := calories * (quantity / servingSize)
 
