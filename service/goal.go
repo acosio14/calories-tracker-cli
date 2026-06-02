@@ -11,7 +11,7 @@ import (
 
 type GoalManager struct{}
 
-func (g *GoalManager) EditCaloriesGoal(u UserManager) error {
+func (g *GoalManager) EditGoal(u UserManager) error {
 	user, err := u.SelectUser()
 	if err != nil {
 		return err
@@ -53,5 +53,29 @@ func (g *GoalManager) EditCaloriesGoal(u UserManager) error {
 		return err
 	}
 
+	return nil
+}
+
+func (g *GoalManager) EditDailyCalories(u UserManager, calories float64) error {
+	user, err := u.SelectUser()
+	if err != nil {
+		return err
+	}
+
+	user.Goal = domain.Goal{
+		DailyCalories: calories,
+	}
+
+	userData, err := json.MarshalIndent(user, "", "	")
+	if err != nil {
+		return err
+	}
+
+	filename := fmt.Sprintf("%s.json", user.Name)
+	outputPath := filepath.Join("output", filename)
+	err = os.WriteFile(outputPath, userData, 0644)
+	if err != nil {
+		return err
+	}
 	return nil
 }

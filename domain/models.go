@@ -3,9 +3,10 @@ package domain
 import "time"
 
 type Goal struct {
-	Type   string  `json:"type"`
-	Weight float64 `json:"weight"`
-	Rate   float64 `json:"rate"`
+	Type          string  `json:"type"`
+	Weight        float64 `json:"weight"`
+	Rate          float64 `json:"rate"`
+	DailyCalories float64 `json:"daily_calories"`
 }
 
 type Weight struct {

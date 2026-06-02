@@ -16,7 +16,8 @@ type UserManager interface {
 }
 
 type GoalManager interface {
-	EditCaloriesGoal(u service.UserManager) error
+	EditGoal(u service.UserManager) error
+	EditDailyCalories(u service.UserManager) error
 }
 
 type FoodTracker interface {
@@ -154,6 +155,7 @@ func (c *CLI) EditCmd() *cobra.Command {
 		Short: "Edit Goal or Food Item.",
 	}
 	editCmd.AddCommand(c.EditGoalCmd())
+	editCmd.AddCommand(c.EditDailyCaloriesCmd())
 	editCmd.AddCommand(c.EditFoodItemCmd())
 	return editCmd
 }
@@ -163,7 +165,22 @@ func (c *CLI) EditGoalCmd() *cobra.Command {
 		Use:   "goal",
 		Short: "Edit Goal.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.Goal.EditCaloriesGoal(c.User)
+			return c.Goal.EditGoal(c.User)
+		},
+	}
+	return editGoalCmd
+}
+
+func (c *CLI) EditDailyCaloriesCmd() *cobra.Command {
+	editGoalCmd := &cobra.Command{
+		Use:   "daily-calories",
+		Short: "Update daily calories limit.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			newCalories, err := strconv.ParseFloat(args[0], 64)
+			if err != nil {
+				return fmt.Errorf("invalid weight value: %w", err)
+			}
+			return c.Goal.EditDailyCalories(c.User, newCalories)
 		},
 	}
 	return editGoalCmd

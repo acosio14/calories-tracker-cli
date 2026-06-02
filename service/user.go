@@ -41,12 +41,17 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Println("How many weeks to reach goal?")
 	fmt.Scan(&goalTimeline)
 
+	var dailyCalories float64
+	fmt.Println("Daily Calories intake?")
+	fmt.Scan(&dailyCalories)
+
 	goalRate := (goalWeight - currentWeight) / goalTimeline
 
 	goal := domain.Goal{
-		Type:   userGoal,
-		Weight: goalWeight,
-		Rate:   goalRate,
+		Type:          userGoal,
+		Weight:        goalWeight,
+		Rate:          goalRate,
+		DailyCalories: dailyCalories,
 	}
 	today := time.Now()
 
