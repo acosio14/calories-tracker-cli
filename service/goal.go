@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-
-	"github.com/acosio14/calories-tracker-cli/domain"
 )
 
 type GoalManager struct{}
@@ -35,11 +33,9 @@ func (g *GoalManager) EditGoal(u UserManager) error {
 
 	goalRate := (goalWeight - currentWeight) / goalTimeline
 
-	user.Goal = domain.Goal{
-		Type:   newGoal,
-		Weight: goalWeight,
-		Rate:   goalRate,
-	}
+	user.Goal.Type = newGoal
+	user.Goal.Weight = goalWeight
+	user.Goal.Rate = goalRate
 
 	userData, err := json.MarshalIndent(user, "", "	")
 	if err != nil {
@@ -61,10 +57,7 @@ func (g *GoalManager) EditDailyCalories(u UserManager, calories float64) error {
 	if err != nil {
 		return err
 	}
-
-	user.Goal = domain.Goal{
-		DailyCalories: calories,
-	}
+	user.Goal.DailyCalories = calories
 
 	userData, err := json.MarshalIndent(user, "", "	")
 	if err != nil {
