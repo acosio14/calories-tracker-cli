@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
-	"github.com/acosio14/calories-tracker-cli/service"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +16,7 @@ type UserManager interface {
 
 type GoalManager interface {
 	EditGoal(u UserManager) error
-	EditDailyCalories(u UserManager) error
+	EditDailyCalories(u UserManager, calories float64) error
 }
 
 type FoodTracker interface {
@@ -47,12 +46,7 @@ type CLI struct {
 	Weight WeightTracker
 }
 
-func NewCLI(
-	User service.UserManager,
-	Goal service.GoalManager,
-	Food service.FoodTracker,
-	Weight service.WeightTracker
-) *CLI {
+func NewCLI(User UserManager, Goal GoalManager, Food FoodTracker, Weight WeightTracker) *CLI {
 	return &CLI{
 		User:   User,
 		Goal:   Goal,
