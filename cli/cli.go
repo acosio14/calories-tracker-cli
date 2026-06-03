@@ -16,32 +16,43 @@ type UserManager interface {
 }
 
 type GoalManager interface {
-	EditGoal(u service.UserManager) error
-	EditDailyCalories(u service.UserManager) error
+	EditGoal(u UserManager) error
+	EditDailyCalories(u UserManager) error
 }
 
 type FoodTracker interface {
-	AddFoodItem() error
+	AddFoodItem(
+		u UserManager,
+		foodItem string,
+		calories int,
+		servingSize int,
+		quantity int,
+		meal string,
+	) error
 	EditFoodItem() error
+	DeleteFoodItem(u UserManager, foodItemID int)
 	ViewRemainingCalories() error
 }
 
 type WeightTracker interface {
-	AddWeight(u service.UserManager, weight float64) error
+	AddWeight(u UserManager, weight float64) error
+	DeleteWeightEntry(u UserManager, weightEntryID int)
 	DisplayWeightProgress() error
 }
 
 type CLI struct {
-	User   service.UserManager
-	Goal   service.GoalManager
-	Food   service.FoodTracker
-	Weight service.WeightTracker
+	User   UserManager
+	Goal   GoalManager
+	Food   FoodTracker
+	Weight WeightTracker
 }
 
-func NewCLI(User service.UserManager,
+func NewCLI(
+	User service.UserManager,
 	Goal service.GoalManager,
 	Food service.FoodTracker,
-	Weight service.WeightTracker) *CLI {
+	Weight service.WeightTracker
+) *CLI {
 	return &CLI{
 		User:   User,
 		Goal:   Goal,
@@ -195,6 +206,17 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 		},
 	}
 	return editFoodItem
+}
+
+func (c *CLI) DeleteCmd() *cobra.Command {
+	deleteCmd := &cobra.Command{
+		Use:   "delete",
+		Short: "Delete food item or weight entry",
+	}
+	deleteCmd.AddCommand(c.DeleteFoodItem())
+	deleteCmd.AddCommand(c.DeleteWeightEntry())
+
+	return deleteCmd
 }
 
 func (c *CLI) ViewCmd() *cobra.Command {
