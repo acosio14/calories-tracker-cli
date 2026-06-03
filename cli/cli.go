@@ -29,13 +29,13 @@ type FoodTracker interface {
 		meal string,
 	) error
 	EditFoodItem() error
-	DeleteFoodItem(u UserManager, foodItemID int)
+	DeleteFoodItem(u UserManager, foodItemID int) error
 	ViewRemainingCalories() error
 }
 
 type WeightTracker interface {
 	AddWeight(u UserManager, weight float64) error
-	DeleteWeightEntry(u UserManager, weightEntryID int)
+	DeleteWeightEntry(u UserManager, weightEntryID int) error
 	DisplayWeightProgress() error
 }
 
@@ -207,10 +207,42 @@ func (c *CLI) DeleteCmd() *cobra.Command {
 		Use:   "delete",
 		Short: "Delete food item or weight entry",
 	}
-	deleteCmd.AddCommand(c.DeleteFoodItem())
-	deleteCmd.AddCommand(c.DeleteWeightEntry())
+	deleteCmd.AddCommand(c.DeleteFoodItemCmd())
+	deleteCmd.AddCommand(c.DeleteWeightEntryCmd())
 
 	return deleteCmd
+}
+
+func (c *CLI) DeleteFoodItemCmd() *cobra.Command {
+	deleteFoodCmd := &cobra.Command{
+		Use:   "food-id",
+		Short: "Delete food item",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			argsInt, _ := strconv.Atoi(args[0])
+			err := c.Food.DeleteFoodItem(c.User, argsInt)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+	return deleteFoodCmd
+}
+
+func (c *CLI) DeleteWeightEntryCmd() *cobra.Command {
+	deleteWeightCmd := &cobra.Command{
+		Use:   "weight-id",
+		Short: "Delete weight entry",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			argsInt, _ := strconv.Atoi(args[0])
+			err := c.Weight.DeleteWeightEntry(c.User, argsInt)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+	return deleteWeightCmd
 }
 
 func (c *CLI) ViewCmd() *cobra.Command {

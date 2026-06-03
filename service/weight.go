@@ -42,6 +42,10 @@ func (w *WeightTracker) AddWeight(u UserManager, weight float64) error {
 
 }
 
+func (w *WeightTracker) DeleteWeightEntry(u UserManager, weightEntryID int) error {
+	return nil
+}
+
 func (w *WeightTracker) DisplayWeightProgress() error {
 	u := &UserManager{}
 	user, err := u.SelectUser()
