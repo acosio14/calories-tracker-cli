@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/acosio14/calories-tracker-cli/cli"
 )
 
 type GoalManager struct{}
 
-func (g *GoalManager) EditGoal(u UserManager) error {
+func (g *GoalManager) EditGoal(u cli.UserManager) error {
 	user, err := u.SelectUser()
 	if err != nil {
 		return err
@@ -52,7 +54,7 @@ func (g *GoalManager) EditGoal(u UserManager) error {
 	return nil
 }
 
-func (g *GoalManager) EditDailyCalories(u UserManager, calories float64) error {
+func (g *GoalManager) EditDailyCalories(u cli.UserManager, calories float64) error {
 	user, err := u.SelectUser()
 	if err != nil {
 		return err

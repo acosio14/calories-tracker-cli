@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/acosio14/calories-tracker-cli/cli"
 	"github.com/acosio14/calories-tracker-cli/domain"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
@@ -15,7 +16,7 @@ import (
 
 type WeightTracker struct{}
 
-func (w *WeightTracker) AddWeight(u UserManager, weight float64) error {
+func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64) error {
 	user, err := u.SelectUser()
 	if err != nil {
 		return err
@@ -42,7 +43,7 @@ func (w *WeightTracker) AddWeight(u UserManager, weight float64) error {
 
 }
 
-func (w *WeightTracker) DeleteWeightEntry(u UserManager, weightEntryID int) error {
+func (w *WeightTracker) DeleteWeightEntry(u cli.UserManager, weightEntryID int) error {
 	return nil
 }
 

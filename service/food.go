@@ -7,13 +7,14 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/acosio14/calories-tracker-cli/cli"
 	"github.com/acosio14/calories-tracker-cli/domain"
 )
 
 type FoodTracker struct{}
 
 func (f *FoodTracker) AddFoodItem(
-	u UserManager,
+	u cli.UserManager,
 	foodItem string,
 	calories int,
 	servingSize int,
@@ -67,7 +68,7 @@ func (f *FoodTracker) EditFoodItem() error {
 	return nil
 }
 
-func (f *FoodTracker) DeleteFoodItem(u UserManager, foodItemID int) error {
+func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
 	return nil
 }
 
