@@ -40,7 +40,15 @@ func (f *FoodTracker) AddFoodItem(
 	}
 	totalCalories := calories * (quantity / servingSize)
 
+	// Need to find the highest index(ID) then increase it by one
+	var count int
+	for i := range user.FoodJournal {
+		count = i
+	}
+	count++
+
 	foodEntry := domain.FoodItem{
+		ID:                 count,
 		Date:               today,
 		Meal:               meal,
 		Name:               foodItem,

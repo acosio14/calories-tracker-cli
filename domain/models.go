@@ -10,11 +10,13 @@ type Goal struct {
 }
 
 type Weight struct {
+	ID    int       `json:"id"`
 	Date  time.Time `json:"date"`
 	Value float64   `json:"weight_value"`
 }
 
 type FoodItem struct {
+	ID                 int       `json:"id"`
 	Date               time.Time `json:"date"`
 	Meal               string    `json:"meal"`
 	Name               string    `json:"name"`

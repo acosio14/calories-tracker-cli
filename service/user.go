@@ -57,6 +57,7 @@ func (u *UserManager) CreateUser(name string) error {
 
 	weight := make([]domain.Weight, 1)
 	weight[0] = domain.Weight{
+		ID:    0,
 		Date:  today,
 		Value: currentWeight,
 	}

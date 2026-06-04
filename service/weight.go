@@ -22,7 +22,15 @@ func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64) error {
 		return err
 	}
 
+	// Need to find the highest index(ID) then increase it by one
+	var count int
+	for i := range user.WeightTracker {
+		count = i
+	}
+	count++
+
 	weight_entry := domain.Weight{
+		ID:    count,
 		Date:  time.Now(),
 		Value: weight,
 	}
