@@ -197,25 +197,25 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 		Short: "Edit food item.",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			id, _ := cmd.Flags().GetInt("id")
-			name, _ := cmd.Flags().GetString("name")
 			date, _ := cmd.Flags().GetString("date")
 			meal, _ := cmd.Flags().GetString("meal")
-			calories, _ := cmd.Flags().GetInt("calories")
+			name, _ := cmd.Flags().GetString("name")
 			servingSize, _ := cmd.Flags().GetInt("serving-size")
+			calories, _ := cmd.Flags().GetInt("calories")
 			quantity, _ := cmd.Flags().GetInt("quantity")
 
-			args := []any{name, date, meal, calories, servingSize, quantity}
+			args := []any{date, meal, name, servingSize, calories, quantity}
 
 			return c.Food.EditFoodItem(c.User, id, args)
 		},
 	}
 	editFoodItem.Flags().Int("id", 0, "Food item ID.")
 	editFoodItem.MarkFlagRequired("id")
-	editFoodItem.Flags().String("name", "", "Name of food-item")
 	editFoodItem.Flags().Int("date", 0, "Date that food item was eaten.")
 	editFoodItem.Flags().String("meal", "", "Meal of the day(breakfast, Lunch, Dinner)")
-	editFoodItem.Flags().Int("calories", 0, "Calories per serving for food item.")
+	editFoodItem.Flags().String("name", "", "Name of food-item")
 	editFoodItem.Flags().Int("serving-size", 0, "Serving size of food item.")
+	editFoodItem.Flags().Int("calories", 0, "Calories per serving for food item.")
 	editFoodItem.Flags().Int("quantity", 0, "Number of servings.")
 
 	return editFoodItem
