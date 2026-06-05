@@ -28,7 +28,7 @@ type FoodTracker interface {
 		quantity int,
 		meal string,
 	) error
-	EditFoodItem() error
+	EditFoodItem(u UserManager, foodItemID int, command []any) error
 	DeleteFoodItem(u UserManager, foodItemID int) error
 	ViewRemainingCalories() error
 }
@@ -105,7 +105,7 @@ func (c *CLI) AddCmd() *cobra.Command {
 
 func (c *CLI) AddFoodItemCmd() *cobra.Command {
 	addFoodCmd := &cobra.Command{
-		Use:   "food",
+		Use:   "food-item",
 		Short: "Add Food Item.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			foodItem := args[0]
@@ -193,12 +193,31 @@ func (c *CLI) EditDailyCaloriesCmd() *cobra.Command {
 
 func (c *CLI) EditFoodItemCmd() *cobra.Command {
 	editFoodItem := &cobra.Command{
-		Use:   "food",
+		Use:   "food-item",
 		Short: "Edit food item.",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.Food.EditFoodItem()
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			id, _ := cmd.Flags().GetInt("id")
+			name, _ := cmd.Flags().GetString("name")
+			date, _ := cmd.Flags().GetString("date")
+			meal, _ := cmd.Flags().GetString("meal")
+			calories, _ := cmd.Flags().GetInt("calories")
+			servingSize, _ := cmd.Flags().GetInt("serving-size")
+			quantity, _ := cmd.Flags().GetInt("quantity")
+
+			args := []any{name, date, meal, calories, servingSize, quantity}
+
+			return c.Food.EditFoodItem(c.User, id, args)
 		},
 	}
+	editFoodItem.Flags().Int("id", 0, "Food item ID.")
+	editFoodItem.MarkFlagRequired("id")
+	editFoodItem.Flags().String("name", "", "Name of food-item")
+	editFoodItem.Flags().Int("date", 0, "Date that food item was eaten.")
+	editFoodItem.Flags().String("meal", "", "Meal of the day(breakfast, Lunch, Dinner)")
+	editFoodItem.Flags().Int("calories", 0, "Calories per serving for food item.")
+	editFoodItem.Flags().Int("serving-size", 0, "Serving size of food item.")
+	editFoodItem.Flags().Int("quantity", 0, "Number of servings.")
+
 	return editFoodItem
 	// add Commands
 	// each command has EditFoodItem with the specific thing to change?

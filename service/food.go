@@ -72,8 +72,9 @@ func (f *FoodTracker) AddFoodItem(
 	return nil
 }
 
-func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, command string) error {
+func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, commands []any) error {
 	// command -> name, serving size, calories, etc
+
 	return nil
 }
 
@@ -100,4 +101,5 @@ func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
 
 func (f *FoodTracker) ViewRemainingCalories() error {
 	return nil
+	//view in table format? show all items
 }
