@@ -200,6 +200,8 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 		},
 	}
 	return editFoodItem
+	// add Commands
+	// each command has EditFoodItem with the specific thing to change?
 }
 
 func (c *CLI) DeleteCmd() *cobra.Command {

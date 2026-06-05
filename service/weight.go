@@ -52,6 +52,23 @@ func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64) error {
 }
 
 func (w *WeightTracker) DeleteWeightEntry(u cli.UserManager, weightEntryID int) error {
+	user, err := u.SelectUser()
+	if err != nil {
+		return err
+	}
+	// Delete index through slicing
+	user.WeightTracker = append(user.WeightTracker[:weightEntryID], user.WeightTracker[weightEntryID+1])
+
+	userData, err := json.MarshalIndent(user, "", "	")
+	if err != nil {
+		return err
+	}
+	filename := fmt.Sprintf("%s.json", user.Name)
+	outputPath := filepath.Join("output", filename)
+	err = os.WriteFile(outputPath, userData, 0644)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
