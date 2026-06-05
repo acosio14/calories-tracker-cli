@@ -34,7 +34,7 @@ type FoodTracker interface {
 }
 
 type WeightTracker interface {
-	AddWeight(u UserManager, weight float64) error
+	AddWeight(u UserManager, weight float64, date int) error
 	DeleteWeightEntry(u UserManager, weightEntryID int) error
 	DisplayWeightProgress() error
 }
@@ -143,13 +143,15 @@ func (c *CLI) AddWeigthCmd() *cobra.Command {
 		Short: "Add weight",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			weight_arg, err := strconv.ParseFloat(args[0], 64)
+			date, _ := cmd.Flags().GetInt("date")
 			if err != nil {
 				return fmt.Errorf("invalid weight value: %w", err)
 			}
-			return c.Weight.AddWeight(c.User, weight_arg)
+			return c.Weight.AddWeight(c.User, weight_arg, date)
 			// Need optional date flag, say I measured yesterday and wrote it down but didn't add it
 		},
 	}
+	addWeigthCmd.Flags().Int("date", 0, "Date when weight was taken.") // currently int but needs to be date type
 	return addWeigthCmd
 }
 
@@ -219,8 +221,6 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 	editFoodItem.Flags().Int("quantity", 0, "Number of servings.")
 
 	return editFoodItem
-	// add Commands
-	// each command has EditFoodItem with the specific thing to change?
 }
 
 func (c *CLI) DeleteCmd() *cobra.Command {

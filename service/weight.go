@@ -16,7 +16,7 @@ import (
 
 type WeightTracker struct{}
 
-func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64) error {
+func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64, date int) error {
 	user, err := u.SelectUser()
 	if err != nil {
 		return err
