@@ -217,33 +217,40 @@ func (c *CLI) DeleteCmd() *cobra.Command {
 
 func (c *CLI) DeleteFoodItemCmd() *cobra.Command {
 	deleteFoodCmd := &cobra.Command{
-		Use:   "food-id",
+		Use:   "food-item",
 		Short: "Delete food item",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			argsInt, _ := strconv.Atoi(args[0])
-			err := c.Food.DeleteFoodItem(c.User, argsInt)
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			foodID, _ := cmd.Flags().GetInt("id")
+			err := c.Food.DeleteFoodItem(c.User, foodID)
 			if err != nil {
 				return err
 			}
 			return nil
 		},
 	}
+	deleteFoodCmd.Flags().Int("id", 0, "ID of food-item.")
+	deleteFoodCmd.MarkFlagRequired("id")
+
 	return deleteFoodCmd
 }
 
 func (c *CLI) DeleteWeightEntryCmd() *cobra.Command {
 	deleteWeightCmd := &cobra.Command{
-		Use:   "weight-id",
+		Use:   "weight-entry",
 		Short: "Delete weight entry",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			argsInt, _ := strconv.Atoi(args[0])
-			err := c.Weight.DeleteWeightEntry(c.User, argsInt)
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			weightID, _ := cmd.Flags().GetInt("id")
+			err := c.Weight.DeleteWeightEntry(c.User, weightID)
 			if err != nil {
 				return err
 			}
 			return nil
 		},
 	}
+	deleteWeightCmd.Flags().Int("id", 0, "ID of weight entry")
+	deleteWeightCmd.MarkFlagRequired("id")
 	return deleteWeightCmd
 }
 
