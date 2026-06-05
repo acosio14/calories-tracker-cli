@@ -77,6 +77,23 @@ func (f *FoodTracker) EditFoodItem() error {
 }
 
 func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
+	user, err := u.SelectUser()
+	if err != nil {
+		return err
+	}
+	// Delete index through slicing
+	user.FoodJournal = append(user.FoodJournal[:foodItemID], user.FoodJournal[foodItemID+1])
+
+	userData, err := json.MarshalIndent(user, "", "	")
+	if err != nil {
+		return err
+	}
+	filename := fmt.Sprintf("%s.json", user.Name)
+	outputPath := filepath.Join("output", filename)
+	err = os.WriteFile(outputPath, userData, 0644)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
