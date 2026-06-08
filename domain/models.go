@@ -20,10 +20,10 @@ type FoodItem struct {
 	Date               time.Time `json:"date"`
 	Meal               string    `json:"meal"`
 	Name               string    `json:"name"`
-	ServingSize        int       `json:"servings"`
-	CaloriesPerServing int       `json:"calories_per_serving"`
-	Quantity           int       `json:"quantity"`
-	TotalCalories      int       `json:"total_calories"`
+	ServingSize        float64   `json:"servings"`
+	CaloriesPerServing float64   `json:"calories_per_serving"`
+	Quantity           float64   `json:"quantity"`
+	TotalCalories      float64   `json:"total_calories"`
 }
 
 type User struct {

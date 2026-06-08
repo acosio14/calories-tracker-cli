@@ -16,9 +16,9 @@ type FoodTracker struct{}
 func (f *FoodTracker) AddFoodItem(
 	u cli.UserManager,
 	foodItem string,
-	calories int,
-	servingSize int,
-	quantity int,
+	calories float64,
+	servingSize float64,
+	quantity float64,
 	meal string,
 ) error {
 	user, err := u.SelectUser()
@@ -99,7 +99,22 @@ func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
 	return nil
 }
 
-func (f *FoodTracker) ViewRemainingCalories() error {
+func (f *FoodTracker) ViewRemainingCalories(u cli.UserManager, date time.Time) error {
+	user, err := u.SelectUser()
+	if err != nil {
+		return err
+	}
+
+	var dailyCalories float64 = 0
+	for _, foodItem := range user.FoodJournal {
+		if foodItem.Date.Equal(date) {
+			fmt.Printf("%s | %.2f | %.2f\n", foodItem.Name, foodItem.Quantity, foodItem.TotalCalories)
+			dailyCalories += foodItem.TotalCalories
+		}
+	}
+
+	remainingCalories := user.Goal.DailyCalories - dailyCalories
+	fmt.Printf("Remaining Calories for %v: %.2f\n", date, remainingCalories)
+
 	return nil
-	//view in table format? show all items
 }

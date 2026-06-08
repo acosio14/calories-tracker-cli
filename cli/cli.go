@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
 	"github.com/spf13/cobra"
@@ -23,14 +24,14 @@ type FoodTracker interface {
 	AddFoodItem(
 		u UserManager,
 		foodItem string,
-		calories int,
-		servingSize int,
-		quantity int,
+		calories float64,
+		servingSize float64,
+		quantity float64,
 		meal string,
 	) error
 	EditFoodItem(u UserManager, foodItemID int, command []any) error
 	DeleteFoodItem(u UserManager, foodItemID int) error
-	ViewRemainingCalories() error
+	ViewRemainingCalories(u UserManager, date time.Time) error
 }
 
 type WeightTracker interface {
