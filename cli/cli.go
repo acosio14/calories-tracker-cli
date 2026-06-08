@@ -111,9 +111,9 @@ func (c *CLI) AddFoodItemCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			foodItem := args[0]
 			meal, _ := cmd.Flags().GetString("meal")
-			calories, _ := cmd.Flags().GetInt("calories")
-			servingSize, _ := cmd.Flags().GetInt("serving-size")
-			quantity, _ := cmd.Flags().GetInt("quantity")
+			calories, _ := cmd.Flags().GetFloat64("calories")
+			servingSize, _ := cmd.Flags().GetFloat64("serving-size")
+			quantity, _ := cmd.Flags().GetFloat64("quantity")
 			// add food oatmeal --calories 160 --serving-size 35g --quantity 43g --meal breakfast
 			return c.Food.AddFoodItem(c.User, foodItem, calories, servingSize, quantity, meal)
 		},
@@ -122,15 +122,15 @@ func (c *CLI) AddFoodItemCmd() *cobra.Command {
 	if err := addFoodCmd.MarkFlagRequired("meal"); err != nil {
 		panic(err)
 	}
-	addFoodCmd.Flags().Int("calories", 0, "Calories per serving for food item.")
+	addFoodCmd.Flags().Float64("calories", 0, "Calories per serving for food item.")
 	if err := addFoodCmd.MarkFlagRequired("calories"); err != nil {
 		panic(err)
 	}
-	addFoodCmd.Flags().Int("serving-size", 0, "Serving size of food item.")
+	addFoodCmd.Flags().Float64("serving-size", 0, "Serving size of food item.")
 	if err := addFoodCmd.MarkFlagRequired("serving-size"); err != nil {
 		panic(err)
 	}
-	addFoodCmd.Flags().Int("quantity", 0, "Number of servings.")
+	addFoodCmd.Flags().Float64("quantity", 0, "Number of servings.")
 	if err := addFoodCmd.MarkFlagRequired("quantity"); err != nil {
 		panic(err)
 	}
@@ -291,13 +291,13 @@ func (c *CLI) ViewLeftoverCaloriesCmd() *cobra.Command {
 		Use:   "calories",
 		Short: "Remaining calories for the day/week.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return c.Food.ViewRemainingCalories()
+			date, _ := cmd.Flags().GetString("date")
+			return c.Food.ViewRemainingCalories(c.User, time.Date(date)) //TO DO: Fix date input
 		},
 	}
 	//default: today. Monday, Tuesday, etc.
 	//default: current. Last (week)
-	viewCaloriesCmd.Flags().String("day", "today", "Show remaining calories the day.")
-	viewCaloriesCmd.Flags().String("week", "current", "Show remaining calories for current week.")
+	viewCaloriesCmd.Flags().String("date", "today", "Show remaining calories the day.")
 	return viewCaloriesCmd
 }
 
