@@ -292,12 +292,22 @@ func (c *CLI) ViewLeftoverCaloriesCmd() *cobra.Command {
 		Short: "Remaining calories for the day/week.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			date, _ := cmd.Flags().GetString("date")
-			return c.Food.ViewRemainingCalories(c.User, time.Date(date)) //TO DO: Fix date input
+			var input time.Time
+			if date == "today" {
+				input = time.Now()
+			} else {
+				parsed, err := time.Parse("02-01-2006", date)
+				if err != nil {
+					return err
+				}
+				input = parsed
+			}
+			return c.Food.ViewRemainingCalories(c.User, input) //TO DO: Fix date input
 		},
 	}
-	//default: today. Monday, Tuesday, etc.
-	//default: current. Last (week)
-	viewCaloriesCmd.Flags().String("date", "today", "Show remaining calories the day.")
+
+	// For now: today, yesterday
+	viewCaloriesCmd.Flags().String("date", "today", "Show remaining calories for the day.")
 	return viewCaloriesCmd
 }
 
