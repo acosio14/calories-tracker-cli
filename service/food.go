@@ -72,8 +72,27 @@ func (f *FoodTracker) AddFoodItem(
 	return nil
 }
 
-func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, commands []any) error {
-	// command -> name, serving size, calories, etc
+func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []any) error {
+	// flags = date, meal, name, servingSize, calories, quantity
+	user, err := u.SelectUser()
+	if err != nil {
+		return err
+	}
+	var nonEmptyFlags []any
+	for _, flag := range flags {
+		if flag != "" && flag != 0 {
+			nonEmptyFlags = append(nonEmptyFlags, flag)
+		}
+	}
+
+	for _, foodItem := range user.FoodJournal {
+		if foodItem.ID == foodItemID {
+			switch nonEmptyFlags{
+			case "date" // can't use strings, 1) should use enums 2) can't tell if its "date"
+			}
+
+		}
+	}
 
 	return nil
 }

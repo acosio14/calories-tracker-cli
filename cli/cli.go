@@ -29,7 +29,7 @@ type FoodTracker interface {
 		quantity float64,
 		meal string,
 	) error
-	EditFoodItem(u UserManager, foodItemID int, command []any) error
+	EditFoodItem(u UserManager, foodItemID int, flags []any) error
 	DeleteFoodItem(u UserManager, foodItemID int) error
 	ViewRemainingCalories(u UserManager, date time.Time) error
 }
