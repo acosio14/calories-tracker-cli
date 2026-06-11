@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -13,36 +14,38 @@ import (
 type UserManager struct{}
 
 func (u *UserManager) CreateUser(name string) error {
-	var age int
-	fmt.Println("What is your age?:") //change to use birthday and calculate age
-	fmt.Scan(&age)
+	var r io.Reader
+	var birthday int
+	fmt.Print("Enter Birthday (MM/DD/YYYY):")
+	fmt.Fscan(r, &birthday)
+	age := time.Now().Day() - birthday
 
 	var gender string
-	fmt.Println("What is your gender?(M/F)")
+	fmt.Print("Gender (M/F): ")
 	fmt.Scan(&gender)
 
 	var height int
-	fmt.Println("What is your height?(inches)")
+	fmt.Print("Height (inches): ")
 	fmt.Scan(&height)
 
 	var userGoal string
-	fmt.Println("What is your goal? (lose/maintain/gain)")
+	fmt.Print("Goal (lose/maintain/gain): ")
 	fmt.Scan(&userGoal)
 
 	var currentWeight float64
-	fmt.Println("What is your current weight?(lbs)")
+	fmt.Print("Current weight (lbs): ")
 	fmt.Scan(&currentWeight)
 
 	var goalWeight float64
-	fmt.Println("What is your goal weight?(lbs)")
+	fmt.Print("Goal weight (lbs): ")
 	fmt.Scan(&goalWeight)
 
 	var goalTimeline float64
-	fmt.Println("How many weeks to reach goal?")
+	fmt.Print("Duration (weeks): ")
 	fmt.Scan(&goalTimeline)
 
 	var dailyCalories float64
-	fmt.Println("Daily Calories intake?")
+	fmt.Print("Daily Calories intake: ")
 	fmt.Scan(&dailyCalories)
 
 	goalRate := (goalWeight - currentWeight) / goalTimeline
