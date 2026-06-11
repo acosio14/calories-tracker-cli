@@ -85,7 +85,7 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 		}
 	}
 
-	//find out if foodItemID is 1 based or 0 based
+	// find out if foodItemID is 1 based or 0 based
 	for _, flagEnum := range flagIndex {
 		switch flagEnum {
 		case 0:
@@ -106,7 +106,7 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 			//quantity
 			user.FoodJournal[foodItemID-1].Quantity = flags[5].(float64)
 		default:
-			// error?
+			fmt.Println("Error")
 		}
 	}
 
