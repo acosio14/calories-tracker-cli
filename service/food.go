@@ -78,20 +78,48 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 	if err != nil {
 		return err
 	}
-	var nonEmptyFlags []any
-	for _, flag := range flags {
+	var flagIndex []int
+	for i, flag := range flags {
 		if flag != "" && flag != 0 {
-			nonEmptyFlags = append(nonEmptyFlags, flag)
+			flagIndex = append(flagIndex, i)
 		}
 	}
 
-	for _, foodItem := range user.FoodJournal {
-		if foodItem.ID == foodItemID {
-			switch nonEmptyFlags{
-			case "date" // can't use strings, 1) should use enums 2) can't tell if its "date"
-			}
-
+	//find out if foodItemID is 1 based or 0 based
+	for _, flagEnum := range flagIndex {
+		switch flagEnum {
+		case 0:
+			user.FoodJournal[foodItemID-1].Date = flags[0].(time.Time) //flags[i] is any need to be time.Time
+		case 1:
+			//meal
+			user.FoodJournal[foodItemID-1].Meal = flags[1].(string)
+		case 2:
+			//name
+			user.FoodJournal[foodItemID-1].Name = flags[2].(string)
+		case 3:
+			//serving-size
+			user.FoodJournal[foodItemID-1].ServingSize = flags[3].(float64)
+		case 4:
+			//calories
+			user.FoodJournal[foodItemID-1].TotalCalories = flags[4].(float64)
+		case 5:
+			//quantity
+			user.FoodJournal[foodItemID-1].Quantity = flags[5].(float64)
+		default:
+			// error?
 		}
+	}
+
+	userData, err := json.MarshalIndent(user, "", "	")
+	if err != nil {
+		return err
+	}
+
+	filename := fmt.Sprintf("%s.json", user.Name)
+	outputPath := filepath.Join("output", filename)
+	err = os.WriteFile(outputPath, userData, 0644)
+	if err != nil {
+		return err
 	}
 
 	return nil
