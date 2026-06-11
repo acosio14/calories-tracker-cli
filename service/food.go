@@ -89,7 +89,7 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 	for _, flagEnum := range flagIndex {
 		switch flagEnum {
 		case 0:
-			user.FoodJournal[foodItemID-1].Date = flags[0].(time.Time) //flags[i] is any need to be time.Time
+			user.FoodJournal[foodItemID-1].Date = flags[0].(time.Time)
 		case 1:
 			//meal
 			user.FoodJournal[foodItemID-1].Meal = flags[1].(string)
