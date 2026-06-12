@@ -17,26 +17,22 @@ func (g *GoalManager) EditGoal(u cli.UserManager) error {
 		return err
 	}
 
-	var newGoal string
 	fmt.Println("What is your new goal? (lose/maintain/gain)")
-	fmt.Scan(&newGoal)
+	newGoal, _ := GetInput(os.Stdin)
 
-	var currentWeight float64
 	fmt.Println("What is your current weight?(lbs)")
-	fmt.Scan(&currentWeight)
+	currentWeight, _ := GetInput(os.Stdin)
 
-	var goalWeight float64
 	fmt.Println("What is your goal weight?(lbs)")
-	fmt.Scan(&goalWeight)
+	goalWeight, _ := GetInput(os.Stdin)
 
-	var goalTimeline float64
 	fmt.Println("How many weeks to reach goal?")
-	fmt.Scan(&goalTimeline)
+	goalTimeline, _ := GetInput(os.Stdin)
 
-	goalRate := (goalWeight - currentWeight) / goalTimeline
+	goalRate := (goalWeight.(float64) - currentWeight.(float64)) / goalTimeline.(float64)
 
-	user.Goal.Type = newGoal
-	user.Goal.Weight = goalWeight
+	user.Goal.Type = newGoal.(string)
+	user.Goal.Weight = goalWeight.(float64)
 	user.Goal.Rate = goalRate
 
 	userData, err := json.MarshalIndent(user, "", "	")
