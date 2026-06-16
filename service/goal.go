@@ -12,7 +12,7 @@ import (
 type GoalManager struct{}
 
 func (g *GoalManager) EditGoal(u cli.UserManager) error {
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func (g *GoalManager) EditGoal(u cli.UserManager) error {
 }
 
 func (g *GoalManager) EditDailyCalories(u cli.UserManager, calories float64) error {
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}

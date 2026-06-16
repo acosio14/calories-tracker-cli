@@ -17,7 +17,7 @@ import (
 type WeightTracker struct{}
 
 func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64, date int) error {
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64, date int) e
 }
 
 func (w *WeightTracker) DeleteWeightEntry(u cli.UserManager, weightEntryID int) error {
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func (w *WeightTracker) DeleteWeightEntry(u cli.UserManager, weightEntryID int) 
 
 func (w *WeightTracker) DisplayWeightProgress() error {
 	u := &UserManager{}
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}

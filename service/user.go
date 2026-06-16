@@ -100,7 +100,7 @@ func (u *UserManager) CreateUser(name string) error {
 	return nil
 }
 
-func (u *UserManager) SelectUser() (*domain.User, error) {
+func (u *UserManager) LoadUser() (*domain.User, error) {
 	var user domain.User
 
 	entries, err := os.ReadDir("../output")
@@ -124,4 +124,8 @@ func (u *UserManager) SelectUser() (*domain.User, error) {
 	}
 
 	return &user, nil
+}
+
+func (u *UserManager) SaveUser(User *domain.User) error {
+	return nil
 }

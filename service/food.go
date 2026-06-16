@@ -21,7 +21,7 @@ func (f *FoodTracker) AddFoodItem(
 	quantity float64,
 	meal string,
 ) error {
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func (f *FoodTracker) AddFoodItem(
 
 func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []any) error {
 	// flags = date, meal, name, servingSize, calories, quantity
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -127,7 +127,7 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 }
 
 func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -148,7 +148,7 @@ func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
 }
 
 func (f *FoodTracker) ViewRemainingCalories(u cli.UserManager, date time.Time) error {
-	user, err := u.SelectUser()
+	user, err := u.LoadUser()
 	if err != nil {
 		return err
 	}

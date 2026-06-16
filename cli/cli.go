@@ -12,7 +12,7 @@ import (
 
 type UserManager interface {
 	CreateUser(name string) error
-	SelectUser() (*domain.User, error)
+	LoadUser() (*domain.User, error)
 }
 
 type GoalManager interface {
