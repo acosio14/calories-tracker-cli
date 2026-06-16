@@ -1,10 +1,7 @@
 package service
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/cli"
@@ -59,16 +56,8 @@ func (f *FoodTracker) AddFoodItem(
 	}
 	user.FoodJournal = append(user.FoodJournal, foodEntry)
 
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join("output", filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
+	u.SaveUser(user, "output")
+
 	return nil
 }
 
@@ -111,17 +100,7 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 		}
 	}
 
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
-
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join("output", filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
+	u.SaveUser(user, "output")
 
 	return nil
 }
@@ -134,16 +113,7 @@ func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
 	// Delete index through slicing
 	user.FoodJournal = append(user.FoodJournal[:foodItemID], user.FoodJournal[foodItemID+1])
 
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join("output", filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
+	u.SaveUser(user, "output")
 	return nil
 }
 

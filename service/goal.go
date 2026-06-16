@@ -1,10 +1,8 @@
 package service
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/acosio14/calories-tracker-cli/cli"
 )
@@ -35,17 +33,7 @@ func (g *GoalManager) EditGoal(u cli.UserManager) error {
 	user.Goal.Weight = goalWeight.(float64)
 	user.Goal.Rate = goalRate
 
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
-
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join("output", filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
+	u.SaveUser(user, "output")
 
 	return nil
 }
@@ -57,16 +45,6 @@ func (g *GoalManager) EditDailyCalories(u cli.UserManager, calories float64) err
 	}
 	user.Goal.DailyCalories = calories
 
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
-
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join("output", filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
+	u.SaveUser(user, "output")
 	return nil
 }

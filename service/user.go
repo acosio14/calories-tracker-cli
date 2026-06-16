@@ -70,7 +70,7 @@ func (u *UserManager) CreateUser(name string) error {
 
 	foodItem := make([]domain.FoodItem, 1)
 
-	user := domain.User{
+	user := &domain.User{
 		Name:          name,
 		Age:           age,
 		Gender:        gender.(string),
@@ -80,22 +80,12 @@ func (u *UserManager) CreateUser(name string) error {
 		FoodJournal:   foodItem,
 	}
 
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
 	outputFolder := "output"
-	err = os.MkdirAll(outputFolder, 0644)
+	err := os.MkdirAll(outputFolder, 0644)
 	if err != nil {
 		return err
 	}
-
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join(outputFolder, filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
+	u.SaveUser(user, outputFolder)
 
 	return nil
 }
@@ -126,6 +116,16 @@ func (u *UserManager) LoadUser() (*domain.User, error) {
 	return &user, nil
 }
 
-func (u *UserManager) SaveUser(User *domain.User) error {
+func (u *UserManager) SaveUser(user *domain.User, outputFolder string) error {
+	userData, err := json.MarshalIndent(user, "", "	")
+	if err != nil {
+		return err
+	}
+	filename := fmt.Sprintf("%s.json", user.Name)
+	outputPath := filepath.Join(outputFolder, filename)
+	err = os.WriteFile(outputPath, userData, 0644)
+	if err != nil {
+		return err
+	}
 	return nil
 }

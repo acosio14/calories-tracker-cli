@@ -1,10 +1,7 @@
 package service
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/cli"
@@ -36,16 +33,7 @@ func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64, date int) e
 	}
 	user.WeightTracker = append(user.WeightTracker, weight_entry)
 
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join("output", filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
+	u.SaveUser(user, "output")
 
 	return nil
 
@@ -59,16 +47,7 @@ func (w *WeightTracker) DeleteWeightEntry(u cli.UserManager, weightEntryID int) 
 	// Delete index through slicing
 	user.WeightTracker = append(user.WeightTracker[:weightEntryID], user.WeightTracker[weightEntryID+1])
 
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join("output", filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
+	u.SaveUser(user, "output")
 	return nil
 }
 
