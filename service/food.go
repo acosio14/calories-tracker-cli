@@ -78,6 +78,7 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 	if err != nil {
 		return err
 	}
+
 	var flagIndex []int
 	for i, flag := range flags {
 		if flag != "" && flag != 0 {

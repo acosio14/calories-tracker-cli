@@ -24,6 +24,7 @@ func GetInput(r io.Reader) (any, error) {
 }
 
 func (u *UserManager) CreateUser(name string) error {
+
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
 	birthday, _ := GetInput(os.Stdin)
 	// Need to parse b-day into proper digit in order to calculate age

@@ -100,7 +100,7 @@ func (c *CLI) AddCmd() *cobra.Command {
 		Long:  "Add Goal, FoodItem or weight to User's tracking history.",
 	}
 	addCmd.AddCommand(c.AddFoodItemCmd())
-	addCmd.AddCommand(c.AddWeigthCmd())
+	addCmd.AddCommand(c.AddWeightCmd())
 	return addCmd
 }
 
@@ -138,8 +138,8 @@ func (c *CLI) AddFoodItemCmd() *cobra.Command {
 	return addFoodCmd
 }
 
-func (c *CLI) AddWeigthCmd() *cobra.Command {
-	addWeigthCmd := &cobra.Command{
+func (c *CLI) AddWeightCmd() *cobra.Command {
+	addWeightCmd := &cobra.Command{
 		Use:   "weight",
 		Short: "Add weight",
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -152,8 +152,8 @@ func (c *CLI) AddWeigthCmd() *cobra.Command {
 			// Need optional date flag, say I measured yesterday and wrote it down but didn't add it
 		},
 	}
-	addWeigthCmd.Flags().Int("date", 0, "Date when weight was taken.") // currently int but needs to be date type
-	return addWeigthCmd
+	addWeightCmd.Flags().Int("date", 0, "Date when weight was taken.") // currently int but needs to be date type
+	return addWeightCmd
 }
 
 func (c *CLI) EditCmd() *cobra.Command {
@@ -320,6 +320,6 @@ func (c *CLI) ViewPlotCmd() *cobra.Command {
 		},
 	}
 	// week. month, year
-	viewPlotCmd.Flags().String("weigth", "month", "Plot weight for time period.")
+	viewPlotCmd.Flags().String("weight", "month", "Plot weight for time period.")
 	return viewPlotCmd
 }
