@@ -56,7 +56,10 @@ func (f *FoodTracker) AddFoodItem(
 	}
 	user.FoodJournal = append(user.FoodJournal, foodEntry)
 
-	u.SaveUser(user, "output")
+	err = u.SaveUser(user, "output")
+	if err != nil {
+		return fmt.Errorf("error saving user, %v", err)
+	}
 
 	return nil
 }
@@ -100,7 +103,10 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 		}
 	}
 
-	u.SaveUser(user, "output")
+	err = u.SaveUser(user, "output")
+	if err != nil {
+		return fmt.Errorf("error saving user, %v", err)
+	}
 
 	return nil
 }
@@ -113,7 +119,11 @@ func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
 	// Delete index through slicing
 	user.FoodJournal = append(user.FoodJournal[:foodItemID], user.FoodJournal[foodItemID+1])
 
-	u.SaveUser(user, "output")
+	err = u.SaveUser(user, "output")
+	if err != nil {
+		return fmt.Errorf("error saving user, %v", err)
+	}
+
 	return nil
 }
 

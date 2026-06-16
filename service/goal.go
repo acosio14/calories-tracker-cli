@@ -33,7 +33,10 @@ func (g *GoalManager) EditGoal(u cli.UserManager) error {
 	user.Goal.Weight = goalWeight.(float64)
 	user.Goal.Rate = goalRate
 
-	u.SaveUser(user, "output")
+	err = u.SaveUser(user, "output")
+	if err != nil {
+		return fmt.Errorf("error saving user, %v", err)
+	}
 
 	return nil
 }
@@ -45,6 +48,10 @@ func (g *GoalManager) EditDailyCalories(u cli.UserManager, calories float64) err
 	}
 	user.Goal.DailyCalories = calories
 
-	u.SaveUser(user, "output")
+	err = u.SaveUser(user, "output")
+	if err != nil {
+		return fmt.Errorf("error saving user, %v", err)
+	}
+
 	return nil
 }

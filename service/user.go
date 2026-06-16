@@ -85,7 +85,10 @@ func (u *UserManager) CreateUser(name string) error {
 	if err != nil {
 		return err
 	}
-	u.SaveUser(user, outputFolder)
+	err = u.SaveUser(user, outputFolder)
+	if err != nil {
+		return fmt.Errorf("error saving user, %v", err)
+	}
 
 	return nil
 }
