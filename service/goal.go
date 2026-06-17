@@ -16,16 +16,16 @@ func (g *GoalManager) EditGoal(u cli.UserManager) error {
 	}
 
 	fmt.Println("What is your new goal? (lose/maintain/gain)")
-	newGoal, _ := GetString(os.Stdin)
+	newGoal, _ := readString(os.Stdin)
 
 	fmt.Println("What is your current weight?(lbs)")
-	currentWeight, _ := GetFloat64(os.Stdin)
+	currentWeight, _ := readFloat(os.Stdin)
 
 	fmt.Println("What is your goal weight?(lbs)")
-	goalWeight, _ := GetFloat64(os.Stdin)
+	goalWeight, _ := readFloat(os.Stdin)
 
 	fmt.Println("How many weeks to reach goal?")
-	goalTimeline, _ := GetFloat64(os.Stdin)
+	goalTimeline, _ := readFloat(os.Stdin)
 
 	goalRate := (goalWeight - currentWeight) / goalTimeline
 

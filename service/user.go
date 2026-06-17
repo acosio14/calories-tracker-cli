@@ -13,7 +13,7 @@ import (
 
 type UserManager struct{}
 
-func GetString(r io.Reader) (string, error) {
+func readString(r io.Reader) (string, error) {
 	var returnValue string
 	_, err := fmt.Fscan(r, &returnValue)
 	if err != nil {
@@ -23,7 +23,7 @@ func GetString(r io.Reader) (string, error) {
 	return returnValue, nil
 }
 
-func GetInt(r io.Reader) (int, error) {
+func readInt(r io.Reader) (int, error) {
 	var returnValue int
 	_, err := fmt.Fscan(r, &returnValue)
 	if err != nil {
@@ -33,7 +33,7 @@ func GetInt(r io.Reader) (int, error) {
 	return returnValue, nil
 }
 
-func GetFloat64(r io.Reader) (float64, error) {
+func readFloat(r io.Reader) (float64, error) {
 	var returnValue float64
 	_, err := fmt.Fscan(r, &returnValue)
 	if err != nil {
@@ -46,30 +46,30 @@ func GetFloat64(r io.Reader) (float64, error) {
 func (u *UserManager) CreateUser(name string) error {
 
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
-	birthday, _ := GetInt(os.Stdin)
+	birthday, _ := readInt(os.Stdin)
 	// Need to parse b-day into proper digit in order to calculate age
 	age := time.Now().Day() - birthday
 
 	fmt.Print("Gender (M/F): ")
-	gender, _ := GetString(os.Stdin)
+	gender, _ := readString(os.Stdin)
 
 	fmt.Print("Height (inches): ")
-	height, _ := GetInt(os.Stdin)
+	height, _ := readInt(os.Stdin)
 
 	fmt.Print("Goal (lose/maintain/gain): ")
-	userGoal, _ := GetString(os.Stdin)
+	userGoal, _ := readString(os.Stdin)
 
 	fmt.Print("Current weight (lbs): ")
-	currentWeight, _ := GetFloat64(os.Stdin)
+	currentWeight, _ := readFloat(os.Stdin)
 
 	fmt.Print("Goal weight (lbs): ")
-	goalWeight, _ := GetFloat64(os.Stdin)
+	goalWeight, _ := readFloat(os.Stdin)
 
 	fmt.Print("Duration (weeks): ")
-	goalTimeline, _ := GetFloat64(os.Stdin)
+	goalTimeline, _ := readFloat(os.Stdin)
 
 	fmt.Print("Daily Calories intake: ")
-	dailyCalories, _ := GetFloat64(os.Stdin)
+	dailyCalories, _ := readFloat(os.Stdin)
 
 	goalRate := (goalWeight - currentWeight) / goalTimeline
 
