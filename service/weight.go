@@ -33,7 +33,7 @@ func (w *WeightTracker) AddWeight(u cli.UserManager, weight float64, date int) e
 	}
 	user.WeightTracker = append(user.WeightTracker, weight_entry)
 
-	err = u.SaveUser(user, "output")
+	err = u.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -50,7 +50,7 @@ func (w *WeightTracker) DeleteWeightEntry(u cli.UserManager, weightEntryID int) 
 	// Delete index through slicing
 	user.WeightTracker = append(user.WeightTracker[:weightEntryID], user.WeightTracker[weightEntryID+1])
 
-	err = u.SaveUser(user, "output")
+	err = u.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}

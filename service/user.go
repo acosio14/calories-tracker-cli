@@ -80,12 +80,16 @@ func (u *UserManager) CreateUser(name string) error {
 		FoodJournal:   foodItem,
 	}
 
-	outputFolder := "output"
-	err := os.MkdirAll(outputFolder, 0644)
+	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		return err
+		return fmt.Errorf("error finding home dir %v", err)
 	}
-	err = u.SaveUser(user, outputFolder)
+	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
+	err = os.MkdirAll(outputFolder, 0755)
+	if err != nil {
+		return fmt.Errorf("error creating output folder %v", err)
+	}
+	err = u.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -94,13 +98,19 @@ func (u *UserManager) CreateUser(name string) error {
 }
 
 func (u *UserManager) LoadUser() (*domain.User, error) {
-	var user domain.User
 
-	entries, err := os.ReadDir("../output")
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return nil, fmt.Errorf("error finding home dir %v", err)
+	}
+	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
+
+	entries, err := os.ReadDir(outputFolder)
 	if err != nil {
 		return nil, fmt.Errorf("Error with reading output directory %v", err)
 	}
 
+	var user domain.User
 	if len(entries) < 1 {
 		return nil, fmt.Errorf("User not created")
 	} else {
@@ -119,7 +129,13 @@ func (u *UserManager) LoadUser() (*domain.User, error) {
 	return &user, nil
 }
 
-func (u *UserManager) SaveUser(user *domain.User, outputFolder string) error {
+func (u *UserManager) SaveUser(user *domain.User) error {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return fmt.Errorf("error finding home dir %v", err)
+	}
+	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
+
 	userData, err := json.MarshalIndent(user, "", "	")
 	if err != nil {
 		return err
