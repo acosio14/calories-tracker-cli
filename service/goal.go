@@ -16,21 +16,21 @@ func (g *GoalManager) EditGoal(u cli.UserManager) error {
 	}
 
 	fmt.Println("What is your new goal? (lose/maintain/gain)")
-	newGoal, _ := GetInput(os.Stdin)
+	newGoal, _ := GetString(os.Stdin)
 
 	fmt.Println("What is your current weight?(lbs)")
-	currentWeight, _ := GetInput(os.Stdin)
+	currentWeight, _ := GetFloat64(os.Stdin)
 
 	fmt.Println("What is your goal weight?(lbs)")
-	goalWeight, _ := GetInput(os.Stdin)
+	goalWeight, _ := GetFloat64(os.Stdin)
 
 	fmt.Println("How many weeks to reach goal?")
-	goalTimeline, _ := GetInput(os.Stdin)
+	goalTimeline, _ := GetFloat64(os.Stdin)
 
-	goalRate := (goalWeight.(float64) - currentWeight.(float64)) / goalTimeline.(float64)
+	goalRate := (goalWeight - currentWeight) / goalTimeline
 
-	user.Goal.Type = newGoal.(string)
-	user.Goal.Weight = goalWeight.(float64)
+	user.Goal.Type = newGoal
+	user.Goal.Weight = goalWeight
 	user.Goal.Rate = goalRate
 
 	err = u.SaveUser(user)

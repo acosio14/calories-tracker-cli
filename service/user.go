@@ -13,8 +13,8 @@ import (
 
 type UserManager struct{}
 
-func GetInput(r io.Reader) (any, error) {
-	var returnValue any
+func GetString(r io.Reader) (string, error) {
+	var returnValue string
 	_, err := fmt.Fscan(r, &returnValue)
 	if err != nil {
 		return "", err
@@ -23,41 +23,61 @@ func GetInput(r io.Reader) (any, error) {
 	return returnValue, nil
 }
 
+func GetInt(r io.Reader) (int, error) {
+	var returnValue int
+	_, err := fmt.Fscan(r, &returnValue)
+	if err != nil {
+		return 0, err
+	}
+
+	return returnValue, nil
+}
+
+func GetFloat64(r io.Reader) (float64, error) {
+	var returnValue float64
+	_, err := fmt.Fscan(r, &returnValue)
+	if err != nil {
+		return 0.0, err
+	}
+
+	return returnValue, nil
+}
+
 func (u *UserManager) CreateUser(name string) error {
 
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
-	birthday, _ := GetInput(os.Stdin)
+	birthday, _ := GetInt(os.Stdin)
 	// Need to parse b-day into proper digit in order to calculate age
-	age := time.Now().Day() - birthday.(int)
+	age := time.Now().Day() - birthday
 
 	fmt.Print("Gender (M/F): ")
-	gender, _ := GetInput(os.Stdin)
+	gender, _ := GetString(os.Stdin)
 
 	fmt.Print("Height (inches): ")
-	height, _ := GetInput(os.Stdin)
+	height, _ := GetInt(os.Stdin)
 
 	fmt.Print("Goal (lose/maintain/gain): ")
-	userGoal, _ := GetInput(os.Stdin)
+	userGoal, _ := GetString(os.Stdin)
 
 	fmt.Print("Current weight (lbs): ")
-	currentWeight, _ := GetInput(os.Stdin)
+	currentWeight, _ := GetFloat64(os.Stdin)
 
 	fmt.Print("Goal weight (lbs): ")
-	goalWeight, _ := GetInput(os.Stdin)
+	goalWeight, _ := GetFloat64(os.Stdin)
 
 	fmt.Print("Duration (weeks): ")
-	goalTimeline, _ := GetInput(os.Stdin)
+	goalTimeline, _ := GetFloat64(os.Stdin)
 
 	fmt.Print("Daily Calories intake: ")
-	dailyCalories, _ := GetInput(os.Stdin)
+	dailyCalories, _ := GetFloat64(os.Stdin)
 
-	goalRate := (goalWeight.(float64) - currentWeight.(float64)) / goalTimeline.(float64)
+	goalRate := (goalWeight - currentWeight) / goalTimeline
 
 	goal := domain.Goal{
-		Type:          userGoal.(string),
-		Weight:        goalWeight.(float64),
+		Type:          userGoal,
+		Weight:        goalWeight,
 		Rate:          goalRate,
-		DailyCalories: dailyCalories.(float64),
+		DailyCalories: dailyCalories,
 	}
 	today := time.Now()
 
@@ -65,7 +85,7 @@ func (u *UserManager) CreateUser(name string) error {
 	weight[0] = domain.Weight{
 		ID:    0,
 		Date:  today,
-		Value: currentWeight.(float64),
+		Value: currentWeight,
 	}
 
 	foodItem := make([]domain.FoodItem, 1)
@@ -73,8 +93,8 @@ func (u *UserManager) CreateUser(name string) error {
 	user := &domain.User{
 		Name:          name,
 		Age:           age,
-		Gender:        gender.(string),
-		Height:        height.(int),
+		Gender:        gender,
+		Height:        height,
 		Goal:          goal,
 		WeightTracker: weight,
 		FoodJournal:   foodItem,
