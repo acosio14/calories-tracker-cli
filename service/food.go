@@ -64,7 +64,7 @@ func (f *FoodTracker) AddFoodItem(
 	return nil
 }
 
-func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []any) error {
+func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flag cli.FoodItemInput) error {
 	// flags = date, meal, name, servingSize, calories, quantity
 	user, err := u.LoadUser()
 	if err != nil {
@@ -82,22 +82,22 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flags []an
 	for _, flagEnum := range flagIndex {
 		switch flagEnum {
 		case 0:
-			user.FoodJournal[foodItemID-1].Date = flags[0].(time.Time)
+			user.FoodJournal[foodItemID-1].Date = *flag.Date
 		case 1:
 			//meal
-			user.FoodJournal[foodItemID-1].Meal = flags[1].(string)
+			user.FoodJournal[foodItemID-1].Meal = *flag.Meal
 		case 2:
 			//name
-			user.FoodJournal[foodItemID-1].Name = flags[2].(string)
+			user.FoodJournal[foodItemID-1].Name = *flag.Name
 		case 3:
 			//serving-size
-			user.FoodJournal[foodItemID-1].ServingSize = flags[3].(float64)
+			user.FoodJournal[foodItemID-1].ServingSize = *flag.ServingSize
 		case 4:
 			//calories
-			user.FoodJournal[foodItemID-1].TotalCalories = flags[4].(float64)
+			user.FoodJournal[foodItemID-1].TotalCalories = *flag.Calories
 		case 5:
 			//quantity
-			user.FoodJournal[foodItemID-1].Quantity = flags[5].(float64)
+			user.FoodJournal[foodItemID-1].Quantity = *flag.Quantity
 		default:
 			fmt.Println("Error")
 		}

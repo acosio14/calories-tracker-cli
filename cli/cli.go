@@ -30,7 +30,7 @@ type FoodTracker interface {
 		quantity float64,
 		meal string,
 	) error
-	EditFoodItem(u UserManager, foodItemID int, flags []any) error
+	EditFoodItem(u UserManager, foodItemID int, flags FoodItemInput) error
 	DeleteFoodItem(u UserManager, foodItemID int) error
 	ViewRemainingCalories(u UserManager, date time.Time) error
 }
@@ -196,6 +196,15 @@ func (c *CLI) EditDailyCaloriesCmd() *cobra.Command {
 	return editGoalCmd
 }
 
+type FoodItemInput struct { // TO-DO: Need to move this to service and fix import cycle
+	Date        *time.Time
+	Meal        *string
+	Name        *string
+	ServingSize *float64
+	Calories    *float64
+	Quantity    *float64
+}
+
 func (c *CLI) EditFoodItemCmd() *cobra.Command {
 	editFoodItem := &cobra.Command{
 		Use:   "food-item",
@@ -205,13 +214,20 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 			date, _ := cmd.Flags().GetString("date")
 			meal, _ := cmd.Flags().GetString("meal")
 			name, _ := cmd.Flags().GetString("name")
-			servingSize, _ := cmd.Flags().GetInt("serving-size")
-			calories, _ := cmd.Flags().GetInt("calories")
-			quantity, _ := cmd.Flags().GetInt("quantity")
+			servingSize, _ := cmd.Flags().GetFloat64("serving-size")
+			calories, _ := cmd.Flags().GetFloat64("calories")
+			quantity, _ := cmd.Flags().GetFloat64("quantity")
 
-			args := []any{date, meal, name, servingSize, calories, quantity}
+			arg := FoodItemInput{
+				Date:        &date, //TO-DO: Need to deal with date being string (should be time.Time)
+				Meal:        &meal,
+				Name:        &name,
+				ServingSize: &servingSize,
+				Calories:    &calories,
+				Quantity:    &quantity,
+			}
 
-			return c.Food.EditFoodItem(c.User, id, args)
+			return c.Food.EditFoodItem(c.User, id, arg)
 		},
 	}
 	editFoodItem.Flags().Int("id", 0, "Food item ID.")
@@ -219,9 +235,9 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 	editFoodItem.Flags().Int("date", 0, "Date that food item was eaten.")
 	editFoodItem.Flags().String("meal", "", "Meal of the day(breakfast, Lunch, Dinner)")
 	editFoodItem.Flags().String("name", "", "Name of food-item")
-	editFoodItem.Flags().Int("serving-size", 0, "Serving size of food item.")
-	editFoodItem.Flags().Int("calories", 0, "Calories per serving for food item.")
-	editFoodItem.Flags().Int("quantity", 0, "Number of servings.")
+	editFoodItem.Flags().Float64("serving-size", 0, "Serving size of food item.")
+	editFoodItem.Flags().Float64("calories", 0, "Calories per serving for food item.")
+	editFoodItem.Flags().Float64("quantity", 0, "Number of servings.")
 
 	return editFoodItem
 }
