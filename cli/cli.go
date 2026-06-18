@@ -109,6 +109,7 @@ func (c *CLI) AddFoodItemCmd() *cobra.Command {
 	addFoodCmd := &cobra.Command{
 		Use:   "food-item",
 		Short: "Add Food Item.",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			foodItem := args[0]
 			meal, _ := cmd.Flags().GetString("meal")
