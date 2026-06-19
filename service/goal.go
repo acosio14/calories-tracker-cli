@@ -7,8 +7,6 @@ import (
 	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
-type GoalManager struct{}
-
 func EditGoal() error {
 	user, err := storage.LoadUser()
 	if err != nil {

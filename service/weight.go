@@ -11,8 +11,6 @@ import (
 	"gonum.org/v1/plot/vg"
 )
 
-type WeightTracker struct{}
-
 func AddWeight(weight float64, date int) error {
 	user, err := storage.LoadUser()
 	if err != nil {
