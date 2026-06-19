@@ -80,11 +80,14 @@ func CreateUser(name string) error {
 	today := time.Now()
 
 	weight := make([]domain.Weight, 0)
-	weight[0] = domain.Weight{
-		ID:    0,
-		Date:  today,
-		Value: currentWeight,
-	}
+	weight = append(
+		weight,
+		domain.Weight{
+			ID:    0,
+			Date:  today,
+			Value: currentWeight,
+		},
+	)
 
 	foodItem := make([]domain.FoodItem, 0)
 
