@@ -26,6 +26,15 @@ type FoodItem struct {
 	TotalCalories      float64   `json:"total_calories"`
 }
 
+type FoodItemInput struct {
+	Date        *time.Time
+	Meal        *string
+	Name        *string
+	ServingSize *float64
+	Calories    *float64
+	Quantity    *float64
+}
+
 type User struct {
 	Name          string     `json:"name"`
 	Age           int        `json:"age"`

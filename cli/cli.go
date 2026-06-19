@@ -10,37 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type UserManager interface {
-	CreateUser(name string) error
-	LoadUser() (*domain.User, error)
-	SaveUser(*domain.User) error
-}
-
-type GoalManager interface {
-	EditGoal(u UserManager) error
-	EditDailyCalories(u UserManager, calories float64) error
-}
-
-type FoodTracker interface {
-	AddFoodItem(
-		u UserManager,
-		foodItem string,
-		calories float64,
-		servingSize float64,
-		quantity float64,
-		meal string,
-	) error
-	EditFoodItem(u UserManager, foodItemID int, flags FoodItemInput) error
-	DeleteFoodItem(u UserManager, foodItemID int) error
-	ViewRemainingCalories(u UserManager, date time.Time) error
-}
-
-type WeightTracker interface {
-	AddWeight(u UserManager, weight float64, date int) error
-	DeleteWeightEntry(u UserManager, weightEntryID int) error
-	DisplayWeightProgress() error
-}
-
 type CLI struct {
 	User   UserManager
 	Goal   GoalManager
@@ -196,15 +165,6 @@ func (c *CLI) EditDailyCaloriesCmd() *cobra.Command {
 	return editGoalCmd
 }
 
-type FoodItemInput struct { // TO-DO: Need to move this to service and fix import cycle
-	Date        *time.Time
-	Meal        *string
-	Name        *string
-	ServingSize *float64
-	Calories    *float64
-	Quantity    *float64
-}
-
 func (c *CLI) EditFoodItemCmd() *cobra.Command {
 	editFoodItem := &cobra.Command{
 		Use:   "food-item",
@@ -218,7 +178,7 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 			calories, _ := cmd.Flags().GetFloat64("calories")
 			quantity, _ := cmd.Flags().GetFloat64("quantity")
 
-			arg := FoodItemInput{
+			arg := domain.FoodItemInput{
 				Date:        &date, //TO-DO: Need to deal with date being string (should be time.Time)
 				Meal:        &meal,
 				Name:        &name,

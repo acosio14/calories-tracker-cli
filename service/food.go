@@ -4,21 +4,18 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/acosio14/calories-tracker-cli/cli"
 	"github.com/acosio14/calories-tracker-cli/domain"
+	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
-type FoodTracker struct{}
-
-func (f *FoodTracker) AddFoodItem(
-	u cli.UserManager,
+func AddFoodItem(
 	foodItem string,
 	calories float64,
 	servingSize float64,
 	quantity float64,
 	meal string,
 ) error {
-	user, err := u.LoadUser()
+	user, err := storage.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -56,7 +53,7 @@ func (f *FoodTracker) AddFoodItem(
 	}
 	user.FoodJournal = append(user.FoodJournal, foodEntry)
 
-	err = u.SaveUser(user)
+	err = storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -64,46 +61,34 @@ func (f *FoodTracker) AddFoodItem(
 	return nil
 }
 
-func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flag cli.FoodItemInput) error {
+func EditFoodItem(foodItemID int, flag domain.FoodItemInput) error {
 	// flags = date, meal, name, servingSize, calories, quantity
-	user, err := u.LoadUser()
+	user, err := storage.LoadUser()
 	if err != nil {
 		return err
 	}
+	item := &user.FoodJournal[foodItemID]
 
-	var flagIndex []int
-	for i, flag := range flags {
-		if flag != "" && flag != 0 {
-			flagIndex = append(flagIndex, i)
-		}
+	if flag.Date != nil {
+		item.Date = *flag.Date
+	}
+	if flag.Meal != nil {
+		item.Meal = *flag.Meal
+	}
+	if flag.Name != nil {
+		item.Name = *flag.Name
+	}
+	if flag.ServingSize != nil {
+		item.ServingSize = *flag.ServingSize
+	}
+	if flag.Calories != nil {
+		item.CaloriesPerServing = *flag.Calories
+	}
+	if flag.Quantity != nil {
+		item.Quantity = *flag.Quantity
 	}
 
-	// find out if foodItemID is 1 based or 0 based
-	for _, flagEnum := range flagIndex {
-		switch flagEnum {
-		case 0:
-			user.FoodJournal[foodItemID-1].Date = *flag.Date
-		case 1:
-			//meal
-			user.FoodJournal[foodItemID-1].Meal = *flag.Meal
-		case 2:
-			//name
-			user.FoodJournal[foodItemID-1].Name = *flag.Name
-		case 3:
-			//serving-size
-			user.FoodJournal[foodItemID-1].ServingSize = *flag.ServingSize
-		case 4:
-			//calories
-			user.FoodJournal[foodItemID-1].TotalCalories = *flag.Calories
-		case 5:
-			//quantity
-			user.FoodJournal[foodItemID-1].Quantity = *flag.Quantity
-		default:
-			fmt.Println("Error")
-		}
-	}
-
-	err = u.SaveUser(user)
+	err = storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -111,15 +96,15 @@ func (f *FoodTracker) EditFoodItem(u cli.UserManager, foodItemID int, flag cli.F
 	return nil
 }
 
-func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
-	user, err := u.LoadUser()
+func DeleteFoodItem(foodItemID int) error {
+	user, err := storage.LoadUser()
 	if err != nil {
 		return err
 	}
 	// Delete index through slicing
 	user.FoodJournal = append(user.FoodJournal[:foodItemID], user.FoodJournal[foodItemID+1])
 
-	err = u.SaveUser(user)
+	err = storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -127,8 +112,8 @@ func (f *FoodTracker) DeleteFoodItem(u cli.UserManager, foodItemID int) error {
 	return nil
 }
 
-func (f *FoodTracker) ViewRemainingCalories(u cli.UserManager, date time.Time) error {
-	user, err := u.LoadUser()
+func ViewRemainingCalories(date time.Time) error {
+	user, err := storage.LoadUser()
 	if err != nil {
 		return err
 	}

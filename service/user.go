@@ -1,7 +1,6 @@
 package service
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -9,9 +8,8 @@ import (
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
+	"github.com/acosio14/calories-tracker-cli/storage"
 )
-
-type UserManager struct{}
 
 func readString(r io.Reader) (string, error) {
 	var returnValue string
@@ -43,7 +41,7 @@ func readFloat(r io.Reader) (float64, error) {
 	return returnValue, nil
 }
 
-func (u *UserManager) CreateUser(name string) error {
+func CreateUser(name string) error {
 
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
 	birthday, _ := readInt(os.Stdin)
@@ -81,14 +79,14 @@ func (u *UserManager) CreateUser(name string) error {
 	}
 	today := time.Now()
 
-	weight := make([]domain.Weight, 1)
+	weight := make([]domain.Weight, 0)
 	weight[0] = domain.Weight{
 		ID:    0,
 		Date:  today,
 		Value: currentWeight,
 	}
 
-	foodItem := make([]domain.FoodItem, 1)
+	foodItem := make([]domain.FoodItem, 0)
 
 	user := &domain.User{
 		Name:          name,
@@ -109,62 +107,10 @@ func (u *UserManager) CreateUser(name string) error {
 	if err != nil {
 		return fmt.Errorf("error creating output folder %v", err)
 	}
-	err = u.SaveUser(user)
+	err = storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
 
-	return nil
-}
-
-func (u *UserManager) LoadUser() (*domain.User, error) {
-
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return nil, fmt.Errorf("error finding home dir %v", err)
-	}
-	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
-
-	entries, err := os.ReadDir(outputFolder)
-	if err != nil {
-		return nil, fmt.Errorf("Error with reading output directory %v", err)
-	}
-
-	var user domain.User
-	if len(entries) < 1 {
-		return nil, fmt.Errorf("User not created")
-	} else {
-		jsonFile := string(entries[0].Name())
-		jsonContent, err := os.ReadFile(jsonFile)
-		if err != nil {
-			return nil, fmt.Errorf("read user %q: %w", jsonFile, err)
-		}
-
-		err = json.Unmarshal(jsonContent, &user)
-		if err != nil {
-			return nil, fmt.Errorf("parse user %q: %w", jsonFile, err)
-		}
-	}
-
-	return &user, nil
-}
-
-func (u *UserManager) SaveUser(user *domain.User) error {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return fmt.Errorf("error finding home dir %v", err)
-	}
-	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
-
-	userData, err := json.MarshalIndent(user, "", "	")
-	if err != nil {
-		return err
-	}
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join(outputFolder, filename)
-	err = os.WriteFile(outputPath, userData, 0644)
-	if err != nil {
-		return err
-	}
 	return nil
 }

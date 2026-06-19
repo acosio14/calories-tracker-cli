@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/acosio14/calories-tracker-cli/cli"
+	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
 type GoalManager struct{}
 
-func (g *GoalManager) EditGoal(u cli.UserManager) error {
-	user, err := u.LoadUser()
+func EditGoal() error {
+	user, err := storage.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func (g *GoalManager) EditGoal(u cli.UserManager) error {
 	user.Goal.Weight = goalWeight
 	user.Goal.Rate = goalRate
 
-	err = u.SaveUser(user)
+	err = storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -41,14 +41,14 @@ func (g *GoalManager) EditGoal(u cli.UserManager) error {
 	return nil
 }
 
-func (g *GoalManager) EditDailyCalories(u cli.UserManager, calories float64) error {
-	user, err := u.LoadUser()
+func EditDailyCalories(calories float64) error {
+	user, err := storage.LoadUser()
 	if err != nil {
 		return err
 	}
 	user.Goal.DailyCalories = calories
 
-	err = u.SaveUser(user)
+	err = storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
