@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
-	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
 func readString(r io.Reader) (string, error) {
@@ -41,7 +40,11 @@ func readFloat(r io.Reader) (float64, error) {
 	return returnValue, nil
 }
 
-func CreateUser(name string) error {
+type UserManager struct {
+	Storage StorageInterface
+}
+
+func (u *UserManager) CreateUser(name string) error {
 
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
 	birthday, _ := readInt(os.Stdin)
@@ -110,7 +113,7 @@ func CreateUser(name string) error {
 	if err != nil {
 		return fmt.Errorf("error creating output folder %v", err)
 	}
-	err = storage.SaveUser(user)
+	err = u.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}

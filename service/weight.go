@@ -5,14 +5,17 @@ import (
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
-	"github.com/acosio14/calories-tracker-cli/storage"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"
 )
 
-func AddWeight(weight float64, date int) error {
-	user, err := storage.LoadUser()
+type WeightTracker struct {
+	Storage StorageInterface
+}
+
+func (w *WeightTracker) AddWeight(weight float64, date int) error {
+	user, err := w.Storage.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -31,7 +34,7 @@ func AddWeight(weight float64, date int) error {
 	}
 	user.WeightTracker = append(user.WeightTracker, weight_entry)
 
-	err = storage.SaveUser(user)
+	err = w.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -40,15 +43,15 @@ func AddWeight(weight float64, date int) error {
 
 }
 
-func DeleteWeightEntry(weightEntryID int) error {
-	user, err := storage.LoadUser()
+func (w *WeightTracker) DeleteWeightEntry(weightEntryID int) error {
+	user, err := w.Storage.LoadUser()
 	if err != nil {
 		return err
 	}
 	// Delete index through slicing
 	user.WeightTracker = append(user.WeightTracker[:weightEntryID], user.WeightTracker[weightEntryID+1])
 
-	err = storage.SaveUser(user)
+	err = w.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -56,8 +59,8 @@ func DeleteWeightEntry(weightEntryID int) error {
 	return nil
 }
 
-func DisplayWeightProgress() error {
-	user, err := storage.LoadUser()
+func (w *WeightTracker) DisplayWeightProgress() error {
+	user, err := w.Storage.LoadUser()
 	if err != nil {
 		return err
 	}

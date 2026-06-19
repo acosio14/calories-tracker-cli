@@ -12,7 +12,9 @@ import (
 // Should contain save() and load() functions that service uses
 // Do Later
 
-func LoadUser() (*domain.User, error) {
+type Storage struct{}
+
+func (s *Storage) LoadUser() (*domain.User, error) {
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -44,7 +46,7 @@ func LoadUser() (*domain.User, error) {
 	return &user, nil
 }
 
-func SaveUser(user *domain.User) error {
+func (s *Storage) SaveUser(user *domain.User) error {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return fmt.Errorf("error finding home dir %v", err)

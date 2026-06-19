@@ -5,17 +5,20 @@ import (
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
-	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
-func AddFoodItem(
+type FoodTracker struct {
+	Storage StorageInterface
+}
+
+func (f *FoodTracker) AddFoodItem(
 	foodItem string,
 	calories float64,
 	servingSize float64,
 	quantity float64,
 	meal string,
 ) error {
-	user, err := storage.LoadUser()
+	user, err := f.Storage.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -53,7 +56,7 @@ func AddFoodItem(
 	}
 	user.FoodJournal = append(user.FoodJournal, foodEntry)
 
-	err = storage.SaveUser(user)
+	err = f.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -61,9 +64,9 @@ func AddFoodItem(
 	return nil
 }
 
-func EditFoodItem(foodItemID int, flag domain.FoodItemInput) error {
+func (f *FoodTracker) EditFoodItem(foodItemID int, flag domain.FoodItemInput) error {
 	// flags = date, meal, name, servingSize, calories, quantity
-	user, err := storage.LoadUser()
+	user, err := f.Storage.LoadUser()
 	if err != nil {
 		return err
 	}
@@ -88,7 +91,7 @@ func EditFoodItem(foodItemID int, flag domain.FoodItemInput) error {
 		item.Quantity = *flag.Quantity
 	}
 
-	err = storage.SaveUser(user)
+	err = f.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -96,15 +99,15 @@ func EditFoodItem(foodItemID int, flag domain.FoodItemInput) error {
 	return nil
 }
 
-func DeleteFoodItem(foodItemID int) error {
-	user, err := storage.LoadUser()
+func (f *FoodTracker) DeleteFoodItem(foodItemID int) error {
+	user, err := f.Storage.LoadUser()
 	if err != nil {
 		return err
 	}
 	// Delete index through slicing
 	user.FoodJournal = append(user.FoodJournal[:foodItemID], user.FoodJournal[foodItemID+1])
 
-	err = storage.SaveUser(user)
+	err = f.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
 	}
@@ -112,8 +115,8 @@ func DeleteFoodItem(foodItemID int) error {
 	return nil
 }
 
-func ViewRemainingCalories(date time.Time) error {
-	user, err := storage.LoadUser()
+func (f *FoodTracker) ViewRemainingCalories(date time.Time) error {
+	user, err := f.Storage.LoadUser()
 	if err != nil {
 		return err
 	}
