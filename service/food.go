@@ -100,6 +100,8 @@ func (f *FoodTracker) EditFoodItem(foodItemID int, flag domain.FoodItemInput) er
 		item.Quantity = *flag.Quantity
 	}
 
+	item.TotalCalories = item.CaloriesPerServing * (item.Quantity / item.ServingSize) // 40g/30g * (100 cal/g)
+
 	err = f.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)
