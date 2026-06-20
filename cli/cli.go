@@ -125,7 +125,7 @@ func (c *CLI) AddWeightCmd() *cobra.Command {
 			if dateString == "today" {
 				date = time.Now()
 			} else {
-				date, err = time.Parse("01/02/2026", dateString)
+				date, err = time.Parse("01/02/2006", dateString)
 				if err != nil {
 					return fmt.Errorf("couldn't parse date %v", err)
 				}
@@ -198,7 +198,7 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 				if err != nil {
 					return err
 				}
-				date, err := time.Parse("01/02/2026", dateString)
+				date, err := time.Parse("01/02/2006", dateString)
 				if err != nil {
 					return err
 				}

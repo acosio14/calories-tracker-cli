@@ -49,7 +49,7 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
 	birthdayString, _ := readString(os.Stdin)
 
-	birthday, err := time.Parse("01/02/2026", birthdayString)
+	birthday, err := time.Parse("01/02/2006", birthdayString)
 	// Need to parse b-day into proper digit in order to calculate age
 	age := time.Since(birthday).Hours() / 24 / 365
 
