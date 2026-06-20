@@ -16,7 +16,7 @@ type WeightTracker struct {
 	Storage StorageInterface
 }
 
-func (w *WeightTracker) AddWeight(weight float64, date int) error {
+func (w *WeightTracker) AddWeight(weight float64, date time.Time) error {
 	user, err := w.Storage.LoadUser()
 	if err != nil {
 		return err
@@ -35,7 +35,7 @@ func (w *WeightTracker) AddWeight(weight float64, date int) error {
 
 	weight_entry := domain.Weight{
 		ID:    maxID + 1,
-		Date:  time.Now(),
+		Date:  date,
 		Value: weight,
 	}
 	user.WeightTracker = append(user.WeightTracker, weight_entry)

@@ -112,20 +112,30 @@ func (c *CLI) AddFoodItemCmd() *cobra.Command {
 }
 
 func (c *CLI) AddWeightCmd() *cobra.Command {
+	var date time.Time
 	addWeightCmd := &cobra.Command{
 		Use:   "weight",
 		Short: "Add weight",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			weight_arg, err := strconv.ParseFloat(args[0], 64)
-			date, _ := cmd.Flags().GetInt("date")
 			if err != nil {
 				return fmt.Errorf("invalid weight value: %w", err)
 			}
+			dateString, _ := cmd.Flags().GetString("date")
+			if dateString == "today" {
+				date = time.Now()
+			} else {
+				date, err = time.Parse("01/02/2026", dateString)
+				if err != nil {
+					return fmt.Errorf("couldn't parse date %v", err)
+				}
+			}
+
 			return c.Weight.AddWeight(weight_arg, date)
 			// Need optional date flag, say I measured yesterday and wrote it down but didn't add it
 		},
 	}
-	addWeightCmd.Flags().Int("date", 0, "Date when weight was taken.") // currently int but needs to be date type
+	addWeightCmd.Flags().String("date", "today", "Date when weight was taken.") // currently int but needs to be date type
 	return addWeightCmd
 }
 

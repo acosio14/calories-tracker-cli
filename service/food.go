@@ -76,6 +76,9 @@ func (f *FoodTracker) EditFoodItem(foodItemID int, flag domain.FoodItemInput) er
 	if err != nil {
 		return err
 	}
+	if foodItemID > len(user.FoodJournal)-1 {
+		return fmt.Errorf("footItemID out of range")
+	}
 	item := &user.FoodJournal[foodItemID]
 
 	if flag.Date != nil {
@@ -129,7 +132,7 @@ func (f *FoodTracker) ViewRemainingCalories(date time.Time) error {
 
 	var dailyCalories float64 = 0
 	for _, foodItem := range user.FoodJournal {
-		if foodItem.Date.Equal(date) {
+		if foodItem.Date.Equal(date) { // Never matches, compare by calendar day
 			fmt.Printf("%s | %.2f | %.2f\n", foodItem.Name, foodItem.Quantity, foodItem.TotalCalories)
 			dailyCalories += foodItem.TotalCalories
 		}
