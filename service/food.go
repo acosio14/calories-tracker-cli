@@ -41,7 +41,7 @@ func (f *FoodTracker) AddFoodItem(
 
 	var maxID int
 	if len(user.FoodJournal) == 0 {
-		maxID = 0
+		maxID = -1
 	} else {
 		maxID = slices.MaxFunc(user.FoodJournal,
 			func(a, b domain.FoodItem) int {
