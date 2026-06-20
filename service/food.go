@@ -41,10 +41,10 @@ func (f *FoodTracker) AddFoodItem(
 
 	var maxID int
 	if len(user.FoodJournal) == 0 {
-		return fmt.Errorf("FoodJournal slice is empty")
+		maxID = 0
 	} else {
-		maxID = slices.MaxFunc(user.WeightTracker,
-			func(a, b domain.Weight) int {
+		maxID = slices.MaxFunc(user.FoodJournal,
+			func(a, b domain.FoodItem) int {
 				return cmp.Compare(a.ID, b.ID)
 			},
 		).ID
