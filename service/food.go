@@ -131,10 +131,9 @@ func (f *FoodTracker) ViewRemainingCalories(date time.Time) error {
 	if err != nil {
 		return err
 	}
-
 	var dailyCalories float64 = 0
 	for _, foodItem := range user.FoodJournal {
-		if foodItem.Date.Equal(date) { // Never matches, compare by calendar day
+		if foodItem.Date.YearDay() == date.YearDay() {
 			fmt.Printf("%s | %.2f | %.2f\n", foodItem.Name, foodItem.Quantity, foodItem.TotalCalories)
 			dailyCalories += foodItem.TotalCalories
 		}
