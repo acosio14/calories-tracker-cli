@@ -168,18 +168,18 @@ func (c *CLI) EditDailyCaloriesCmd() *cobra.Command {
 }
 
 func (c *CLI) EditFoodItemCmd() *cobra.Command {
-	var date time.Time
-	var meal string
-	var name string
-	var servingSize float64
-	var calories float64
-	var quantity float64
-	var err error
-
 	editFoodItem := &cobra.Command{
 		Use:   "food-item",
 		Short: "Edit food item.",
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			arg := domain.FoodItemInput{
+				Date:        nil,
+				Meal:        nil,
+				Name:        nil,
+				ServingSize: nil,
+				Calories:    nil,
+				Quantity:    nil,
+			}
 
 			id, _ := cmd.Flags().GetInt("id")
 
@@ -188,49 +188,46 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 				if err != nil {
 					return err
 				}
-				date, err = time.Parse("01/02/2026", dateString)
+				date, err := time.Parse("01/02/2026", dateString)
 				if err != nil {
 					return err
 				}
+				arg.Date = &date
 			}
 			if cmd.Flags().Changed("meal") {
-				meal, err = cmd.Flags().GetString("meal")
+				meal, err := cmd.Flags().GetString("meal")
 				if err != nil {
 					return err
 				}
+				arg.Meal = &meal
 			}
 			if cmd.Flags().Changed("name") {
-				name, err = cmd.Flags().GetString("name")
+				name, err := cmd.Flags().GetString("name")
 				if err != nil {
 					return err
 				}
+				arg.Name = &name
 			}
 			if cmd.Flags().Changed("serving-size") {
-				servingSize, err = cmd.Flags().GetFloat64("serving-size")
+				servingSize, err := cmd.Flags().GetFloat64("serving-size")
 				if err != nil {
 					return err
 				}
+				arg.ServingSize = &servingSize
 			}
 			if cmd.Flags().Changed("calories") {
-				calories, err = cmd.Flags().GetFloat64("calories")
+				calories, err := cmd.Flags().GetFloat64("calories")
 				if err != nil {
 					return err
 				}
+				arg.Calories = &calories
 			}
 			if cmd.Flags().Changed("quantity") {
-				quantity, err = cmd.Flags().GetFloat64("quantity")
+				quantity, err := cmd.Flags().GetFloat64("quantity")
 				if err != nil {
 					return err
 				}
-			}
-
-			arg := domain.FoodItemInput{
-				Date:        &date,
-				Meal:        &meal,
-				Name:        &name,
-				ServingSize: &servingSize,
-				Calories:    &calories,
-				Quantity:    &quantity,
+				arg.Quantity = &quantity
 			}
 
 			return c.Food.EditFoodItem(id, arg)
@@ -240,10 +237,10 @@ func (c *CLI) EditFoodItemCmd() *cobra.Command {
 	editFoodItem.MarkFlagRequired("id")
 	editFoodItem.Flags().String("date", "", "Date that food item was eaten.")
 	editFoodItem.Flags().String("meal", "", "Meal of the day(breakfast, Lunch, Dinner)")
-	editFoodItem.Flags().StringVar(&name, "name", "", "Name of food-item")
-	editFoodItem.Flags().Float64Var(&servingSize, "serving-size", 0, "Serving size of food item.")
-	editFoodItem.Flags().Float64Var(&calories, "calories", 0, "Calories per serving for food item.")
-	editFoodItem.Flags().Float64Var(&quantity, "quantity", 0, "Number of servings.")
+	editFoodItem.Flags().String("name", "", "Name of food-item")
+	editFoodItem.Flags().Float64("serving-size", 0, "Serving size of food item.")
+	editFoodItem.Flags().Float64("calories", 0, "Calories per serving for food item.")
+	editFoodItem.Flags().Float64("quantity", 0, "Number of servings.")
 
 	return editFoodItem
 }
