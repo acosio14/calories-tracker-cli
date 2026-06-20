@@ -47,9 +47,11 @@ type UserManager struct {
 func (u *UserManager) CreateUser(name string) error {
 
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
-	birthday, _ := readInt(os.Stdin)
+	birthdayString, _ := readString(os.Stdin)
+
+	birthday, err := time.Parse("01/02/2026", birthdayString)
 	// Need to parse b-day into proper digit in order to calculate age
-	age := time.Now().Day() - birthday
+	age := time.Since(birthday).Hours() / 24 / 365
 
 	fmt.Print("Gender (M/F): ")
 	gender, _ := readString(os.Stdin)
@@ -96,7 +98,7 @@ func (u *UserManager) CreateUser(name string) error {
 
 	user := &domain.User{
 		Name:          name,
-		Age:           age,
+		Age:           int(age),
 		Gender:        gender,
 		Height:        height,
 		Goal:          goal,
