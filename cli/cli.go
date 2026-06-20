@@ -11,21 +11,37 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewRootCmd() *cobra.Command {
+type CLI struct {
+	User   *service.UserManager
+	Food   *service.FoodTracker
+	Weight *service.WeightTracker
+	Goal   *service.GoalManager
+}
+
+func NewCLI(User *service.UserManager, Food *service.FoodTracker, Weight *service.WeightTracker, Goal *service.GoalManager) *CLI {
+	return &CLI{
+		User:   User,
+		Food:   Food,
+		Weight: Weight,
+		Goal:   Goal,
+	}
+}
+
+func (c *CLI) NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "calorie-tracker",
 		Short: "Tracks Calories",
 	}
-	rootCmd.AddCommand(CreateUserCmd())
-	rootCmd.AddCommand(AddCmd())
-	rootCmd.AddCommand(EditCmd())
-	rootCmd.AddCommand(ViewCmd())
-	rootCmd.AddCommand(DeleteCmd())
+	rootCmd.AddCommand(c.CreateUserCmd())
+	rootCmd.AddCommand(c.AddCmd())
+	rootCmd.AddCommand(c.EditCmd())
+	rootCmd.AddCommand(c.ViewCmd())
+	rootCmd.AddCommand(c.DeleteCmd())
 
 	return rootCmd
 }
 
-func CreateUserCmd() *cobra.Command {
+func (c *CLI) CreateUserCmd() *cobra.Command {
 	createUserCmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create User.",
@@ -37,7 +53,7 @@ func CreateUserCmd() *cobra.Command {
 				return err
 			}
 			if len(entries) == 0 {
-				return service.CreateUser(args[0])
+				return c.User.CreateUser(args[0])
 			} else {
 				fmt.Printf("A user file already exist: %s\n", entries[0].Name())
 				return err
@@ -48,19 +64,19 @@ func CreateUserCmd() *cobra.Command {
 
 }
 
-func AddCmd() *cobra.Command {
+func (c *CLI) AddCmd() *cobra.Command {
 	//Add: Goal, Calories, Weight, or Food item
 	addCmd := &cobra.Command{
 		Use:   "add",
 		Short: "Add Goal, FoodItem or weight.",
 		Long:  "Add Goal, FoodItem or weight to User's tracking history.",
 	}
-	addCmd.AddCommand(AddFoodItemCmd())
-	addCmd.AddCommand(AddWeightCmd())
+	addCmd.AddCommand(c.AddFoodItemCmd())
+	addCmd.AddCommand(c.AddWeightCmd())
 	return addCmd
 }
 
-func AddFoodItemCmd() *cobra.Command {
+func (c *CLI) AddFoodItemCmd() *cobra.Command {
 	addFoodCmd := &cobra.Command{
 		Use:   "food-item",
 		Short: "Add Food Item.",
@@ -72,7 +88,7 @@ func AddFoodItemCmd() *cobra.Command {
 			servingSize, _ := cmd.Flags().GetFloat64("serving-size")
 			quantity, _ := cmd.Flags().GetFloat64("quantity")
 			// add food oatmeal --calories 160 --serving-size 35g --quantity 43g --meal breakfast
-			return service.AddFoodItem(foodItem, calories, servingSize, quantity, meal)
+			return c.Food.AddFoodItem(foodItem, calories, servingSize, quantity, meal)
 		},
 	}
 	addFoodCmd.Flags().String("meal", "", "Meal of the day(breakfast, Lunch, Dinner)")
@@ -95,7 +111,7 @@ func AddFoodItemCmd() *cobra.Command {
 	return addFoodCmd
 }
 
-func AddWeightCmd() *cobra.Command {
+func (c *CLI) AddWeightCmd() *cobra.Command {
 	addWeightCmd := &cobra.Command{
 		Use:   "weight",
 		Short: "Add weight",
@@ -105,7 +121,7 @@ func AddWeightCmd() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("invalid weight value: %w", err)
 			}
-			return service.AddWeight(weight_arg, date)
+			return c.Weight.AddWeight(weight_arg, date)
 			// Need optional date flag, say I measured yesterday and wrote it down but didn't add it
 		},
 	}
@@ -113,30 +129,30 @@ func AddWeightCmd() *cobra.Command {
 	return addWeightCmd
 }
 
-func EditCmd() *cobra.Command {
+func (c *CLI) EditCmd() *cobra.Command {
 	//Edit: Goal or Food Item
 	editCmd := &cobra.Command{
 		Use:   "edit",
 		Short: "Edit Goal or Food Item.",
 	}
-	editCmd.AddCommand(EditGoalCmd())
-	editCmd.AddCommand(EditDailyCaloriesCmd())
-	editCmd.AddCommand(EditFoodItemCmd())
+	editCmd.AddCommand(c.EditGoalCmd())
+	editCmd.AddCommand(c.EditDailyCaloriesCmd())
+	editCmd.AddCommand(c.EditFoodItemCmd())
 	return editCmd
 }
 
-func EditGoalCmd() *cobra.Command {
+func (c *CLI) EditGoalCmd() *cobra.Command {
 	editGoalCmd := &cobra.Command{
 		Use:   "goal",
 		Short: "Edit Goal.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return service.EditGoal()
+			return c.Goal.EditGoal()
 		},
 	}
 	return editGoalCmd
 }
 
-func EditDailyCaloriesCmd() *cobra.Command {
+func (c *CLI) EditDailyCaloriesCmd() *cobra.Command {
 	editGoalCmd := &cobra.Command{
 		Use:   "daily-calories",
 		Short: "Update daily calories limit.",
@@ -145,13 +161,13 @@ func EditDailyCaloriesCmd() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("invalid weight value: %w", err)
 			}
-			return service.EditDailyCalories(newCalories)
+			return c.Goal.EditDailyCalories(newCalories)
 		},
 	}
 	return editGoalCmd
 }
 
-func EditFoodItemCmd() *cobra.Command {
+func (c *CLI) EditFoodItemCmd() *cobra.Command {
 	var date int
 	var meal string
 	var name string
@@ -213,7 +229,7 @@ func EditFoodItemCmd() *cobra.Command {
 				Quantity:    &quantity,
 			}
 
-			return service.EditFoodItem(id, arg)
+			return c.Food.EditFoodItem(id, arg)
 		},
 	}
 	editFoodItem.Flags().Int("id", 0, "Food item ID.")
@@ -228,25 +244,25 @@ func EditFoodItemCmd() *cobra.Command {
 	return editFoodItem
 }
 
-func DeleteCmd() *cobra.Command {
+func (c *CLI) DeleteCmd() *cobra.Command {
 	deleteCmd := &cobra.Command{
 		Use:   "delete",
 		Short: "Delete food item or weight entry",
 	}
-	deleteCmd.AddCommand(DeleteFoodItemCmd())
-	deleteCmd.AddCommand(DeleteWeightEntryCmd())
+	deleteCmd.AddCommand(c.DeleteFoodItemCmd())
+	deleteCmd.AddCommand(c.DeleteWeightEntryCmd())
 
 	return deleteCmd
 }
 
-func DeleteFoodItemCmd() *cobra.Command {
+func (c *CLI) DeleteFoodItemCmd() *cobra.Command {
 	deleteFoodCmd := &cobra.Command{
 		Use:   "food-item",
 		Short: "Delete food item",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			foodID, _ := cmd.Flags().GetInt("id")
-			err := service.DeleteFoodItem(foodID)
+			err := c.Food.DeleteFoodItem(foodID)
 			if err != nil {
 				return err
 			}
@@ -259,14 +275,14 @@ func DeleteFoodItemCmd() *cobra.Command {
 	return deleteFoodCmd
 }
 
-func DeleteWeightEntryCmd() *cobra.Command {
+func (c *CLI) DeleteWeightEntryCmd() *cobra.Command {
 	deleteWeightCmd := &cobra.Command{
 		Use:   "weight-entry",
 		Short: "Delete weight entry",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			weightID, _ := cmd.Flags().GetInt("id")
-			err := service.DeleteWeightEntry(weightID)
+			err := c.Weight.DeleteWeightEntry(weightID)
 			if err != nil {
 				return err
 			}
@@ -278,19 +294,19 @@ func DeleteWeightEntryCmd() *cobra.Command {
 	return deleteWeightCmd
 }
 
-func ViewCmd() *cobra.Command {
+func (c *CLI) ViewCmd() *cobra.Command {
 	//View: Remaining calories in the day
 	// Weight Progress (Plot)
 	viewCmd := &cobra.Command{
 		Use:   "view",
 		Short: "View remaining calories or weight progress.",
 	}
-	viewCmd.AddCommand(ViewLeftoverCaloriesCmd())
-	viewCmd.AddCommand(ViewPlotCmd())
+	viewCmd.AddCommand(c.ViewLeftoverCaloriesCmd())
+	viewCmd.AddCommand(c.ViewPlotCmd())
 	return viewCmd
 }
 
-func ViewLeftoverCaloriesCmd() *cobra.Command {
+func (c *CLI) ViewLeftoverCaloriesCmd() *cobra.Command {
 	viewCaloriesCmd := &cobra.Command{
 		Use:   "calories",
 		Short: "Remaining calories for the day/week.",
@@ -306,7 +322,7 @@ func ViewLeftoverCaloriesCmd() *cobra.Command {
 				}
 				input = parsed
 			}
-			return service.ViewRemainingCalories(input) //TO DO: Fix date input
+			return c.Food.ViewRemainingCalories(input) //TO DO: Fix date input
 		},
 	}
 
@@ -315,12 +331,12 @@ func ViewLeftoverCaloriesCmd() *cobra.Command {
 	return viewCaloriesCmd
 }
 
-func ViewPlotCmd() *cobra.Command {
+func (c *CLI) ViewPlotCmd() *cobra.Command {
 	viewPlotCmd := &cobra.Command{
 		Use:   "plot",
 		Short: "Show plot",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return service.DisplayWeightProgress()
+			return c.Weight.DisplayWeightProgress()
 		},
 	}
 	// week. month, year

@@ -12,9 +12,9 @@ import (
 // Should contain save() and load() functions that service uses
 // Do Later
 
-type Storage struct{}
+type JSONStorage struct{}
 
-func (s *Storage) LoadUser() (*domain.User, error) {
+func (s *JSONStorage) LoadUser() (*domain.User, error) {
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -46,7 +46,7 @@ func (s *Storage) LoadUser() (*domain.User, error) {
 	return &user, nil
 }
 
-func (s *Storage) SaveUser(user *domain.User) error {
+func (s *JSONStorage) SaveUser(user *domain.User) error {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return fmt.Errorf("error finding home dir %v", err)
