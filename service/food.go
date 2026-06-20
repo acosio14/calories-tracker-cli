@@ -1,7 +1,9 @@
 package service
 
 import (
+	"cmp"
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
@@ -37,15 +39,19 @@ func (f *FoodTracker) AddFoodItem(
 	}
 	totalCalories := calories * (quantity / servingSize)
 
-	// Need to find the highest index(ID) then increase it by one
-	var count int
-	for i := range user.FoodJournal {
-		count = i
+	var maxID int
+	if len(user.FoodJournal) == 0 {
+		return fmt.Errorf("FoodJournal slice is empty")
+	} else {
+		maxID = slices.MaxFunc(user.WeightTracker,
+			func(a, b domain.Weight) int {
+				return cmp.Compare(a.ID, b.ID)
+			},
+		).ID
 	}
-	count++
 
 	foodEntry := domain.FoodItem{
-		ID:                 count,
+		ID:                 maxID + 1,
 		Date:               today,
 		Meal:               meal,
 		Name:               foodItem,
@@ -104,8 +110,8 @@ func (f *FoodTracker) DeleteFoodItem(foodItemID int) error {
 	if err != nil {
 		return err
 	}
-	// Delete index through slicing
-	user.FoodJournal = append(user.FoodJournal[:foodItemID], user.FoodJournal[foodItemID+1])
+	// Delete index
+	user.FoodJournal = slices.Delete(user.FoodJournal, foodItemID, foodItemID+1)
 
 	err = f.Storage.SaveUser(user)
 	if err != nil {

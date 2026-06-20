@@ -1,7 +1,9 @@
 package service
 
 import (
+	"cmp"
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
@@ -20,15 +22,19 @@ func (w *WeightTracker) AddWeight(weight float64, date int) error {
 		return err
 	}
 
-	// Need to find the highest index(ID) then increase it by one
-	var count int
-	for i := range user.WeightTracker {
-		count = i
+	var maxID int
+	if len(user.WeightTracker) == 0 {
+		return fmt.Errorf("weightTracker slice is empty")
+	} else {
+		maxID = slices.MaxFunc(user.WeightTracker,
+			func(a, b domain.Weight) int {
+				return cmp.Compare(a.ID, b.ID)
+			},
+		).ID
 	}
-	count++
 
 	weight_entry := domain.Weight{
-		ID:    count,
+		ID:    maxID + 1,
 		Date:  time.Now(),
 		Value: weight,
 	}
@@ -49,7 +55,7 @@ func (w *WeightTracker) DeleteWeightEntry(weightEntryID int) error {
 		return err
 	}
 	// Delete index through slicing
-	user.WeightTracker = append(user.WeightTracker[:weightEntryID], user.WeightTracker[weightEntryID+1])
+	user.WeightTracker = slices.Delete(user.WeightTracker, weightEntryID, weightEntryID+1)
 
 	err = w.Storage.SaveUser(user)
 	if err != nil {
