@@ -122,7 +122,13 @@ func (f *FoodTracker) DeleteFoodItem(foodItemID int) error {
 		return err
 	}
 	// Delete index
-	user.FoodJournal = slices.Delete(user.FoodJournal, foodItemID, foodItemID+1)
+	var foodIndex int
+	for i, food := range user.FoodJournal {
+		if foodItemID == food.ID {
+			foodIndex = i
+		}
+	}
+	user.FoodJournal = slices.Delete(user.FoodJournal, foodIndex, foodIndex+1)
 
 	err = f.Storage.SaveUser(user)
 	if err != nil {
