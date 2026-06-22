@@ -13,7 +13,7 @@ import (
 )
 
 type WeightTracker struct {
-	Storage StorageInterface
+	Storage Storage
 }
 
 func (w *WeightTracker) AddWeight(weight float64, date time.Time) error {

@@ -10,7 +10,7 @@ import (
 )
 
 type FoodTracker struct {
-	Storage StorageInterface
+	Storage Storage
 }
 
 func (f *FoodTracker) AddFoodItem(

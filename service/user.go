@@ -41,7 +41,7 @@ func readFloat(r io.Reader) (float64, error) {
 }
 
 type UserManager struct {
-	Storage StorageInterface
+	Storage Storage
 }
 
 func (u *UserManager) CreateUser(name string) error {

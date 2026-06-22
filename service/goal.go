@@ -6,7 +6,7 @@ import (
 )
 
 type GoalManager struct {
-	Storage StorageInterface
+	Storage Storage
 }
 
 func (g *GoalManager) EditGoal() error {
