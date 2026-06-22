@@ -327,7 +327,7 @@ func (c *CLI) ViewLeftoverCaloriesCmd() *cobra.Command {
 			if date == "today" {
 				input = time.Now()
 			} else {
-				parsed, err := time.Parse("02-01-2006", date)
+				parsed, err := time.Parse("01/02/2006", date)
 				if err != nil {
 					return err
 				}
