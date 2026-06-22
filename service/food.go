@@ -70,16 +70,19 @@ func (f *FoodTracker) AddFoodItem(
 	return nil
 }
 
-func (f *FoodTracker) EditFoodItem(foodItemID int, flag domain.FoodItemInput) error {
+func (f *FoodTracker) EditFoodItem(foodInputID int, flag domain.FoodItemInput) error {
 	// flags = date, meal, name, servingSize, calories, quantity
 	user, err := f.Storage.LoadUser()
 	if err != nil {
 		return err
 	}
-	if foodItemID > len(user.FoodJournal)-1 {
-		return fmt.Errorf("footItemID out of range")
+
+	var item *domain.FoodItem
+	for i, food := range user.FoodJournal {
+		if foodInputID == food.ID {
+			item = &user.FoodJournal[i]
+		}
 	}
-	item := &user.FoodJournal[foodItemID]
 
 	if flag.Date != nil {
 		item.Date = *flag.Date
@@ -100,6 +103,9 @@ func (f *FoodTracker) EditFoodItem(foodItemID int, flag domain.FoodItemInput) er
 		item.Quantity = *flag.Quantity
 	}
 
+	if item.ServingSize <= 0 {
+		return fmt.Errorf("serving size less than or equals to zero")
+	}
 	item.TotalCalories = item.CaloriesPerServing * (item.Quantity / item.ServingSize) // 40g/30g * (100 cal/g)
 
 	err = f.Storage.SaveUser(user)
