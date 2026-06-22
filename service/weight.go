@@ -49,13 +49,19 @@ func (w *WeightTracker) AddWeight(weight float64, date time.Time) error {
 
 }
 
-func (w *WeightTracker) DeleteWeightEntry(weightEntryID int) error {
+func (w *WeightTracker) DeleteWeightEntry(weightInputID int) error {
 	user, err := w.Storage.LoadUser()
 	if err != nil {
 		return err
 	}
 	// Delete index through slicing
-	user.WeightTracker = slices.Delete(user.WeightTracker, weightEntryID, weightEntryID+1)
+	var weightIndex int
+	for i, weight := range user.WeightTracker {
+		if weightInputID == weight.ID {
+			weightIndex = i
+		}
+	}
+	user.WeightTracker = slices.Delete(user.WeightTracker, weightIndex, weightIndex+1)
 
 	err = w.Storage.SaveUser(user)
 	if err != nil {
