@@ -50,6 +50,9 @@ func (u *UserManager) CreateUser(name string) error {
 	birthdayString, _ := readString(os.Stdin)
 
 	birthday, err := time.Parse("01/02/2006", birthdayString)
+	if err != nil {
+		return err
+	}
 	// Need to parse b-day into proper digit in order to calculate age
 	age := time.Since(birthday).Hours() / 24 / 365
 

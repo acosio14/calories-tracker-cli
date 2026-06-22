@@ -17,7 +17,7 @@ type Weight struct {
 
 type FoodItem struct {
 	ID                 int       `json:"id"`
-	Date               time.Time `json:"date"`
+	Date               time.Time `json:"date"` //Future: Find way to make this a struct of calendar dates not time included
 	Meal               string    `json:"meal"`
 	Name               string    `json:"name"`
 	ServingSize        float64   `json:"servings"`
