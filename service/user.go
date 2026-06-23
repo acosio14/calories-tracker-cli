@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
+	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
 func readString(r io.Reader) (string, error) {
@@ -109,15 +109,7 @@ func (u *UserManager) CreateUser(name string) error {
 		FoodJournal:   foodItem,
 	}
 
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return fmt.Errorf("error finding home dir %v", err)
-	}
-	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
-	err = os.MkdirAll(outputFolder, 0755)
-	if err != nil {
-		return fmt.Errorf("error creating output folder %v", err)
-	}
+	storage.OutputFolder(storage.Options{CreateFolder: true})
 	err = u.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)

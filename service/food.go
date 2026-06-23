@@ -37,6 +37,9 @@ func (f *FoodTracker) AddFoodItem(
 			meal = "dinner"
 		}
 	}
+	if servingSize <= 0 {
+		return fmt.Errorf("serving size less than or equals to zero")
+	}
 	totalCalories := calories * (quantity / servingSize)
 
 	var maxID int
@@ -122,11 +125,14 @@ func (f *FoodTracker) DeleteFoodItem(foodItemID int) error {
 		return err
 	}
 	// Delete index
-	var foodIndex int
+	var foodIndex int = -1
 	for i, food := range user.FoodJournal {
 		if foodItemID == food.ID {
 			foodIndex = i
 		}
+	}
+	if foodIndex == -1 {
+		return fmt.Errorf("unkown food index")
 	}
 	user.FoodJournal = slices.Delete(user.FoodJournal, foodIndex, foodIndex+1)
 

@@ -24,7 +24,7 @@ func (w *WeightTracker) AddWeight(weight float64, date time.Time) error {
 
 	var maxID int
 	if len(user.WeightTracker) == 0 {
-		return fmt.Errorf("weightTracker slice is empty")
+		maxID = -1
 	} else {
 		maxID = slices.MaxFunc(user.WeightTracker,
 			func(a, b domain.Weight) int {
@@ -55,11 +55,14 @@ func (w *WeightTracker) DeleteWeightEntry(weightInputID int) error {
 		return err
 	}
 	// Delete index through slicing
-	var weightIndex int
+	var weightIndex int = -1
 	for i, weight := range user.WeightTracker {
 		if weightInputID == weight.ID {
 			weightIndex = i
 		}
+	}
+	if weightIndex == -1 {
+		return fmt.Errorf("unkown weight index")
 	}
 	user.WeightTracker = slices.Delete(user.WeightTracker, weightIndex, weightIndex+1)
 
