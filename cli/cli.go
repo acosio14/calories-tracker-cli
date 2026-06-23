@@ -47,7 +47,7 @@ func (c *CLI) CreateUserCmd() *cobra.Command {
 		Short: "Create User.",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			entries, err := os.ReadDir("./output")
+			entries, err := os.ReadDir("./output") // TO-DO: Need to read correct directory
 			if err != nil {
 				fmt.Printf("Error reading directory %v", err)
 				return err

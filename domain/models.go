@@ -20,7 +20,7 @@ type FoodItem struct {
 	Date               time.Time `json:"date"` //Future: Find way to make this a struct of calendar dates not time included
 	Meal               string    `json:"meal"`
 	Name               string    `json:"name"`
-	ServingSize        float64   `json:"servings"`
+	ServingSize        float64   `json:"serving_size"`
 	CaloriesPerServing float64   `json:"calories_per_serving"`
 	Quantity           float64   `json:"quantity"`
 	TotalCalories      float64   `json:"total_calories"`

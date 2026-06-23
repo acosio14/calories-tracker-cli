@@ -33,12 +33,12 @@ func (w *WeightTracker) AddWeight(weight float64, date time.Time) error {
 		).ID
 	}
 
-	weight_entry := domain.Weight{
+	weightEntry := domain.Weight{
 		ID:    maxID + 1,
 		Date:  date,
 		Value: weight,
 	}
-	user.WeightTracker = append(user.WeightTracker, weight_entry)
+	user.WeightTracker = append(user.WeightTracker, weightEntry)
 
 	err = w.Storage.SaveUser(user)
 	if err != nil {

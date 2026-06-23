@@ -9,9 +9,6 @@ import (
 	"github.com/acosio14/calories-tracker-cli/domain"
 )
 
-// Should contain save() and load() functions that service uses
-// Do Later
-
 type JSONStorage struct{}
 
 type Options struct {
