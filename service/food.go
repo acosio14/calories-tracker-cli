@@ -67,7 +67,7 @@ func (f *FoodTracker) AddFoodItem(
 
 	err = f.Storage.SaveUser(user)
 	if err != nil {
-		return fmt.Errorf("error saving user, %v", err)
+		return fmt.Errorf("error saving user, %w", err)
 	}
 
 	return nil
@@ -117,7 +117,7 @@ func (f *FoodTracker) EditFoodItem(foodInputID int, flag domain.FoodItemInput) e
 
 	err = f.Storage.SaveUser(user)
 	if err != nil {
-		return fmt.Errorf("error saving user, %v", err)
+		return fmt.Errorf("error saving user, %w", err)
 	}
 
 	return nil
@@ -143,7 +143,7 @@ func (f *FoodTracker) DeleteFoodItem(foodInputID int) error {
 
 	err = f.Storage.SaveUser(user)
 	if err != nil {
-		return fmt.Errorf("error saving user, %v", err)
+		return fmt.Errorf("error saving user, %w", err)
 	}
 
 	return nil
@@ -165,7 +165,7 @@ func (f *FoodTracker) ViewRemainingCalories(date time.Time) error {
 	}
 
 	remainingCalories := user.Goal.DailyCalories - dailyCalories
-	fmt.Printf("Remaining Calories for %v: %.2f\n", date, remainingCalories)
+	fmt.Printf("Remaining Calories for %w: %.2f\n", date, remainingCalories)
 
 	return nil
 }

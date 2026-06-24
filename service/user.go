@@ -58,43 +58,43 @@ func (u *UserManager) CreateUser(name string) error {
 	fmt.Print("Gender (M/F): ")
 	gender, err := readString(os.Stdin)
 	if err != nil {
-		return fmt.Errorf("error with input %v", err)
+		return fmt.Errorf("error with input %w", err)
 	}
 
 	fmt.Print("Height (inches): ")
 	height, err := readInt(os.Stdin)
 	if err != nil {
-		return fmt.Errorf("error with input %v", err)
+		return fmt.Errorf("error with input %w", err)
 	}
 
 	fmt.Print("Goal (lose/maintain/gain): ")
 	userGoal, err := readString(os.Stdin)
 	if err != nil {
-		return fmt.Errorf("error with input %v", err)
+		return fmt.Errorf("error with input %w", err)
 	}
 
 	fmt.Print("Current weight (lbs): ")
 	currentWeight, err := readFloat(os.Stdin)
 	if err != nil {
-		return fmt.Errorf("error with input %v", err)
+		return fmt.Errorf("error with input %w", err)
 	}
 
 	fmt.Print("Goal weight (lbs): ")
 	goalWeight, err := readFloat(os.Stdin)
 	if err != nil {
-		return fmt.Errorf("error with input %v", err)
+		return fmt.Errorf("error with input %w", err)
 	}
 
 	fmt.Print("Duration (weeks): ")
 	goalTimeline, err := readFloat(os.Stdin)
 	if err != nil {
-		return fmt.Errorf("error with input %v", err)
+		return fmt.Errorf("error with input %w", err)
 	}
 
 	fmt.Print("Daily Calories intake: ")
 	dailyCalories, err := readFloat(os.Stdin)
 	if err != nil {
-		return fmt.Errorf("error with input %v", err)
+		return fmt.Errorf("error with input %w", err)
 	}
 
 	goalRate := (goalWeight - currentWeight) / goalTimeline
@@ -131,7 +131,7 @@ func (u *UserManager) CreateUser(name string) error {
 
 	err = u.Storage.SaveUser(user)
 	if err != nil {
-		return fmt.Errorf("error saving user, %v", err)
+		return fmt.Errorf("error saving user, %w", err)
 	}
 
 	return nil

@@ -14,7 +14,7 @@ type JSONStorage struct{}
 func OutputFolderPath() (*string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		return nil, fmt.Errorf("error finding home dir %v", err)
+		return nil, fmt.Errorf("error finding home dir %w", err)
 	}
 	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
 
@@ -29,7 +29,7 @@ func (s *JSONStorage) LoadUser() (*domain.User, error) {
 
 	entries, err := os.ReadDir(*outputFolder)
 	if err != nil {
-		return nil, fmt.Errorf("error with reading output directory %v", err)
+		return nil, fmt.Errorf("error with reading output directory %w", err)
 	}
 
 	var user domain.User
@@ -60,7 +60,7 @@ func (s *JSONStorage) SaveUser(user *domain.User) error {
 
 	err = os.MkdirAll(*outputFolder, 0755)
 	if err != nil {
-		return fmt.Errorf("error creating output folder %v", err)
+		return fmt.Errorf("error creating output folder %w", err)
 	}
 
 	userData, err := json.MarshalIndent(user, "", "	")

@@ -116,7 +116,7 @@ func (c *CLI) AddWeightCmd() *cobra.Command {
 			} else {
 				date, err = time.Parse("01/02/2006", dateString)
 				if err != nil {
-					return fmt.Errorf("couldn't parse date %v", err)
+					return fmt.Errorf("couldn't parse date %w", err)
 				}
 			}
 

@@ -42,7 +42,7 @@ func (w *WeightTracker) AddWeight(weight float64, date time.Time) error {
 
 	err = w.Storage.SaveUser(user)
 	if err != nil {
-		return fmt.Errorf("error saving user, %v", err)
+		return fmt.Errorf("error saving user, %w", err)
 	}
 
 	return nil
@@ -69,7 +69,7 @@ func (w *WeightTracker) DeleteWeightEntry(weightInputID int) error {
 
 	err = w.Storage.SaveUser(user)
 	if err != nil {
-		return fmt.Errorf("error saving user, %v", err)
+		return fmt.Errorf("error saving user, %w", err)
 	}
 
 	return nil
@@ -96,7 +96,7 @@ func (w *WeightTracker) DisplayWeightProgress() error {
 
 	line, scatter, err := plotter.NewLinePoints(pts)
 	if err != nil {
-		return fmt.Errorf("failed to create line points: %v", err)
+		return fmt.Errorf("failed to create line points: %w", err)
 	}
 	p.Add(line, scatter)
 

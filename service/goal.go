@@ -35,7 +35,7 @@ func (g *GoalManager) EditGoal() error {
 
 	err = g.Storage.SaveUser(user)
 	if err != nil {
-		return fmt.Errorf("error saving user, %v", err)
+		return fmt.Errorf("error saving user, %w", err)
 	}
 
 	return nil
@@ -50,7 +50,7 @@ func (g *GoalManager) EditDailyCalories(calories float64) error {
 
 	err = g.Storage.SaveUser(user)
 	if err != nil {
-		return fmt.Errorf("error saving user, %v", err)
+		return fmt.Errorf("error saving user, %w", err)
 	}
 
 	return nil
