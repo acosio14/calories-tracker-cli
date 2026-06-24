@@ -84,6 +84,7 @@ func (f *FoodTracker) EditFoodItem(foodInputID int, flag domain.FoodItemInput) e
 	for i, food := range user.FoodJournal {
 		if foodInputID == food.ID {
 			item = &user.FoodJournal[i]
+			break
 		}
 	}
 	if item == nil {
@@ -132,6 +133,7 @@ func (f *FoodTracker) DeleteFoodItem(foodInputID int) error {
 	for i, food := range user.FoodJournal {
 		if foodInputID == food.ID {
 			foodIndex = i
+			break
 		}
 	}
 	if foodIndex == -1 {

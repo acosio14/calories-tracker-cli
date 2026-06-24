@@ -59,6 +59,7 @@ func (w *WeightTracker) DeleteWeightEntry(weightInputID int) error {
 	for i, weight := range user.WeightTracker {
 		if weightInputID == weight.ID {
 			weightIndex = i
+			break
 		}
 	}
 	if weightIndex == -1 {
