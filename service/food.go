@@ -165,7 +165,7 @@ func (f *FoodTracker) ViewRemainingCalories(date time.Time) error {
 	}
 
 	remainingCalories := user.Goal.DailyCalories - dailyCalories
-	fmt.Printf("Remaining Calories for %w: %.2f\n", date, remainingCalories)
+	fmt.Printf("Remaining Calories for %v: %.2f\n", date, remainingCalories)
 
 	return nil
 }
