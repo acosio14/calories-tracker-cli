@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
-	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
 func readString(r io.Reader) (string, error) {
@@ -45,31 +43,7 @@ type UserManager struct {
 	Storage Storage
 }
 
-func userExists(userFile string) error {
-	outputFolder, err := storage.OutputFolderPath()
-	if err != nil {
-		return err
-	}
-
-	filename := fmt.Sprintf("%s.json", userFile)
-	outputFile := filepath.Join(*outputFolder, filename)
-	entries, err := os.ReadDir(outputFile)
-	if err != nil {
-		return fmt.Errorf("Error reading directory %w", err)
-	}
-	if len(entries) != 0 {
-		fmt.Printf("A user file already exist: %s\n", entries[0].Name())
-		return err
-	}
-
-	return nil
-}
-
 func (u *UserManager) CreateUser(name string) error {
-	err := userExists(name) // This prevents having to go through the entire questions and then finding out there is already one.
-	if err != nil {
-		return err
-	}
 
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
 	birthdayString, err := readString(os.Stdin)

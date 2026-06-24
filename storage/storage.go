@@ -21,6 +21,19 @@ func OutputFolderPath() (*string, error) {
 	return &outputFolder, nil
 }
 
+func userExists(outputFilePath string) error {
+
+	entries, err := os.ReadDir(outputFilePath)
+	if err != nil {
+		return fmt.Errorf("Error reading directory %w", err)
+	}
+	if len(entries) != 0 {
+		return fmt.Errorf("user file already exist: %s\n", entries[0].Name())
+	}
+
+	return nil
+}
+
 func (s *JSONStorage) LoadUser() (*domain.User, error) {
 	outputFolder, err := OutputFolderPath()
 	if err != nil {
@@ -69,10 +82,13 @@ func (s *JSONStorage) SaveUser(user *domain.User) error {
 	}
 
 	filename := fmt.Sprintf("%s.json", user.Name)
-	outputPath := filepath.Join(*outputFolder, filename)
-	// To-Do: Can add UserExists here and ask if overwrite? or rename?
-	//
-	err = os.WriteFile(outputPath, userData, 0644)
+	outputFilePath := filepath.Join(*outputFolder, filename)
+	err = userExists(outputFilePath)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(outputFilePath, userData, 0644)
 	if err != nil {
 		return err
 	}
