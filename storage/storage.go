@@ -16,19 +16,16 @@ func OutputFolderPath() (*string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error finding home dir %w", err)
 	}
-	outputFolder := filepath.Join(homeDir, "/calories-tracker-output")
+	outputFolder := filepath.Join(homeDir, "calories-tracker-output")
 
 	return &outputFolder, nil
 }
 
 func userExists(outputFilePath string) error {
 
-	entries, err := os.ReadDir(outputFilePath)
-	if err != nil {
-		return fmt.Errorf("Error reading directory %w", err)
-	}
-	if len(entries) != 0 {
-		return fmt.Errorf("user file already exist: %s\n", entries[0].Name())
+	_, err := os.Stat(outputFilePath)
+	if os.IsNotExist(err) { //if err doesn't exist, then file exist, then user file already exists
+		return fmt.Errorf("user file already exist: %s\n", outputFilePath)
 	}
 
 	return nil
@@ -83,11 +80,6 @@ func (s *JSONStorage) SaveUser(user *domain.User) error {
 
 	filename := fmt.Sprintf("%s.json", user.Name)
 	outputFilePath := filepath.Join(*outputFolder, filename)
-	err = userExists(outputFilePath)
-	if err != nil {
-		return err
-	}
-
 	err = os.WriteFile(outputFilePath, userData, 0644)
 	if err != nil {
 		return err
