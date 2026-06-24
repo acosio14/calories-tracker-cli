@@ -42,7 +42,7 @@ func (s *JSONStorage) LoadUser() (*domain.User, error) {
 
 	entries, err := os.ReadDir(*outputFolder)
 	if err != nil {
-		return nil, fmt.Errorf("Error with reading output directory %v", err)
+		return nil, fmt.Errorf("error with reading output directory %v", err)
 	}
 
 	var user domain.User
