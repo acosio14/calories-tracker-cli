@@ -11,31 +11,18 @@ import (
 
 type JSONStorage struct{}
 
-type Options struct {
-	CreateFolder bool
-}
-
-func OutputFolder(opts Options) (*string, error) {
+func OutputFolderPath() (*string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, fmt.Errorf("error finding home dir %v", err)
 	}
 	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
 
-	if opts.CreateFolder == true {
-		err = os.MkdirAll(outputFolder, 0755)
-		if err != nil {
-			return nil, fmt.Errorf("error creating output folder %v", err)
-		}
-	} else {
-		return nil, fmt.Errorf("can't create folder with this command")
-	}
-
 	return &outputFolder, nil
 }
 
 func (s *JSONStorage) LoadUser() (*domain.User, error) {
-	outputFolder, err := OutputFolder(Options{CreateFolder: false})
+	outputFolder, err := OutputFolderPath()
 	if err != nil {
 		return nil, err
 	}
@@ -66,15 +53,21 @@ func (s *JSONStorage) LoadUser() (*domain.User, error) {
 
 func (s *JSONStorage) SaveUser(user *domain.User) error {
 
-	outputFolder, err := OutputFolder(Options{CreateFolder: false})
+	outputFolder, err := OutputFolderPath()
 	if err != nil {
 		return err
+	}
+
+	err = os.MkdirAll(*outputFolder, 0755)
+	if err != nil {
+		return fmt.Errorf("error creating output folder %v", err)
 	}
 
 	userData, err := json.MarshalIndent(user, "", "	")
 	if err != nil {
 		return err
 	}
+
 	filename := fmt.Sprintf("%s.json", user.Name)
 	outputPath := filepath.Join(*outputFolder, filename)
 	err = os.WriteFile(outputPath, userData, 0644)

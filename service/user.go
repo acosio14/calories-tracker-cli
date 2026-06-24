@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
-	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
 func readString(r io.Reader) (string, error) {
@@ -109,7 +108,6 @@ func (u *UserManager) CreateUser(name string) error {
 		FoodJournal:   foodItem,
 	}
 
-	storage.OutputFolder(storage.Options{CreateFolder: true})
 	err = u.Storage.SaveUser(user)
 	if err != nil {
 		return fmt.Errorf("error saving user, %v", err)

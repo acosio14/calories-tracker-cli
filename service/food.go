@@ -86,6 +86,9 @@ func (f *FoodTracker) EditFoodItem(foodInputID int, flag domain.FoodItemInput) e
 			item = &user.FoodJournal[i]
 		}
 	}
+	if item == nil {
+		return fmt.Errorf("unknown food item id")
+	}
 
 	if flag.Date != nil {
 		item.Date = *flag.Date
@@ -119,7 +122,7 @@ func (f *FoodTracker) EditFoodItem(foodInputID int, flag domain.FoodItemInput) e
 	return nil
 }
 
-func (f *FoodTracker) DeleteFoodItem(foodItemID int) error {
+func (f *FoodTracker) DeleteFoodItem(foodInputID int) error {
 	user, err := f.Storage.LoadUser()
 	if err != nil {
 		return err
@@ -127,12 +130,12 @@ func (f *FoodTracker) DeleteFoodItem(foodItemID int) error {
 	// Delete index
 	var foodIndex int = -1
 	for i, food := range user.FoodJournal {
-		if foodItemID == food.ID {
+		if foodInputID == food.ID {
 			foodIndex = i
 		}
 	}
 	if foodIndex == -1 {
-		return fmt.Errorf("unkown food index")
+		return fmt.Errorf("no food item with id %d", foodInputID)
 	}
 	user.FoodJournal = slices.Delete(user.FoodJournal, foodIndex, foodIndex+1)
 

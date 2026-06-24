@@ -62,7 +62,7 @@ func (w *WeightTracker) DeleteWeightEntry(weightInputID int) error {
 		}
 	}
 	if weightIndex == -1 {
-		return fmt.Errorf("unkown weight index")
+		return fmt.Errorf("no weight entry with id %d", weightInputID)
 	}
 	user.WeightTracker = slices.Delete(user.WeightTracker, weightIndex, weightIndex+1)
 
