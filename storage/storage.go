@@ -16,7 +16,7 @@ func OutputFolderPath() (*string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error finding home dir %w", err)
 	}
-	outputFolder := filepath.Join(homeDir, "Projects/calories-tracker-cli/output")
+	outputFolder := filepath.Join(homeDir, "/calories-tracker-output")
 
 	return &outputFolder, nil
 }
@@ -70,6 +70,8 @@ func (s *JSONStorage) SaveUser(user *domain.User) error {
 
 	filename := fmt.Sprintf("%s.json", user.Name)
 	outputPath := filepath.Join(*outputFolder, filename)
+	// To-Do: Can add UserExists here and ask if overwrite? or rename?
+	//
 	err = os.WriteFile(outputPath, userData, 0644)
 	if err != nil {
 		return err
