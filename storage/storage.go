@@ -34,7 +34,7 @@ func (s *JSONStorage) LoadUser() (*domain.User, error) {
 
 	var user domain.User
 	if len(entries) < 1 {
-		return nil, fmt.Errorf("User not created")
+		return nil, fmt.Errorf("user not created")
 	} else {
 		jsonFile := filepath.Join(*outputFolder, string(entries[0].Name()))
 		jsonContent, err := os.ReadFile(jsonFile)

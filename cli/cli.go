@@ -2,7 +2,6 @@ package cli
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"time"
 
@@ -47,17 +46,7 @@ func (c *CLI) CreateUserCmd() *cobra.Command {
 		Short: "Create User.",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			entries, err := os.ReadDir("./output") // TO-DO: Need to read correct directory
-			if err != nil {
-				fmt.Printf("Error reading directory %v", err)
-				return err
-			}
-			if len(entries) == 0 {
-				return c.User.CreateUser(args[0])
-			} else {
-				fmt.Printf("A user file already exist: %s\n", entries[0].Name())
-				return err
-			}
+			return c.User.CreateUser(args[0])
 		},
 	}
 	return createUserCmd
