@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
@@ -47,13 +46,11 @@ type UserManager struct {
 
 func (u *UserManager) CreateUser(name string) error {
 
-	// To-Do: Fix this to take correct file path and check if user file exists
 	outputFolder, err := storage.OutputFolderPath()
 	if err != nil {
 		return err
 	}
-	filename := fmt.Sprintf("%s.json", name)
-	outputFilePath := filepath.Join(*outputFolder, filename)
+	outputFilePath, err := storage.OutputFilePath(*outputFolder, name)
 	_, err = os.Stat(outputFilePath)
 	if err == nil {
 		return fmt.Errorf("user file already exists: %s", outputFilePath)

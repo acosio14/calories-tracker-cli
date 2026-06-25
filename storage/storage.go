@@ -68,11 +68,17 @@ func (s *JSONStorage) SaveUser(user *domain.User) error {
 		return err
 	}
 
-	filename := fmt.Sprintf("%s.json", user.Name)
-	outputFilePath := filepath.Join(*outputFolder, filename)
+	outputFilePath, err := OutputFilePath(*outputFolder, user.Name)
 	err = os.WriteFile(outputFilePath, userData, 0644)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func OutputFilePath(outputFolder string, name string) (string, error) {
+	filename := fmt.Sprintf("%s.json", name)
+	outputFilePath := filepath.Join(outputFolder, filename)
+
+	return outputFilePath, nil
 }

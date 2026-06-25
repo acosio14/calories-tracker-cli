@@ -10,19 +10,19 @@ import (
 
 func main() {
 	JSONStorage := &storage.JSONStorage{}
-	food_svc := &service.FoodTracker{
+	foodSvc := &service.FoodTracker{
 		Storage: JSONStorage,
 	}
-	goal_svc := &service.GoalManager{
+	goalSvc := &service.GoalManager{
 		Storage: JSONStorage,
 	}
-	user_svc := &service.UserManager{
+	userSvc := &service.UserManager{
 		Storage: JSONStorage,
 	}
-	weight_svc := &service.WeightTracker{
+	weightSvc := &service.WeightTracker{
 		Storage: JSONStorage,
 	}
-	cli := cli.NewCLI(user_svc, food_svc, weight_svc, goal_svc)
+	cli := cli.NewCLI(userSvc, foodSvc, weightSvc, goalSvc)
 	if err := cli.NewRootCmd().Execute(); err != nil {
 		os.Exit(1)
 	}
