@@ -11,20 +11,20 @@ import (
 
 type JSONStorage struct{}
 
-func GetOutputFilePath(outputFolder string, name string) (string, error) {
+func GetOutputFilePath(outputFolder string, name string) string {
 	filename := fmt.Sprintf("%s.json", name)
 	outputFilePath := filepath.Join(outputFolder, filename)
 
-	return outputFilePath, nil
+	return outputFilePath
 }
-func GetOutputFolderPath() (*string, error) {
+func GetOutputFolderPath() (string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		return nil, fmt.Errorf("error finding home dir %w", err)
+		return "", fmt.Errorf("error finding home dir %w", err)
 	}
 	outputFolder := filepath.Join(homeDir, "calories-tracker-output")
 
-	return &outputFolder, nil
+	return outputFolder, nil
 }
 
 func (s *JSONStorage) LoadUser() (*domain.User, error) {
@@ -33,7 +33,7 @@ func (s *JSONStorage) LoadUser() (*domain.User, error) {
 		return nil, err
 	}
 
-	entries, err := os.ReadDir(*outputFolder)
+	entries, err := os.ReadDir(outputFolder)
 	if err != nil {
 		return nil, fmt.Errorf("error with reading output directory %w", err)
 	}
@@ -42,7 +42,7 @@ func (s *JSONStorage) LoadUser() (*domain.User, error) {
 	if len(entries) < 1 {
 		return nil, fmt.Errorf("user not created")
 	} else {
-		jsonFile := filepath.Join(*outputFolder, string(entries[0].Name()))
+		jsonFile := filepath.Join(outputFolder, string(entries[0].Name()))
 		jsonContent, err := os.ReadFile(jsonFile)
 		if err != nil {
 			return nil, fmt.Errorf("read user %q: %w", jsonFile, err)
@@ -64,7 +64,7 @@ func (s *JSONStorage) SaveUser(user *domain.User) error {
 		return err
 	}
 
-	err = os.MkdirAll(*outputFolder, 0755)
+	err = os.MkdirAll(outputFolder, 0755)
 	if err != nil {
 		return fmt.Errorf("error creating output folder %w", err)
 	}
@@ -74,7 +74,7 @@ func (s *JSONStorage) SaveUser(user *domain.User) error {
 		return err
 	}
 
-	outputFilePath, err := GetOutputFilePath(*outputFolder, user.Name)
+	outputFilePath := GetOutputFilePath(outputFolder, user.Name)
 	err = os.WriteFile(outputFilePath, userData, 0644)
 	if err != nil {
 		return err

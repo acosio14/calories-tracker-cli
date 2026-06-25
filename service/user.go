@@ -50,7 +50,7 @@ func (u *UserManager) CreateUser(name string) error {
 	if err != nil {
 		return err
 	}
-	outputFilePath, err := storage.GetOutputFilePath(*outputFolder, name)
+	outputFilePath := storage.GetOutputFilePath(outputFolder, name)
 	_, err = os.Stat(outputFilePath)
 	if err == nil {
 		return fmt.Errorf("user file already exists: %s", outputFilePath)
