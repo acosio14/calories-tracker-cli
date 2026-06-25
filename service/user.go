@@ -55,8 +55,8 @@ func (u *UserManager) CreateUser(name string) error {
 	filename := fmt.Sprintf("%s.json", name)
 	outputFilePath := filepath.Join(*outputFolder, filename)
 	_, err = os.Stat(outputFilePath)
-	if os.IsNotExist(err) { //if err doesn't exist, then file exist, then user file already exists
-		return fmt.Errorf("user file already exist: %s\n", outputFilePath)
+	if err == nil {
+		return fmt.Errorf("user file already exists: %s", outputFilePath)
 	}
 
 	fmt.Print("Enter Birthday (MM/DD/YYYY):")
