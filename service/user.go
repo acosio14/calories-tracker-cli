@@ -46,11 +46,11 @@ type UserManager struct {
 
 func (u *UserManager) CreateUser(name string) error {
 
-	outputFolder, err := storage.OutputFolderPath()
+	outputFolder, err := storage.GetOutputFolderPath()
 	if err != nil {
 		return err
 	}
-	outputFilePath, err := storage.OutputFilePath(*outputFolder, name)
+	outputFilePath, err := storage.GetOutputFilePath(*outputFolder, name)
 	_, err = os.Stat(outputFilePath)
 	if err == nil {
 		return fmt.Errorf("user file already exists: %s", outputFilePath)

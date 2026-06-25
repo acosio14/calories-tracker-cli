@@ -11,7 +11,13 @@ import (
 
 type JSONStorage struct{}
 
-func OutputFolderPath() (*string, error) {
+func GetOutputFilePath(outputFolder string, name string) (string, error) {
+	filename := fmt.Sprintf("%s.json", name)
+	outputFilePath := filepath.Join(outputFolder, filename)
+
+	return outputFilePath, nil
+}
+func GetOutputFolderPath() (*string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, fmt.Errorf("error finding home dir %w", err)
@@ -22,7 +28,7 @@ func OutputFolderPath() (*string, error) {
 }
 
 func (s *JSONStorage) LoadUser() (*domain.User, error) {
-	outputFolder, err := OutputFolderPath()
+	outputFolder, err := GetOutputFolderPath()
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +59,7 @@ func (s *JSONStorage) LoadUser() (*domain.User, error) {
 
 func (s *JSONStorage) SaveUser(user *domain.User) error {
 
-	outputFolder, err := OutputFolderPath()
+	outputFolder, err := GetOutputFolderPath()
 	if err != nil {
 		return err
 	}
@@ -68,17 +74,10 @@ func (s *JSONStorage) SaveUser(user *domain.User) error {
 		return err
 	}
 
-	outputFilePath, err := OutputFilePath(*outputFolder, user.Name)
+	outputFilePath, err := GetOutputFilePath(*outputFolder, user.Name)
 	err = os.WriteFile(outputFilePath, userData, 0644)
 	if err != nil {
 		return err
 	}
 	return nil
-}
-
-func OutputFilePath(outputFolder string, name string) (string, error) {
-	filename := fmt.Sprintf("%s.json", name)
-	outputFilePath := filepath.Join(outputFolder, filename)
-
-	return outputFilePath, nil
 }
