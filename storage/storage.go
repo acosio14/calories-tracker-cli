@@ -21,16 +21,6 @@ func OutputFolderPath() (*string, error) {
 	return &outputFolder, nil
 }
 
-func userExists(outputFilePath string) error {
-
-	_, err := os.Stat(outputFilePath)
-	if os.IsNotExist(err) { //if err doesn't exist, then file exist, then user file already exists
-		return fmt.Errorf("user file already exist: %s\n", outputFilePath)
-	}
-
-	return nil
-}
-
 func (s *JSONStorage) LoadUser() (*domain.User, error) {
 	outputFolder, err := OutputFolderPath()
 	if err != nil {

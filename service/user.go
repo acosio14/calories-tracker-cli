@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/acosio14/calories-tracker-cli/domain"
+	"github.com/acosio14/calories-tracker-cli/storage"
 )
 
 func readString(r io.Reader) (string, error) {
@@ -47,11 +48,11 @@ type UserManager struct {
 func (u *UserManager) CreateUser(name string) error {
 
 	// To-Do: Fix this to take correct file path and check if user file exists
-	outputFolder, err := OutputFolderPath()
+	outputFolder, err := storage.OutputFolderPath()
 	if err != nil {
 		return err
 	}
-	filename := fmt.Sprintf("%s.json", user.Name)
+	filename := fmt.Sprintf("%s.json", name)
 	outputFilePath := filepath.Join(*outputFolder, filename)
 	_, err = os.Stat(outputFilePath)
 	if os.IsNotExist(err) { //if err doesn't exist, then file exist, then user file already exists
